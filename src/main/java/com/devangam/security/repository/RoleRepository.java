@@ -1,10 +1,10 @@
 package com.devangam.security.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-import com.devangam.model.security.Authority;
+import com.devangam.entity.Role;
 
-public interface RoleRepository extends JpaRepository<Authority, Long>{
+
+public interface RoleRepository extends JpaRepository<Role, Long>{
 
 }

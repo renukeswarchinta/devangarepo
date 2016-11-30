@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devangam.dto.UserRequestDTO;
-import com.devangam.model.security.User;
 import com.devangam.security.JwtTokenUtil;
 import com.devangam.security.JwtUser;
 import com.devangam.service.RegistrationService;

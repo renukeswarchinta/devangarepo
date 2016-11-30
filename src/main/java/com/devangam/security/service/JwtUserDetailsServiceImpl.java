@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.devangam.model.security.User;
+import com.devangam.entity.User;
 import com.devangam.security.JwtUserFactory;
 import com.devangam.security.repository.UserRepository;
 

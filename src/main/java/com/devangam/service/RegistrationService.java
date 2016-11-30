@@ -1,9 +1,7 @@
 package com.devangam.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -12,13 +10,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.devangam.dto.UserRequestDTO;
-import com.devangam.model.security.Authority;
-import com.devangam.model.security.AuthorityName;
-import com.devangam.model.security.User;
-import com.devangam.security.repository.UserRepository;
-
-
+import com.devangam.entity.AuthorityName;
+import com.devangam.entity.Role;
+import com.devangam.entity.User;
 import com.devangam.security.repository.RoleRepository;
+import com.devangam.security.repository.UserRepository;
 
 @Service
 @Transactional
@@ -33,18 +29,17 @@ public class RegistrationService {
 	public void createUser(UserRequestDTO userRequestDTO){
 		try {
 			User user = new User();
-		    user.setUsername("test@gmail.com");
+		    user.setEmail("test@gmail.com");
 		    user.setPassword(bCryptPasswordEncoder.encode("test123"));
 		    user.setFirstname("vajpai");
 		    user.setLastname("bingi");
 		    user.setEmail("test@gmail.com");
-		    user.setEnabled(Boolean.TRUE);
-		    user.setLastPasswordResetDate(new Date());
-		    Authority authority = new Authority();
-		    authority.setName(AuthorityName.ROLE_USER);
-		    List<Authority> authorities = new ArrayList<Authority>();
+		    user.setIsActive(true);
+		    Role authority = new Role();
+		    authority.setRoleName(AuthorityName.ROLE_USER.getRoleName());
+		    Set<Role> authorities = new HashSet<Role>();
 		    authorities.add(authority);
-		    user.setAuthorities(authorities);
+		    user.setRoles(authorities);
 			userRepository.save(user);
 		} catch (Exception e) {
 			System.out.println(e);

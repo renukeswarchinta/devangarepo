@@ -2,7 +2,8 @@ package com.devangam.security.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.devangam.model.security.User;
+import com.devangam.entity.User;
+
 
 /**
  * Created by stephan on 20.03.16.
