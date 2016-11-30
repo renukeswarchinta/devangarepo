@@ -41,7 +41,7 @@ public class User  {
 	private String firstname;
 
 	@Column(name="IS_ACTIVE")
-	private int isActive;
+	private boolean isActive; //
 
 	@Column(name="IS_MATRIMONY_USER")
 	private int isMatrimonyUser;
@@ -52,6 +52,8 @@ public class User  {
 	private String mobileNumber;
 
 	private String password;
+	
+	private String username;
 
 	//bi-directional many-to-many association to Role
 	@ManyToMany
@@ -77,6 +79,14 @@ public class User  {
 
 	public int getUserId() {
 		return this.userId;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public void setUserId(int userId) {
@@ -107,11 +117,11 @@ public class User  {
 		this.firstname = firstname;
 	}
 
-	public int getIsActive() {
+	public boolean getIsActive() {
 		return this.isActive;
 	}
 
-	public void setIsActive(int isActive) {
+	public void setIsActive(boolean isActive) {
 		this.isActive = isActive;
 	}
 
