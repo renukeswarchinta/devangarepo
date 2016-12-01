@@ -34,12 +34,12 @@ public class RegistrationService {
 		    user.setFirstname("vajpai");
 		    user.setLastname("bingi");
 		    user.setEmail("test@gmail.com");
-		    user.setIsActive(true);
-		    Role authority = new Role();
+		    user.setActive(true);
+		    /*Role authority = new Role();
 		    authority.setRoleName(AuthorityName.ROLE_USER.getRoleName());
 		    Set<Role> authorities = new HashSet<Role>();
 		    authorities.add(authority);
-		    user.setRoles(authorities);
+		    user.setRoles(authorities);*/
 			userRepository.save(user);
 		} catch (Exception e) {
 			System.out.println(e);

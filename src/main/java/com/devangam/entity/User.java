@@ -1,21 +1,7 @@
 package com.devangam.entity;
-
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 
 /**
@@ -39,12 +25,18 @@ public class User  {
 	private String email;
 
 	private String firstname;
+	
+	private String username;
 
 	@Column(name="IS_ACTIVE")
-	private boolean isActive; //
+	private boolean isActive;
 
 	@Column(name="IS_MATRIMONY_USER")
-	private int isMatrimonyUser;
+	private boolean isMatrimonyUser;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="LAST_UPDATE")
+	private Date lastUpdate;
 
 	private String lastname;
 
@@ -52,41 +44,55 @@ public class User  {
 	private String mobileNumber;
 
 	private String password;
-	
-	private String username;
 
 	//bi-directional many-to-many association to Role
-	@ManyToMany
-	@JoinTable(
-		name="t_user_role"
-		, joinColumns={
-			@JoinColumn(name="USER_ID")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="ROLE_ID")
-			}
-		)
+	//@ManyToMany(mappedBy="users")
+	
+	
+	
+	
+	@ManyToMany(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "USER_ROLE",
+            joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")},
+            inverseJoinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID")})
 	private Set<Role> roles;
+
+	//bi-directional one-to-one association to Location
+	@OneToOne
+	@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
+	private Location location;
 
 	//bi-directional one-to-one association to Matrimony
 	@OneToOne
 	@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
 	private Matrimony matrimony;
 
+	//bi-directional one-to-one association to PersonalDetail
+	@OneToOne
+	@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
+	private PersonalDetail personalDetail;
+
+	//bi-directional one-to-one association to PremiumUser
+	@OneToOne
+	@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
+	private PremiumUser premiumUser;
+
+	//bi-directional one-to-one association to ReligionDetails
+	@OneToOne
+	@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
+	private ReligionDetails religionDetail;
+
+	//bi-directional one-to-one association to ProfessionalDetails
+	@OneToOne
+	@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
+	private ProfessionalDetails professionalDetail;
 
 	public User() {
 	}
 
 	public int getUserId() {
 		return this.userId;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
 	}
 
 	public void setUserId(int userId) {
@@ -117,20 +123,14 @@ public class User  {
 		this.firstname = firstname;
 	}
 
-	public boolean getIsActive() {
-		return this.isActive;
+
+
+	public Date getLastUpdate() {
+		return this.lastUpdate;
 	}
 
-	public void setIsActive(boolean isActive) {
-		this.isActive = isActive;
-	}
-
-	public int getIsMatrimonyUser() {
-		return this.isMatrimonyUser;
-	}
-
-	public void setIsMatrimonyUser(int isMatrimonyUser) {
-		this.isMatrimonyUser = isMatrimonyUser;
+	public void setLastUpdate(Date lastUpdate) {
+		this.lastUpdate = lastUpdate;
 	}
 
 	public String getLastname() {
@@ -165,6 +165,14 @@ public class User  {
 		this.roles = roles;
 	}
 
+	public Location getLocation() {
+		return this.location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+
 	public Matrimony getMatrimony() {
 		return this.matrimony;
 	}
@@ -173,5 +181,60 @@ public class User  {
 		this.matrimony = matrimony;
 	}
 
+	public PersonalDetail getPersonalDetail() {
+		return this.personalDetail;
+	}
+
+	public void setPersonalDetail(PersonalDetail personalDetail) {
+		this.personalDetail = personalDetail;
+	}
+
+	public PremiumUser getPremiumUser() {
+		return this.premiumUser;
+	}
+
+	public void setPremiumUser(PremiumUser premiumUser) {
+		this.premiumUser = premiumUser;
+	}
+
+	public ReligionDetails getReligionDetail() {
+		return this.religionDetail;
+	}
+
+	public void setReligionDetail(ReligionDetails religionDetail) {
+		this.religionDetail = religionDetail;
+	}
+
+	public ProfessionalDetails getProfessionalDetail() {
+		return this.professionalDetail;
+	}
+
+	public void setProfessionalDetail(ProfessionalDetails professionalDetail) {
+		this.professionalDetail = professionalDetail;
+	}
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	public boolean isMatrimonyUser() {
+		return isMatrimonyUser;
+	}
+
+	public void setMatrimonyUser(boolean isMatrimonyUser) {
+		this.isMatrimonyUser = isMatrimonyUser;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
 }

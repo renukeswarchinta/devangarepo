@@ -44,8 +44,7 @@ public class Matrimony  {
 	@Column(name="MOTHER_TOUNGUE")
 	private String motherToungue;
 
-	@Lob
-	private byte[] photo;
+	private String photo;
 
 	//bi-directional one-to-one association to User
 	@OneToOne(mappedBy="matrimony")
@@ -110,13 +109,6 @@ public class Matrimony  {
 		this.motherToungue = motherToungue;
 	}
 
-	public byte[] getPhoto() {
-		return this.photo;
-	}
-
-	public void setPhoto(byte[] photo) {
-		this.photo = photo;
-	}
 
 	public User getUser() {
 		return this.user;
@@ -124,6 +116,14 @@ public class Matrimony  {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
 	}
 
 }
