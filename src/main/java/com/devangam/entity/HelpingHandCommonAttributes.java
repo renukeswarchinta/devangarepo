@@ -1,6 +1,5 @@
 package com.devangam.entity;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -12,7 +11,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @MappedSuperclass
-public class HelpingHandCommonAttributes implements Serializable{
+public class HelpingHandCommonAttributes {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

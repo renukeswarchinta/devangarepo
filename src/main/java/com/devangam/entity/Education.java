@@ -2,16 +2,13 @@ package com.devangam.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Transient;
+import javax.persistence.Table;
 
-import org.hibernate.annotations.Table;
 
-@Table(appliesTo = "T_EDUCATION")
+@Table(name = "T_EDUCATION")
 @Entity
 public class Education extends HelpingHandCommonAttributes{
 	
-	@Transient
-	private static final long serialVersionUID = -3621010469526215357L;
 	
 	@Column(name="CURRENT_EDUCATION")
 	private String currentEducation;
