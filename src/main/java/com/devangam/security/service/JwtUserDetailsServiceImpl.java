@@ -7,8 +7,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.devangam.entity.User;
+import com.devangam.repository.UserRepository;
 import com.devangam.security.JwtUserFactory;
-import com.devangam.security.repository.UserRepository;
 
 /**
  * Created by stephan on 20.03.16.

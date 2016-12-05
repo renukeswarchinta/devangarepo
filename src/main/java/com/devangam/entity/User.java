@@ -2,6 +2,7 @@ package com.devangam.entity;
 import javax.persistence.*;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -57,7 +58,7 @@ public class User  {
             name = "USER_ROLE",
             joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")},
             inverseJoinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID")})
-	private Set<Role> roles;
+	private Set<Role> roles = new HashSet<Role>();
 
 	//bi-directional one-to-one association to Location
 	@OneToOne
@@ -65,7 +66,7 @@ public class User  {
 	private Location location;
 
 	//bi-directional one-to-one association to Matrimony
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
 	private Matrimony matrimony;
 

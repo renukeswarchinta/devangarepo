@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devangam.dto.UserRequestDTO;
+import com.devangam.entity.Matrimony;
+import com.devangam.entity.User;
 import com.devangam.security.JwtTokenUtil;
 import com.devangam.security.JwtUser;
 import com.devangam.service.RegistrationService;
@@ -41,13 +43,15 @@ public class UserRestController {
     
     
     @RequestMapping(path = "/api/signupUser", method = RequestMethod.POST)
-	public @ResponseBody String signupUser(@RequestBody UserRequestDTO userRequestDTO) {
+	public @ResponseBody String signupUser(@RequestBody User userRequestDTO) {
     	registrationService.createUser(userRequestDTO);
     	return "sucess";
     }
     
     @RequestMapping(value = "userdto", method = RequestMethod.GET)
-	public @ResponseBody UserRequestDTO getUserDTO() {
-    	return new UserRequestDTO();
+	public @ResponseBody User getUserDTO() {
+    	User user = new User();
+    	user.setMatrimony(new Matrimony());
+    	return user;
     }
 }

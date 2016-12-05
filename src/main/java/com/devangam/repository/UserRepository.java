@@ -1,4 +1,4 @@
-package com.devangam.security.repository;
+package com.devangam.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
