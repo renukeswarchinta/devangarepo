@@ -36,7 +36,8 @@ public class PersonalDetail  {
 	private String maritalStatus;
 
 	//bi-directional one-to-one association to User
-	@OneToOne(mappedBy="personalDetail")
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="USER_ID")
 	private User user;
 
 	public PersonalDetail() {
