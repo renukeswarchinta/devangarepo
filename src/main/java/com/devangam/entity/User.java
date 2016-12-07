@@ -1,6 +1,9 @@
 package com.devangam.entity;
 import javax.persistence.*;
 
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -65,28 +68,37 @@ public class User  {
 	@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
 	private Location location;
 
-	//bi-directional one-to-one association to Matrimony
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
+	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
+	@LazyToOne(LazyToOneOption.NO_PROXY)
 	private Matrimony matrimony;
+	
+	public Matrimony getMatrimony() {
+		return this.matrimony;
+	}
 
+	public void setMatrimony(Matrimony matrimony) {
+		this.matrimony = matrimony;
+		matrimony.setUser(this);
+	}
+	
+	
 	//bi-directional one-to-one association to PersonalDetail
-	@OneToOne
-	@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
+	@OneToOne(cascade = CascadeType.ALL,mappedBy="user")
+	//@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
 	private PersonalDetail personalDetail;
 
-	//bi-directional one-to-one association to PremiumUser
-	@OneToOne
-	@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
+/*	//bi-directional one-to-one association to PremiumUser
+	@OneToOne(cascade = CascadeType.ALL,mappedBy="user")
+	//@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
 	private PremiumUser premiumUser;
-
+*/
 	//bi-directional one-to-one association to ReligionDetails
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
 	private ReligionDetails religionDetail;
 
 	//bi-directional one-to-one association to ProfessionalDetails
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
 	private ProfessionalDetails professionalDetail;
 
@@ -175,14 +187,14 @@ public class User  {
 		this.location = location;
 	}
 
-	public Matrimony getMatrimony() {
+/*	public Matrimony getMatrimony() {
 		return this.matrimony;
 	}
 
 	public void setMatrimony(Matrimony matrimony) {
 		this.matrimony = matrimony;
 	}
-
+*/
 	public PersonalDetail getPersonalDetail() {
 		return this.personalDetail;
 	}
@@ -191,14 +203,14 @@ public class User  {
 		this.personalDetail = personalDetail;
 	}
 
-	public PremiumUser getPremiumUser() {
+/*	public PremiumUser getPremiumUser() {
 		return this.premiumUser;
 	}
 
 	public void setPremiumUser(PremiumUser premiumUser) {
 		this.premiumUser = premiumUser;
 	}
-
+*/
 	public ReligionDetails getReligionDetail() {
 		return this.religionDetail;
 	}
