@@ -1,6 +1,9 @@
 package com.devangam.entity;
 import javax.persistence.*;
 
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -66,6 +69,7 @@ public class User  {
 	private Location location;
 
 	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
+	@LazyToOne(LazyToOneOption.NO_PROXY)
 	private Matrimony matrimony;
 	
 	public Matrimony getMatrimony() {

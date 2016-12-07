@@ -2,6 +2,7 @@ package com.devangam.entity;
 
 import java.util.Date;
 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -51,7 +52,9 @@ public class Matrimony  {
 	@Column(name="MOTHER_TOUNGUE")
 	private String motherToungue;
 
-	private String photo;
+	@Lob
+    @Basic( fetch = FetchType.LAZY )
+    private byte[] photo;
 
 	//bi-directional one-to-one association to User
 	@OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
@@ -126,12 +129,14 @@ public class Matrimony  {
 		this.user = user;
 	}
 
-	public String getPhoto() {
+	public byte[] getPhoto() {
 		return photo;
 	}
 
-	public void setPhoto(String photo) {
+	public void setPhoto(byte[] photo) {
 		this.photo = photo;
 	}
+
+	
 
 }
