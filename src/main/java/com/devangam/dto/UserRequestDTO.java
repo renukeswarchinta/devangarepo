@@ -1,61 +1,21 @@
 package com.devangam.dto;
 
-public class UserRequestDTO {
+import lombok.Data;
 
+@Data
+public class UserRequestDTO {
 	private String username;
-	private String password;
 	private String firstname;
 	private String lastname;
 	private String email;
-	private Long roleId;
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getFirstname() {
-		return firstname;
-	}
-
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
-	}
-
-	public String getLastname() {
-		return lastname;
-	}
-
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public Long getRoleId() {
-		return roleId;
-	}
-
-	public void setRoleId(Long roleId) {
-		this.roleId = roleId;
-	}
-
-
+	private String password;
+	private String mobileNumber;
+	private boolean matrimonyUser;
+	private MatrimonyDTO matrimony;
+	private PersonalDetailDTO personalDetail;
+	private LocationDTO location;
+	private ProfessionalDetailsDTO professionalDetail;
+	private ReligionDetailsDTO religionDetail;
+	private PremiumUserDTO premiumUser;
+	
 }

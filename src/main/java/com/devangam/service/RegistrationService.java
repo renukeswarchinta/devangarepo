@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.devangam.dto.UserRequestDTO;
 import com.devangam.entity.AuthorityName;
 import com.devangam.entity.Matrimony;
 import com.devangam.entity.Role;
@@ -16,6 +17,7 @@ import com.devangam.exception.DevangamException;
 import com.devangam.repository.MatrimonyRepository;
 import com.devangam.repository.RoleRepository;
 import com.devangam.repository.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 @Transactional
@@ -28,16 +30,20 @@ public class RegistrationService {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired
 	private MatrimonyRepository matrimonyRepository;
+	@Autowired
+	private ObjectMapper objectMapper;
 	
-	public void createUser(User userRequestDTO){
+	public void createUser(UserRequestDTO userRequestDTO){
+		User user = objectMapper.convertValue(userRequestDTO, User.class);
 		try {
-			User user = userRequestDTO;
-		    user.setActive(true);
-		    if(user.getRoles() != null){
-		    	Role role = userRolesRepository.findOne(Integer.valueOf((AuthorityName.ROLE_USER.getRole())));
-		    	user.getRoles().add(role);
-		    }
-			userRepository.save(user);
+		    if (null != user) {
+				user.setActive(true);
+				if (user.getRoles() != null) {
+					Role role = userRolesRepository.findOne(Integer.valueOf((AuthorityName.ROLE_USER.getRole())));
+					user.getRoles().add(role);
+				}
+				userRepository.save(user);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();//TODO : repalcae with logger and throw the exception
 		}
