@@ -49,12 +49,6 @@ public class User  {
 	private String mobileNumber;
 
 	private String password;
-
-	//bi-directional many-to-many association to Role
-	//@ManyToMany(mappedBy="users")
-	
-	
-	
 	
 	@ManyToMany(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
     @JoinTable(
@@ -63,9 +57,8 @@ public class User  {
             inverseJoinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID")})
 	private Set<Role> roles = new HashSet<Role>();
 
-	//bi-directional one-to-one association to Location
-	@OneToOne
-	@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
+	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
+	@LazyToOne(LazyToOneOption.NO_PROXY)
 	private Location location;
 
 	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
@@ -82,24 +75,20 @@ public class User  {
 	}
 	
 	
-	//bi-directional one-to-one association to PersonalDetail
-	@OneToOne(cascade = CascadeType.ALL,mappedBy="user")
-	//@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
+	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
+	@LazyToOne(LazyToOneOption.NO_PROXY)
 	private PersonalDetail personalDetail;
 
-/*	//bi-directional one-to-one association to PremiumUser
-	@OneToOne(cascade = CascadeType.ALL,mappedBy="user")
-	//@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
+	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
+	@LazyToOne(LazyToOneOption.NO_PROXY)
 	private PremiumUser premiumUser;
-*/
-	//bi-directional one-to-one association to ReligionDetails
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
+
+	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
+	@LazyToOne(LazyToOneOption.NO_PROXY)
 	private ReligionDetails religionDetail;
 
-	//bi-directional one-to-one association to ProfessionalDetails
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
+	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
+	@LazyToOne(LazyToOneOption.NO_PROXY)
 	private ProfessionalDetails professionalDetail;
 
 	public User() {
@@ -187,36 +176,31 @@ public class User  {
 		this.location = location;
 	}
 
-/*	public Matrimony getMatrimony() {
-		return this.matrimony;
-	}
 
-	public void setMatrimony(Matrimony matrimony) {
-		this.matrimony = matrimony;
-	}
-*/
 	public PersonalDetail getPersonalDetail() {
 		return this.personalDetail;
 	}
 
 	public void setPersonalDetail(PersonalDetail personalDetail) {
 		this.personalDetail = personalDetail;
+		personalDetail.setUser(this);
 	}
 
-/*	public PremiumUser getPremiumUser() {
+	public PremiumUser getPremiumUser() {
 		return this.premiumUser;
 	}
 
 	public void setPremiumUser(PremiumUser premiumUser) {
 		this.premiumUser = premiumUser;
+		premiumUser.setUser(this);
 	}
-*/
 	public ReligionDetails getReligionDetail() {
 		return this.religionDetail;
 	}
 
 	public void setReligionDetail(ReligionDetails religionDetail) {
 		this.religionDetail = religionDetail;
+		religionDetail.setUser(this);
 	}
 
 	public ProfessionalDetails getProfessionalDetail() {
@@ -225,6 +209,7 @@ public class User  {
 
 	public void setProfessionalDetail(ProfessionalDetails professionalDetail) {
 		this.professionalDetail = professionalDetail;
+		professionalDetail.setUser(this);
 	}
 
 	public boolean isActive() {

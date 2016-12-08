@@ -37,11 +37,19 @@ public class PremiumUser  {
 	@Column(name="PREMIUM_TYPE")
 	private String premiumType;
 
-	/*//bi-directional one-to-one association to User
-	@OneToOne(cascade=CascadeType.ALL,mappedBy="premiumUser")
+
+	@OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinColumn(name="USER_ID")
 	private User user;
-*/
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	public PremiumUser() {
 	}
 

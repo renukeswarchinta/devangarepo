@@ -26,7 +26,8 @@ public class ReligionDetails  {
 	private String subcaste;
 
 	//bi-directional one-to-one association to User
-	@OneToOne(mappedBy="religionDetail")
+	@OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
+	@JoinColumn(name="USER_ID")
 	private User user;
 
 	public ReligionDetails() {
