@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.devangam.security.JwtAuthenticationEntryPoint;
 import com.devangam.security.JwtAuthenticationTokenFilter;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SuppressWarnings("SpringJavaAutowiringInspection")
 @Configuration
@@ -41,6 +42,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+    
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
+    }
+    
 
     @Bean
     public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
