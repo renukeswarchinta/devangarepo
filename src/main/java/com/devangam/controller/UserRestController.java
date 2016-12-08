@@ -12,6 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.devangam.dto.LocationDTO;
+import com.devangam.dto.MatrimonyDTO;
+import com.devangam.dto.PersonalDetailDTO;
+import com.devangam.dto.ProfessionalDetailsDTO;
+import com.devangam.dto.ReligionDetailsDTO;
+import com.devangam.dto.UserRequestDTO;
 import com.devangam.entity.Matrimony;
 import com.devangam.entity.User;
 import com.devangam.security.JwtTokenUtil;
@@ -43,10 +49,22 @@ public class UserRestController {
     
     
     @RequestMapping(path = "/api/signupUser", method = RequestMethod.POST)
-	public @ResponseBody String signupUser(@RequestBody User userRequestDTO) {
+	public @ResponseBody String signupUser(@RequestBody UserRequestDTO userRequestDTO) {
     	registrationService.createUser(userRequestDTO);
     	return "sucess";
     }
+    
+    @RequestMapping(value = "userdto", method = RequestMethod.GET)
+	public @ResponseBody UserRequestDTO getUserDTO() {
+    	UserRequestDTO userRequestDto= new UserRequestDTO();
+    	userRequestDto.setMatrimony(new MatrimonyDTO());
+    	userRequestDto.setLocation(new LocationDTO());
+    	userRequestDto.setPersonalDetail(new PersonalDetailDTO());
+    	userRequestDto.setProfessionalDetail(new ProfessionalDetailsDTO());
+    	userRequestDto.setReligionDetail(new ReligionDetailsDTO());
+    	return userRequestDto;
+    }
+    
     @RequestMapping(path = "/api/signupUserMatrimony", method = RequestMethod.POST)
    	public @ResponseBody String signupUserMatrimony(@RequestBody Matrimony matrimony) {
        	registrationService.createUserMatrimony(matrimony);
@@ -65,13 +83,5 @@ public class UserRestController {
     	
     			
     	return "sucess";
-    }
-    
-    
-    @RequestMapping(value = "userdto", method = RequestMethod.GET)
-	public @ResponseBody User getUserDTO() {
-    	User user = new User();
-    	//user.setMatrimony(new Matrimony());
-    	return user;
     }
 }
