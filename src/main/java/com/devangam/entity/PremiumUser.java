@@ -1,8 +1,22 @@
 package com.devangam.entity;
 
-import java.io.Serializable;
-import javax.persistence.*;
 import java.util.Date;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 
 /**
@@ -13,7 +27,6 @@ import java.util.Date;
 @Table(name="t_premium_users")
 @NamedQuery(name="PremiumUser.findAll", query="SELECT p FROM PremiumUser p")
 public class PremiumUser  {
-	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -25,10 +38,12 @@ public class PremiumUser  {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="PREMIUM_DURATION")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	private Date premiumDuration;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="PREMIUM_EXPIRED_ON")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	private Date premiumExpiredOn;
 
 	@Column(name="PREMIUM_PACKAGE")

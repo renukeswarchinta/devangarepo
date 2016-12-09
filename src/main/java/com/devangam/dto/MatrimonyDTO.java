@@ -8,5 +8,5 @@ public class MatrimonyDTO {
 	private String gender;
 	private String lastname;
 	private String motherToungue;
-	private String photo;
+	private String imageUrl;
 }

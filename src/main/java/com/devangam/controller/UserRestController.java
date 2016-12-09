@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.devangam.dto.LocationDTO;
 import com.devangam.dto.MatrimonyDTO;
 import com.devangam.dto.PersonalDetailDTO;
+import com.devangam.dto.PremiumUserDTO;
 import com.devangam.dto.ProfessionalDetailsDTO;
 import com.devangam.dto.ReligionDetailsDTO;
 import com.devangam.dto.UserRequestDTO;
 import com.devangam.entity.Matrimony;
+import com.devangam.entity.PremiumUser;
 import com.devangam.entity.User;
 import com.devangam.security.JwtTokenUtil;
 import com.devangam.security.JwtUser;
@@ -62,12 +64,13 @@ public class UserRestController {
     	userRequestDto.setPersonalDetail(new PersonalDetailDTO());
     	userRequestDto.setProfessionalDetail(new ProfessionalDetailsDTO());
     	userRequestDto.setReligionDetail(new ReligionDetailsDTO());
+    	userRequestDto.setPremiumUser(new PremiumUserDTO());
     	return userRequestDto;
     }
     
     @RequestMapping(path = "/api/signupUserMatrimony", method = RequestMethod.POST)
-   	public @ResponseBody String signupUserMatrimony(@RequestBody Matrimony matrimony) {
-       	registrationService.createUserMatrimony(matrimony);
+   	public @ResponseBody String signupUserMatrimony(@RequestBody UserRequestDTO userRequestDto) {
+       	registrationService.createUserMatrimony(userRequestDto);
        	return "sucess";
        }
 

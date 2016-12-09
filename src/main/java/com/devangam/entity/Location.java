@@ -21,7 +21,6 @@ import javax.persistence.Table;
 @Table(name="t_location")
 @NamedQuery(name="Location.findAll", query="SELECT l FROM Location l")
 public class Location  {
-	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
