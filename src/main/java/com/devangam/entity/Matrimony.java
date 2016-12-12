@@ -16,7 +16,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -31,6 +33,7 @@ public class Matrimony  {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="MATRIMONY_ID")
+	@JsonIgnore
 	private int matrimonyId;
 
 	@Column(name="CRATED_FOR")
@@ -55,6 +58,7 @@ public class Matrimony  {
 	//bi-directional one-to-one association to User
 	@OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinColumn(name="USER_ID")
+	@JsonBackReference
 	private User user;
 
 	public Matrimony() {

@@ -12,6 +12,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the t_location database table.
@@ -25,6 +28,7 @@ public class Location  {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="LOCATION_ID")
+	@JsonIgnore
 	private int locationId;
 
 	private String city;
@@ -37,6 +41,7 @@ public class Location  {
 
 	@OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinColumn(name="USER_ID")
+	@JsonBackReference
 	private User user;
 
 	public Location() {
