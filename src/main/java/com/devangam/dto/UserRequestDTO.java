@@ -1,9 +1,15 @@
 package com.devangam.dto;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 @Data
-public class UserRequestDTO {
+public class UserRequestDTO implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2095259284251994712L;
 	private String username;
 	private String firstname;
 	private String lastname;
@@ -17,5 +23,6 @@ public class UserRequestDTO {
 	private ProfessionalDetailsDTO professionalDetail;
 	private ReligionDetailsDTO religionDetail;
 	private PremiumUserDTO premiumUser;
+	private boolean active;
 	
 }
