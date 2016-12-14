@@ -37,6 +37,7 @@ public class RegistrationService {
 		try {
 		    if (null != user) {
 				user.setActive(true);
+				user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 				if (user.getRoles() != null) {
 					Role role = userRolesRepository.findOne(Integer.valueOf((AuthorityName.ROLE_USER.getRole())));
 					user.getRoles().add(role);
@@ -50,16 +51,33 @@ public class RegistrationService {
 	// From UI when user wants to register for Matrimony then we need to create all details like matrimony, location etc...after that we set
 	// all other objects from user object
 	public void createUserMatrimony(UserRequestDTO userRequestDto){
-		User user = userRepository.findByUsername("admin1");
-		//user.setMatrimonyUser(true);
-		//user.setMatrimony(matrimonyUser);;
-		//matrimonyUser.setUser(user);
-		//matrimonyRepository.save(matrimonyUser);
-		userRepository.save(user);
+		if(userRequestDto.isMatrimonyUser()){
+			User repositoryUser = userRepository.findByUsername(userRequestDto.getUsername());
+			User user = objectMapper.convertValue(userRequestDto, User.class);
+			
+			repositoryUser.setMatrimony(user.getMatrimony());
+			repositoryUser.setMatrimonyUser(true);
+			repositoryUser.setLocation(user.getLocation());
+			repositoryUser.setPersonalDetail(user.getPersonalDetail());
+			repositoryUser.setProfessionalDetail(user.getProfessionalDetail());
+			repositoryUser.setReligionDetail(user.getReligionDetail());
+			repositoryUser.setPremiumUser(user.getPremiumUser());
+			userRepository.save(repositoryUser);
+		}
 		
 	}
 	//@ExceptionHandler(DevangamException.class)
-	public User getUserDetails(String username){
-		return userRepository.findByUsername(username);
+	public UserRequestDTO getUserDetails(String emailId) {
+		UserRequestDTO userRequestDto = new UserRequestDTO();
+		try {
+			User repositoryUser = userRepository.findByUsername(emailId);
+			if(null != repositoryUser){
+				userRequestDto = objectMapper.convertValue(repositoryUser, UserRequestDTO.class);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return userRequestDto;
+		
 	}
 }

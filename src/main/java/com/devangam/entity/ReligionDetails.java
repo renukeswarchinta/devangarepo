@@ -1,7 +1,19 @@
 package com.devangam.entity;
 
-import java.io.Serializable;
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -12,11 +24,11 @@ import javax.persistence.*;
 @Table(name="t_religion_details")
 @NamedQuery(name="ReligionDetails.findAll", query="SELECT r FROM ReligionDetails r")
 public class ReligionDetails  {
-	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="RELIGION_DETAILS_ID")
+	@JsonIgnore
 	private int religionDetailsId;
 
 	private String dosham;
@@ -28,6 +40,7 @@ public class ReligionDetails  {
 	//bi-directional one-to-one association to User
 	@OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinColumn(name="USER_ID")
+	@JsonBackReference
 	private User user;
 
 	public ReligionDetails() {

@@ -16,7 +16,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -31,6 +33,7 @@ public class PremiumUser  {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="PREMIUM_USERS_ID")
+	@JsonIgnore
 	private int premiumUsersId;
 
 	@Column(name="PREMIUM_AMOUNT")
@@ -55,6 +58,7 @@ public class PremiumUser  {
 
 	@OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinColumn(name="USER_ID")
+	@JsonBackReference
 	private User user;
 	
 	public User getUser() {

@@ -12,6 +12,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the t_professional_details database table.
@@ -21,11 +24,11 @@ import javax.persistence.Table;
 @Table(name="t_professional_details")
 @NamedQuery(name="ProfessionalDetails.findAll", query="SELECT p FROM ProfessionalDetails p")
 public class ProfessionalDetails  {
-	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="PROFESSIONAL_DETAILS_ID")
+	@JsonIgnore
 	private int professionalDetailsId;
 
 	@Column(name="EMPLOYED_IN")
@@ -41,6 +44,7 @@ public class ProfessionalDetails  {
 	//bi-directional one-to-one association to User
 	@OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinColumn(name="USER_ID")
+	@JsonBackReference
 	private User user;
 
 	public ProfessionalDetails() {
