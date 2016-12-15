@@ -2,6 +2,8 @@ package com.devangam.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,6 +27,8 @@ import com.devangam.service.RegistrationService;
 
 @RestController
 public class UserRestController {
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 
     @Value("${jwt.header}")
     private String tokenHeader;
@@ -55,6 +59,9 @@ public class UserRestController {
     
     @RequestMapping(value = "userdto", method = RequestMethod.GET)
 	public @ResponseBody UserRequestDTO getUserDTO() {
+    	logger.debug("Process user dto start..debug");
+    	logger.info("Process user dto start..INFO");
+    	logger.warn("Process user dto start..WARN");
     	UserRequestDTO userRequestDto= new UserRequestDTO();
     	userRequestDto.setMatrimony(new MatrimonyDTO());
     	userRequestDto.setLocation(new LocationDTO());
