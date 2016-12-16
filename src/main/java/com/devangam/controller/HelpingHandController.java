@@ -17,13 +17,13 @@ public class HelpingHandController {
 	@Autowired
 	private EducationHelpingHandImpl helpingHand; 
 	
-	@RequestMapping(name="addEducationDetails",method=RequestMethod.POST)
+	@RequestMapping(value="/api/addEducationDetails",method=RequestMethod.POST)
 	public boolean addEducationDetails(@RequestBody EducationDetailsDTO educationDetails){
 		
 		helpingHand.createEducationDetails(educationDetails);
 		return true;
 	} 
-	@RequestMapping(value ="getEducationDetails",method=RequestMethod.GET)
+	@RequestMapping(value ="/api/getEducationDetails",method=RequestMethod.GET)
 	public @ResponseBody EducationDetailsDTO getEducationDetailsDTO(){
 		return new EducationDetailsDTO();
 	}
