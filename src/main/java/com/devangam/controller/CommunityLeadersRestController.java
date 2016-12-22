@@ -19,7 +19,7 @@ public class CommunityLeadersRestController {
 	@RequestMapping(name="api/addCommunityLeaderDetails")
 	public @ResponseBody ResponseDTO saveCommunityLeadersDTO(@RequestBody CommunityLeadersDTO communityLeadersDTO){
 		ResponseDTO response = new ResponseDTO();
-		
+		registrationService.saveCommunityLeaders(communityLeadersDTO);
 		return response;
 	} 
 }
