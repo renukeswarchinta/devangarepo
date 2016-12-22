@@ -11,11 +11,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.devangam.dto.CommonResponseDTO;
+import com.devangam.dto.CommunityLeadersDTO;
 import com.devangam.dto.UserRequestDTO;
 import com.devangam.dto.UserResponseDTO;
 import com.devangam.entity.AuthorityName;
+import com.devangam.entity.CommunityLeader;
 import com.devangam.entity.Role;
 import com.devangam.entity.User;
+import com.devangam.repository.CommunityLeaderRepository;
 import com.devangam.repository.RoleRepository;
 import com.devangam.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,6 +38,8 @@ public class RegistrationService {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired
 	private ObjectMapper objectMapper;
+	@Autowired 
+	private CommunityLeaderRepository communityLeaderRepo;
 
 	public CommonResponseDTO createUser(UserRequestDTO userRequestDto) {
 		CommonResponseDTO userResponseDto = new CommonResponseDTO();
@@ -137,5 +142,21 @@ public class RegistrationService {
 		userResponsetDto.setMessage(message);
 		return userResponsetDto;
 
+	}
+	
+	public CommonResponseDTO saveCommunityLeaders(CommunityLeadersDTO communityLeadersDTO){
+		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
+		try{
+			
+			CommunityLeader communityLeader = objectMapper.convertValue(communityLeadersDTO, CommunityLeader.class);
+			communityLeaderRepo.save(communityLeader);
+			commonResponseDTO.setStatus(SUCCESS);
+			commonResponseDTO.setMessage("Saved Successfully");
+		}catch(Exception exception){
+			commonResponseDTO.setMessage("Error while saving community leaders data");
+			commonResponseDTO.setStatus(FAILURE);
+		}
+		 return  commonResponseDTO;
+		
 	}
 }
