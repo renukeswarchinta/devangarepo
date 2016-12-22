@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.devangam.entity.Education;
 
+
 public interface EducationHelpingHandRepository extends JpaRepository<Education, Serializable>{
 
 }
