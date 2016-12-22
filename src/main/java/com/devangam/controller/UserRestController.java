@@ -2,6 +2,8 @@ package com.devangam.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,12 +21,16 @@ import com.devangam.dto.PremiumUserDTO;
 import com.devangam.dto.ProfessionalDetailsDTO;
 import com.devangam.dto.ReligionDetailsDTO;
 import com.devangam.dto.UserRequestDTO;
+import com.devangam.dto.UserResponseDTO;
+import com.devangam.dto.CommonResponseDTO;
 import com.devangam.security.JwtTokenUtil;
 import com.devangam.security.JwtUser;
 import com.devangam.service.RegistrationService;
 
 @RestController
 public class UserRestController {
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 
     @Value("${jwt.header}")
     private String tokenHeader;
@@ -48,13 +54,15 @@ public class UserRestController {
     
     
     @RequestMapping(path = "/api/signupUser", method = RequestMethod.POST)
-	public @ResponseBody String signupUser(@RequestBody UserRequestDTO userRequestDTO) {
-    	registrationService.createUser(userRequestDTO);
-    	return "sucess";
+	public @ResponseBody CommonResponseDTO signupUser(@RequestBody UserRequestDTO userRequestDTO) {
+    	return registrationService.createUser(userRequestDTO);
     }
     
     @RequestMapping(value = "userdto", method = RequestMethod.GET)
 	public @ResponseBody UserRequestDTO getUserDTO() {
+    	logger.debug("Process user dto start..debug");
+    	logger.info("Process user dto start..INFO");
+    	logger.warn("Process user dto start..WARN");
     	UserRequestDTO userRequestDto= new UserRequestDTO();
     	userRequestDto.setMatrimony(new MatrimonyDTO());
     	userRequestDto.setLocation(new LocationDTO());
@@ -66,17 +74,14 @@ public class UserRestController {
     }
     
     @RequestMapping(path = "/api/optMatrimonyRegistation", method = RequestMethod.POST)
-   	public @ResponseBody String optMatrimonyRegistation(@RequestBody UserRequestDTO userRequestDto) {
-       	registrationService.createUserMatrimony(userRequestDto);
-       	return "sucess";
+   	public @ResponseBody CommonResponseDTO optMatrimonyRegistation(@RequestBody UserRequestDTO userRequestDto) {
+       	return registrationService.createUserMatrimony(userRequestDto);
        }
 
     @RequestMapping(value = "/api/getUserDetails/{emailId}", method = RequestMethod.GET)
-	public @ResponseBody UserRequestDTO getUserDetails(@PathVariable String emailId) {
-    	System.out.println("Get UserDeails,EmailID="+emailId);
-    	UserRequestDTO userRequestDto = registrationService.getUserDetails(emailId);
-    	//boolean isMatrimony = user.isMatrimonyUser();
+	public @ResponseBody UserResponseDTO getUserDetails(@PathVariable String emailId) {
+		logger.debug("Fetch UserDetails start. EmailID=" + emailId);
     	//Need to check how we can make this user object in session object.and retrive the same with out hitting the database
-    	return userRequestDto;
+    	return registrationService.getUserDetails(emailId);
     }
 }
