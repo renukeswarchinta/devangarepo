@@ -1,6 +1,8 @@
 package com.devangam.service;
 
-import java.io.IOException;
+import static com.devangam.constants.DevangamConstants.FAILURE;
+import static com.devangam.constants.DevangamConstants.SUCCESS;
+
 import java.util.Date;
 
 import javax.transaction.Transactional;
@@ -10,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.devangam.archive.Document;
 import com.devangam.dto.CommonResponseDTO;
@@ -24,8 +27,6 @@ import com.devangam.repository.CommunityLeaderRepository;
 import com.devangam.repository.RoleRepository;
 import com.devangam.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import static com.devangam.constants.DevangamConstants.FAILURE;
-import static com.devangam.constants.DevangamConstants.SUCCESS;
 
 @Service
 @Transactional
@@ -138,28 +139,43 @@ public class RegistrationService {
 
 	// @ExceptionHandler(DevangamException.class)
 	public UserResponseDTO getUserDetails(String emailId) {
-		UserResponseDTO userResponsetDto = new UserResponseDTO();
+		boolean isError = false;
+		boolean isSuccess = false;
 		String message = null;
-		String status = null;
-		try {
-			User repositoryUser = userRepository.findByUsername(emailId);
-			if (null != repositoryUser) {
-				UserRequestDTO userResquestDto = objectMapper.convertValue(repositoryUser, UserRequestDTO.class);
-				userResponsetDto.setUserRequestDto(userResquestDto);
+		UserResponseDTO userResponsetDto = new UserResponseDTO();
+		if (!StringUtils.isEmpty(emailId)) {
+			try {
+				User repositoryUser = userRepository.findByUsername(emailId);
+				if (null != repositoryUser) {
+					UserRequestDTO userResquestDto = objectMapper.convertValue(repositoryUser, UserRequestDTO.class);
+					userResponsetDto.setUserRequestDto(userResquestDto);
+					isSuccess = true;
+					message = "Retriving user details successfully";
+				} else {
+					isError = true;
+					message = "Email Id doesn't exist";
+					if (logger.isDebugEnabled()) {
+						logger.debug("Email Id not exist. EmailId={0}", emailId);
+					}
+				}
+				if (logger.isDebugEnabled()) {
+					logger.debug("Retriving user details successfully. EmailId={0}", userResponsetDto);
+				}
+			} catch (Exception exception) {
+				isError = true;
+				message = "Retriving user details failed.EmailId=" + emailId;
+				if (logger.isErrorEnabled()) {
+					logger.error("Retriving user details successfully. EmailId=" + emailId, exception);
+				}
 			}
-			if (logger.isDebugEnabled()) {
-				logger.debug("Retriving user details successfully by email. mailId=" + userResponsetDto);
-			}
-			status = SUCCESS;
-		} catch (Exception exception) {
-			status = FAILURE;
-			message = "Retriving user details failed";
-			logger.error("Retriving user details failed", exception);
+		} else {
+			isError = false;
+			message = "Email Id empty or null";
 		}
+		String status= isSuccess == true ? SUCCESS : FAILURE; 
 		userResponsetDto.setStatus(status);
 		userResponsetDto.setMessage(message);
 		return userResponsetDto;
-
 	}
 
 	public CommonResponseDTO saveCommunityLeaders(CommunityLeadersDTO communityLeadersDTO) {
