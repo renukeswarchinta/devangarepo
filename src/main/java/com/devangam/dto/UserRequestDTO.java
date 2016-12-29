@@ -2,6 +2,10 @@ package com.devangam.dto;
 
 import java.io.Serializable;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Data
@@ -24,5 +28,9 @@ public class UserRequestDTO implements Serializable{
 	private ReligionDetailsDTO religionDetail;
 	private PremiumUserDTO premiumUser;
 	private boolean active;
+	@JsonIgnore
+	private MultipartFile multipartFile;
+	@JsonIgnore
+	private String userRequestJson;
 	
 }

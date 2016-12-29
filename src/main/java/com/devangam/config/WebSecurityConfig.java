@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import com.devangam.security.JwtAuthenticationEntryPoint;
 import com.devangam.security.JwtAuthenticationTokenFilter;
@@ -37,7 +39,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .userDetailsService(this.userDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
-
+    
+    @Bean
+    public WebMvcConfigurerAdapter corsConfigurer() {
+        return new WebMvcConfigurerAdapter() {
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/*");
+            }
+        };
+    }
+    
+    
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -47,7 +59,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public ObjectMapper objectMapper() {
         return new ObjectMapper();
     }
-    
 
     @Bean
     public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
@@ -59,15 +70,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity
                 // we don't need CSRF because our token is invulnerable
                 .csrf().disable()
-
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-
                 // don't create session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-
                 .authorizeRequests()
                 //.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
                 // allow anonymous resource requests
                 .antMatchers(
                         HttpMethod.GET,
@@ -81,7 +88,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 ).permitAll().antMatchers("/api/**").permitAll()
                 .antMatchers("/auth/**").permitAll()
                 .anyRequest().authenticated();
-
         // Custom JWT based security filter
         httpSecurity
                 .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
