@@ -1,7 +1,5 @@
 package com.devangam.controller;
 
-import java.io.IOException;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -29,7 +27,6 @@ import com.devangam.dto.UserRequestDTO;
 import com.devangam.dto.UserResponseDTO;
 import com.devangam.security.JwtTokenUtil;
 import com.devangam.security.JwtUser;
-import com.devangam.service.FileSystemDocumentService;
 import com.devangam.service.RegistrationService;
 
 @RestController
@@ -55,14 +52,19 @@ public class UserRestController {
 		return user;
 	}
 
-	@RequestMapping(value = "/api/signupUser", method = RequestMethod.POST)
-	public @ResponseBody CommonResponseDTO signupUser(
+	@RequestMapping(value = "/api/user/matrimonyUserRegistation", method = RequestMethod.POST)
+	public @ResponseBody CommonResponseDTO matrimonyUserRegistation(
 			@RequestParam(value = "file", required = false) MultipartFile file,
 			@RequestParam(value = "userRequestJson", required = true) String userRequestJson) {
 		UserRequestDTO userRequestDTO = new UserRequestDTO();
 		userRequestDTO.setMultipartFile(file);
 		userRequestDTO.setUserRequestJson(userRequestJson);
-		return registrationService.createUser(userRequestDTO);
+		return registrationService.saveMatrimonyUser(userRequestDTO);
+	}
+	
+	@RequestMapping(value = "/api/user/signupUser", method = RequestMethod.POST)
+	public @ResponseBody CommonResponseDTO signupUser(@RequestBody UserRequestDTO userRequestDto) {
+		return registrationService.saveUserFromUserRequest(userRequestDto);
 	}
 
 	@RequestMapping(value = "userdto", method = RequestMethod.GET)
@@ -82,7 +84,7 @@ public class UserRestController {
 
 	@RequestMapping(path = "/api/optMatrimonyRegistation", method = RequestMethod.POST)
 	public @ResponseBody CommonResponseDTO optMatrimonyRegistation(@RequestBody UserRequestDTO userRequestDto) {
-		return registrationService.createUserMatrimony(userRequestDto);
+		return registrationService.saveOptUserMatrimony(userRequestDto);
 	}
 
 	@RequestMapping(value = "/api/getUserDetails/{emailId}", method = RequestMethod.GET)

@@ -28,7 +28,7 @@ public class FileSystemDocumentService {
  * 
  */
 
-    public static final String DIRECTORY = "C:\\archive";
+    public static final String DIRECTORY = "/home/ec2-user/archive";
     public static final String META_DATA_FILE_NAME = "metadata.properties";
     
     @PostConstruct
