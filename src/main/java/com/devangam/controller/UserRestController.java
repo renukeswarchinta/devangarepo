@@ -94,4 +94,16 @@ public class UserRestController {
 		// retrive the same with out hitting the database
 		return registrationService.getUserDetails(emailId);
 	}
+	
+	// User profile management; 
+	//Show what are the trasanctions done for all helping hand types
+	// Jobs uploaded if any
+	// Matrimony details if any ... (This can be taken later)
+	public void getUserProfileDetails(String emailId){
+		
+		
+	}
+	
+	
+	
 }

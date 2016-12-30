@@ -5,7 +5,10 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.devangam.dto.CommonResponseDTO;
+import com.devangam.dto.DonationDetailsDTO;
 import com.devangam.dto.EducationDetailsDTO;
+import com.devangam.entity.DonationDetails;
 import com.devangam.entity.Education;
 import com.devangam.repository.EducationHelpingHandRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,11 +23,18 @@ public class EducationHelpingHandImpl implements IHelpingHandService {
 	private ObjectMapper objectMapper;
 	
 	@Override
-	public boolean createEducationDetails(EducationDetailsDTO educationDTO) {
+	public CommonResponseDTO createEducationDetails(EducationDetailsDTO educationDTO) {
+		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
+		try{
 		Education education =objectMapper.convertValue(educationDTO, Education.class);
 		Education savedEducation = educationRepository.save(education);
-		
-		return true;
+		commonResponseDTO.setMessage("Saved Educaiton details");
+		}catch(Exception exception ){
+			commonResponseDTO.setMessage("Exception while saving Educaiton details ");
+			commonResponseDTO.setStatus("400");
+		}
+		return commonResponseDTO;
 	}
+
 
 }
