@@ -49,7 +49,7 @@ public class HelpingHandController {
 
 	@RequestMapping(value="/api/addOldAgeHomeDetails",method=RequestMethod.POST)
 	public @ResponseBody CommonResponseDTO addOldAgeHomeDetails(@RequestBody OldAgeHomeHelpingHandDTO oldAgeHomeHelpingHandDTO){
-		return patientHelpingHand.saveOldAgeHomeHelpingHandDetails(oldAgeHomeHelpingHandDTO);
+		return oldAgeHomeHelpingHand.saveOldAgeHomeHelpingHandDetails(oldAgeHomeHelpingHandDTO);
 	} 
 	
 	@RequestMapping(value ="/api/saveDonationDetails",method=RequestMethod.GET)
