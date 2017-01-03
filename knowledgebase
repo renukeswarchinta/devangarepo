@@ -1,0 +1,33 @@
+http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#common-application-properties
+
+
+http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Tutorials.WebServerDB.CreateWebServer.html
+-------------------------------------------
+[ec2-user ~]$ sudo yum update –y
+> sudo yum install -y httpd24
+> sudo service httpd start
+--------------------------------------------
+> sudo yum install java-1.8.0
+> sudo /usr/sbin/alternatives --config java
+--------------------------------------------
+ls -l /var/www
+
+/var/www/html/
+-------------MYSQL installation------------------------------
+http://text-analytics101.rxnlp.com/2013/11/how-to-install-mysql-on-amazon-ec2.html
+>sudo yum install mysql-server
+Start mysql, and configure it to start up automatically on reboot.
+>sudo chkconfig mysqld on
+
+> sudo service mysqld start
+You would see a response like the following.
+Starting mysqld
+
+
+GRANT ALL PRIVILEGES ON *.* TO 'theuser'@'localhost';
+
+GRANT ALL PRIVILEGES ON *.* TO 'theuser'@'localhost';
+
+CREATE USER 'theuser'@'%' IDENTIFIED BY '[your_pwd]';
+
+GRANT ALL PRIVILEGES ON *.* TO 'theuser'@'%' WITH GRANT OPTION;
