@@ -31,3 +31,5 @@ GRANT ALL PRIVILEGES ON *.* TO 'theuser'@'localhost';
 CREATE USER 'theuser'@'%' IDENTIFIED BY '[your_pwd]';
 
 GRANT ALL PRIVILEGES ON *.* TO 'theuser'@'%' WITH GRANT OPTION;
+
+java -Dserver.port=$PORT -jar <jar name>

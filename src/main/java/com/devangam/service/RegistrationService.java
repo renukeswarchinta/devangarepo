@@ -45,7 +45,10 @@ public class RegistrationService {
 	private CommunityLeaderRepository communityLeaderRepo;
 	@Autowired
     private FileSystemDocumentService fileSystemDocumentService;
-
+	/*@Autowired
+	private JavaMailSender javaMailSender;
+	*/
+	
 	public CommonResponseDTO saveMatrimonyUser(UserRequestDTO userJsonRequestDto) {
 		CommonResponseDTO userResponseDto = new CommonResponseDTO();
 		// TODO : Pre validation check and Required filed validation is required
@@ -96,6 +99,7 @@ public class RegistrationService {
 	public CommonResponseDTO saveUserFromUserRequest(UserRequestDTO userRequestDto) {
 		CommonResponseDTO userResponseDto = new CommonResponseDTO();
 		// TODO : Pre validation check and Required filed validation is required
+		
 		User repositoryUser = null;
 		String message = null;
 		String status = null;
@@ -147,6 +151,7 @@ public class RegistrationService {
 				Role role = userRolesRepository.findOne(Integer.valueOf((AuthorityName.ROLE_USER.getRole())));
 				user.getRoles().add(role);
 			}
+			user.setUsername(userRequestDto.getEmail());
 			repositoryUser = userRepository.save(user);
 		}
 		return repositoryUser;

@@ -58,7 +58,17 @@ public class User  {
 
 	private String password;
 	
-	@ManyToMany(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
+	@Column(name="COUNTRY")
+	private String country;
+
+	@Column(name="STATE")
+	private String state;
+	
+	@Column(name="DISTRICT")
+	private String district;
+	
+	
+	@ManyToMany(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     @JoinTable(
             name = "USER_ROLE",
             joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")},
@@ -185,6 +195,30 @@ public class User  {
 
 	public Location getLocation() {
 		return this.location;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(String district) {
+		this.district = district;
 	}
 
 	public void setLocation(Location location) {
