@@ -104,6 +104,21 @@ public class UserRestController {
 		
 	}
 	
+
+	/**	Method is used to send password on forgot password performed action
+	 * @param emailId
+	 * @return Response either success or failure
+	 */
+	@RequestMapping(value = "/api/forgetPassword/{emailId}", method = RequestMethod.GET)
+	public @ResponseBody UserResponseDTO forgetPassword(@PathVariable String emailId) {
+		logger.debug("Fetch UserDetails start. EmailID=" + emailId);
+		UserResponseDTO userDetails =  registrationService.getUserDetails(emailId);
+		UserRequestDTO userRequestDTO = userDetails.getUserRequestDto();
+		String password = userRequestDTO.getPassword();
+		//Send this password thru email to user.
+		
+		return userDetails;
+	}
 	
 	
 }

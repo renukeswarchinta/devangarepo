@@ -216,6 +216,8 @@ public class RegistrationService {
 				if (null != repositoryUser) {
 					UserRequestDTO userResquestDto = objectMapper.convertValue(repositoryUser, UserRequestDTO.class);
 					userResponsetDto.setUserRequestDto(userResquestDto);
+					//Add this to recover password
+					userResquestDto.setPassword(bCryptPasswordEncoder.encode(repositoryUser.getPassword()));
 					isSuccess = true;
 					message = "Retriving user details successfully";
 				} else {
