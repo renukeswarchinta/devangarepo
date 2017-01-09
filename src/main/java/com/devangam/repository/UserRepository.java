@@ -10,4 +10,5 @@ import com.devangam.entity.User;
  */
 public interface UserRepository extends JpaRepository<User, Long> {
 	User findByUsername(String username);
+	void createVerificationTokenForUser(User user,String token);
 }

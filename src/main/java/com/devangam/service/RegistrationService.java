@@ -4,6 +4,9 @@ import static com.devangam.constants.DevangamConstants.FAILURE;
 import static com.devangam.constants.DevangamConstants.SUCCESS;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -24,9 +27,12 @@ import com.devangam.entity.AuthorityName;
 import com.devangam.entity.CommunityLeader;
 import com.devangam.entity.Role;
 import com.devangam.entity.User;
+import com.devangam.entity.VerificationToken;
 import com.devangam.repository.CommunityLeaderRepository;
 import com.devangam.repository.RoleRepository;
 import com.devangam.repository.UserRepository;
+import com.devangam.repository.VerificationTokenRepository;
+import com.devangam.utils.DevangamProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -46,10 +52,10 @@ public class RegistrationService {
 	private CommunityLeaderRepository communityLeaderRepo;
 	@Autowired
     private FileSystemDocumentService fileSystemDocumentService;
-	/*@Autowired
-	private JavaMailSender javaMailSender;
-	*/
-	
+	@Autowired
+    private VerificationTokenRepository tokenRepository;
+	@Autowired
+	private EmailService emailService;
 	public CommonResponseDTO saveMatrimonyUser(UserRequestDTO userJsonRequestDto) {
 		CommonResponseDTO userResponseDto = new CommonResponseDTO();
 		// TODO : Pre validation check and Required filed validation is required
@@ -156,23 +162,27 @@ public class RegistrationService {
 			user.setUsername(userRequestDto.getEmail());
 			repositoryUser = userRepository.save(user);
 			
-			/*Mail mail = new Mail();
+			Mail mail = new Mail();
 			 mail.setTemplateName(EmailService.VERIFY_EMAIL);
 			 mail.setMailTo("crenukeswar2010@gmail.com");
 			 Map<String,String> map =new HashMap<String,String>();
 			 final String token = UUID.randomUUID().toString();
-			 userDAO.createVerificationTokenForUser(userEntity, token);
-			 //String url = RDNProperty.getInstance().getProperties("rdn.home") + "activate";
-			 final String confirmationUrl = RDNProperty.getInstance().getProperties("rdn.home")+ "/registrationConfirm?token=" + token;
+			 createVerificationTokenForUser(user, token);
+			 final String confirmationUrl = DevangamProperty.getInstance().getProperties("devangam.home")+ "/api/registrationConfirm?token=" + token;
 			 
-			 map.put("firstName", user.getFirstName());
+			 map.put("firstName", user.getFirstname());
 			 map.put("link", confirmationUrl);
 			 mail.setValueMap(map);
-			 emailService.sendMail(mail);*/
+			 emailService.sendMail(mail);
 		}
 		return repositoryUser;
 	}
 	
+	private void createVerificationTokenForUser(User user, String token) {
+		final VerificationToken myToken = new VerificationToken(token, user);
+        tokenRepository.save(myToken);
+	}
+
 	public User convertUserRequestDtoToUser(UserRequestDTO userRequestDto){
 		User user = null;
 		try {

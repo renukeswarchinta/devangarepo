@@ -47,6 +47,7 @@ public class AdvertisementUploadController {
 		Gson gson = new Gson();
         String json = gson.toJson(adverstimentCostGreaterThan1000);
         System.out.println(json);
+        
 		adverstimentCostGreaterThan1000.forEach(advertisement -> System.out.println(advertisement.getAdvertisementCost()));
 		adverstimentCostLessThan1000.forEach(advertisement -> System.out.println(advertisement.getAdvertisementCost()));
 	}
