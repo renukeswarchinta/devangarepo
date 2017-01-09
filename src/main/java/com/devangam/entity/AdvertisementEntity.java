@@ -7,10 +7,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@Table(name="Advertisement")
 public class AdvertisementEntity {
 
 	@Id
@@ -33,6 +35,13 @@ public class AdvertisementEntity {
 	private Date endDate;
 	@Column(name="ADVERTISEMENT_COST")
 	private double advertisementCost;
+	
+	@Column(name="IS_EXPIRED")
+	private boolean isExpired;
+	
+	@Column(name="DAYS_TO_BE_POSTED")
+	private int noOfDaysToBePosted;
+	
 	
 	public AdvertisementEntity() {
 	}

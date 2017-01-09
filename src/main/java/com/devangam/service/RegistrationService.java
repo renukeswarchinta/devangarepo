@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 import com.devangam.archive.Document;
 import com.devangam.dto.CommonResponseDTO;
 import com.devangam.dto.CommunityLeadersDTO;
+import com.devangam.dto.Mail;
 import com.devangam.dto.UserRequestDTO;
 import com.devangam.dto.UserResponseDTO;
 import com.devangam.entity.AuthorityName;
@@ -144,7 +145,8 @@ public class RegistrationService {
 		User repositoryUser = null;
 		User user = convertUserRequestDtoToUser(userRequestDto);
 		if (null != user) {
-			user.setActive(Boolean.TRUE);
+			//user.setActive(Boolean.TRUE);
+			user.setActive(Boolean.FALSE);
 			user.setCreatedDate(new Date());
 			user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 			if (user.getRoles() != null) {
@@ -153,6 +155,20 @@ public class RegistrationService {
 			}
 			user.setUsername(userRequestDto.getEmail());
 			repositoryUser = userRepository.save(user);
+			
+			/*Mail mail = new Mail();
+			 mail.setTemplateName(EmailService.VERIFY_EMAIL);
+			 mail.setMailTo("crenukeswar2010@gmail.com");
+			 Map<String,String> map =new HashMap<String,String>();
+			 final String token = UUID.randomUUID().toString();
+			 userDAO.createVerificationTokenForUser(userEntity, token);
+			 //String url = RDNProperty.getInstance().getProperties("rdn.home") + "activate";
+			 final String confirmationUrl = RDNProperty.getInstance().getProperties("rdn.home")+ "/registrationConfirm?token=" + token;
+			 
+			 map.put("firstName", user.getFirstName());
+			 map.put("link", confirmationUrl);
+			 mail.setValueMap(map);
+			 emailService.sendMail(mail);*/
 		}
 		return repositoryUser;
 	}

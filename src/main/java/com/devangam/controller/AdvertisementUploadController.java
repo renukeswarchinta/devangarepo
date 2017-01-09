@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.devangam.dto.AdvertisementDTO;
 import com.devangam.entity.AdvertisementEntity;
 import com.devangam.service.AdvertisementService;
+import com.google.gson.Gson;
 
 
 /**
@@ -36,10 +37,19 @@ public class AdvertisementUploadController {
 	@RequestMapping(value="/api/getAdvertisementDetails",method=RequestMethod.GET)
 	public void getAdvertisementDetails(){
 		List<AdvertisementEntity> listOfAdvertisements = advertisementService.getAllAdvertisementDetails();
-		listOfAdvertisements.stream()
+		List<AdvertisementEntity> adverstimentCostGreaterThan1000 = listOfAdvertisements.stream()
 							.filter(advertisement  -> advertisement.getAdvertisementCost() > 1000)
 							.collect(Collectors.toList());
-							
 		
+		List<AdvertisementEntity> adverstimentCostLessThan1000 = listOfAdvertisements.stream()
+									.filter(advertisement  -> advertisement.getAdvertisementCost() < 1000)
+									.collect(Collectors.toList());
+		Gson gson = new Gson();
+        String json = gson.toJson(adverstimentCostGreaterThan1000);
+        System.out.println(json);
+		adverstimentCostGreaterThan1000.forEach(advertisement -> System.out.println(advertisement.getAdvertisementCost()));
+		adverstimentCostLessThan1000.forEach(advertisement -> System.out.println(advertisement.getAdvertisementCost()));
 	}
+	
+	
 }
