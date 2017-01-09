@@ -35,7 +35,7 @@ public class AdvertisementUploadController {
 	
 	// In thise method we can use java 8 filter to filter out price greater than 1000 to eligible
 	@RequestMapping(value="/api/getAdvertisementDetails",method=RequestMethod.GET)
-	public void getAdvertisementDetails(){
+	public Gson getAdvertisementDetails(){
 		List<AdvertisementEntity> listOfAdvertisements = advertisementService.getAllAdvertisementDetails();
 		List<AdvertisementEntity> adverstimentCostGreaterThan1000 = listOfAdvertisements.stream()
 							.filter(advertisement  -> advertisement.getAdvertisementCost() > 1000)
@@ -45,11 +45,11 @@ public class AdvertisementUploadController {
 									.filter(advertisement  -> advertisement.getAdvertisementCost() < 1000)
 									.collect(Collectors.toList());
 		Gson gson = new Gson();
-        String json = gson.toJson(adverstimentCostGreaterThan1000);
-        System.out.println(json);
-        
-		adverstimentCostGreaterThan1000.forEach(advertisement -> System.out.println(advertisement.getAdvertisementCost()));
-		adverstimentCostLessThan1000.forEach(advertisement -> System.out.println(advertisement.getAdvertisementCost()));
+//		adverstimentCostGreaterThan1000.forEach(advertisement -> System.out.println(advertisement.getAdvertisementCost()));
+	//	adverstimentCostLessThan1000.forEach(advertisement -> System.out.println(advertisement.getAdvertisementCost()));
+		gson.toJson(adverstimentCostLessThan1000);
+		gson.toJson(adverstimentCostGreaterThan1000);
+		return gson;
 	}
 	
 	
