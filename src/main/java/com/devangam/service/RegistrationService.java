@@ -102,7 +102,9 @@ public class RegistrationService {
 		userResponseDto.setMessage(message);
 		return userResponseDto;
 	}
-	
+	public VerificationToken getVerificationToken(final String VerificationToken) {
+        return tokenRepository.findByToken(VerificationToken);
+    }
 	public CommonResponseDTO saveUserFromUserRequest(UserRequestDTO userRequestDto) {
 		CommonResponseDTO userResponseDto = new CommonResponseDTO();
 		// TODO : Pre validation check and Required filed validation is required

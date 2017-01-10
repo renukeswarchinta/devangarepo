@@ -59,5 +59,16 @@ public class HelpingHandController {
 		return null;
 		
 	}
+	// How do we send big comments and which helping hand he is asking for
+	@RequestMapping(value ="/api/saveHelpingHandUserComments",method=RequestMethod.POST)
+	public @ResponseBody CommonResponseDTO saveHelpingHandUserComments(@ModelAttribute UserComments userComments){
+		
+		donationDetailsImpl.saveDonationDetails(donationDetailsDTO);
+		return null;
+		
+	}
+	
+
+	
 	
 }

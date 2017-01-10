@@ -1,5 +1,8 @@
 package com.devangam.controller;
 
+import java.util.Calendar;
+import java.util.Locale;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -7,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.devangam.dto.CommonResponseDTO;
 import com.devangam.dto.LocationDTO;
@@ -25,9 +31,13 @@ import com.devangam.dto.ProfessionalDetailsDTO;
 import com.devangam.dto.ReligionDetailsDTO;
 import com.devangam.dto.UserRequestDTO;
 import com.devangam.dto.UserResponseDTO;
+import com.devangam.entity.User;
+import com.devangam.entity.VerificationToken;
 import com.devangam.security.JwtTokenUtil;
 import com.devangam.security.JwtUser;
 import com.devangam.service.RegistrationService;
+import com.devangam.service.UserService;
+import com.devangam.utils.DevangamProperty;
 
 @RestController
 public class UserRestController {
@@ -41,6 +51,8 @@ public class UserRestController {
 
 	@Autowired
 	private UserDetailsService userDetailsService;
+	@Autowired
+	private UserService userService;
 	@Autowired
 	private RegistrationService registrationService;
 
@@ -119,6 +131,34 @@ public class UserRestController {
 		
 		return userDetails;
 	}
-	
+	@RequestMapping(value = "/api/registrationConfirm", method = RequestMethod.GET)
+	public ModelAndView confirmRegistration(final HttpServletRequest request, final Model model,
+			@RequestParam("token") final String token) {
+		final Locale locale = request.getLocale();
+
+		final VerificationToken verificationToken = registrationService.getVerificationToken(token);
+		if (verificationToken == null) {
+			final String message = DevangamProperty.getInstance().getProperties("auth.message.invalidToken");
+			model.addAttribute("message", message);
+			return new ModelAndView("redirect:/badUser.html?lang=" + locale.getLanguage());
+		}
+
+		final User userEntity = verificationToken.getUser();
+		final Calendar cal = Calendar.getInstance();
+		if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
+			model.addAttribute("message", DevangamProperty.getInstance().getProperties("auth.message.invalidToken"));
+			model.addAttribute("expired", true);
+			model.addAttribute("token", token);
+			return new ModelAndView("redirect:/badUser.html?lang=" + locale.getLanguage());
+		}
+
+		User persistObj = userService.findUserEntity(userEntity.getEmail());
+		persistObj.setActive(true);
+		userService.updateUserEntity(persistObj);
+
+		model.addAttribute("message", DevangamProperty.getInstance().getProperties("auth.message.validToken"));
+		//return "redirect:{/authenticate1}";
+		return new ModelAndView(new RedirectView("/rdnwebportal/authenticate1"));
+	}
 	
 }
