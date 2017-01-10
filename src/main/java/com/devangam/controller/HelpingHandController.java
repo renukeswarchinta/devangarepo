@@ -1,6 +1,7 @@
 package com.devangam.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,6 +13,7 @@ import com.devangam.dto.DonationDetailsDTO;
 import com.devangam.dto.EducationDetailsDTO;
 import com.devangam.dto.OldAgeHomeHelpingHandDTO;
 import com.devangam.dto.PatientDetailsDTO;
+import com.devangam.dto.UserCommentsDTO;
 import com.devangam.service.DonationDetailsImpl;
 import com.devangam.service.EducationHelpingHandImpl;
 import com.devangam.service.OldAgeHomeHelpingHandImpl;
@@ -61,9 +63,8 @@ public class HelpingHandController {
 	}
 	// How do we send big comments and which helping hand he is asking for
 	@RequestMapping(value ="/api/saveHelpingHandUserComments",method=RequestMethod.POST)
-	public @ResponseBody CommonResponseDTO saveHelpingHandUserComments(@ModelAttribute UserComments userComments){
+	public @ResponseBody CommonResponseDTO saveHelpingHandUserComments(@ModelAttribute UserCommentsDTO userComments){
 		
-		donationDetailsImpl.saveDonationDetails(donationDetailsDTO);
 		return null;
 		
 	}
