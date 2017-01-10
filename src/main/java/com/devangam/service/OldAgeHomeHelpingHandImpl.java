@@ -1,5 +1,7 @@
 package com.devangam.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,5 +31,9 @@ public class OldAgeHomeHelpingHandImpl {
 			commonResponseDTO.setMessage("Error while saving OldAge Home details ");
 		}
 		return commonResponseDTO;
+	}
+
+	public List<OldageHome> getOldAgeHomeDetailsDTO() {
+		return oldAgeHomeHelpingHandRepo.findAll();
 	}
 }

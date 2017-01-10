@@ -1,5 +1,7 @@
 package com.devangam.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,10 @@ public class EducationHelpingHandImpl implements IHelpingHandService {
 			commonResponseDTO.setStatus("400");
 		}
 		return commonResponseDTO;
+	}
+
+	public List<Education> getEducationDetails() {
+		return educationRepository.findAll();
 	}
 
 
