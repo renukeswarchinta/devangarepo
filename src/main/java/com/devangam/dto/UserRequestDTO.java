@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.devangam.entity.MatrimonyImage;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -25,6 +26,7 @@ public class UserRequestDTO implements Serializable{
 	private String state;
 	private String district;
 	private MatrimonyDTO matrimony;
+	private MatrimonyImage matrimonyImage;
 	private PersonalDetailDTO personalDetail;
 	private LocationDTO location;
 	private ProfessionalDetailsDTO professionalDetail;

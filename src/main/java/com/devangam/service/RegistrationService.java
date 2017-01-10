@@ -3,6 +3,7 @@ package com.devangam.service;
 import static com.devangam.constants.DevangamConstants.FAILURE;
 import static com.devangam.constants.DevangamConstants.SUCCESS;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.devangam.archive.Document;
 import com.devangam.dto.CommonResponseDTO;
@@ -25,6 +27,7 @@ import com.devangam.dto.UserRequestDTO;
 import com.devangam.dto.UserResponseDTO;
 import com.devangam.entity.AuthorityName;
 import com.devangam.entity.CommunityLeader;
+import com.devangam.entity.MatrimonyImage;
 import com.devangam.entity.Role;
 import com.devangam.entity.User;
 import com.devangam.entity.VerificationToken;
@@ -56,6 +59,7 @@ public class RegistrationService {
     private VerificationTokenRepository tokenRepository;
 	@Autowired
 	private EmailService emailService;
+	
 	public CommonResponseDTO saveMatrimonyUser(UserRequestDTO userJsonRequestDto) {
 		CommonResponseDTO userResponseDto = new CommonResponseDTO();
 		// TODO : Pre validation check and Required filed validation is required
@@ -70,12 +74,13 @@ public class RegistrationService {
 			userRequestDto.setMultipartFile(userJsonRequestDto.getMultipartFile());
 			repositoryUser = userRepository.findByUsername(userRequestDto.getEmail());
 			if (null == repositoryUser) {
-				repositoryUser = saveUserFromUserDto(userRequestDto);
-				if(null != userRequestDto.getMultipartFile()){
-					fileSystemDocumentService.insert(new Document(userRequestDto.getMultipartFile().getBytes(),String.valueOf(repositoryUser.getUserId()),null,null));
-					if (logger.isInfoEnabled()) {
-						logger.info("Matrimony Image Uploaded Successfully");
-					}
+				//save image into file system
+				MultipartFile multipartFile = userRequestDto.getMultipartFile();
+				if(null != multipartFile) {
+					String key = Instant.now().getEpochSecond() + "_" + "MPS";
+					fileSystemDocumentService.insert(new Document(multipartFile.getBytes(),multipartFile.getOriginalFilename(),String.valueOf(key)));
+					userRequestDto.setMatrimonyImage(new MatrimonyImage(key, multipartFile.getOriginalFilename()));
+					repositoryUser = saveUserFromUserDto(userRequestDto);
 				}
 				isSuccess = true;
 				message = "Successfully registered";
@@ -102,6 +107,7 @@ public class RegistrationService {
 		userResponseDto.setMessage(message);
 		return userResponseDto;
 	}
+	
 	public VerificationToken getVerificationToken(final String VerificationToken) {
         return tokenRepository.findByToken(VerificationToken);
     }

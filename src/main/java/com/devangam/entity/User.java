@@ -7,6 +7,9 @@ import org.hibernate.annotations.LazyToOneOption;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -85,6 +88,13 @@ public class User  {
 	@LazyToOne(LazyToOneOption.NO_PROXY)
 	@JsonManagedReference
 	private Matrimony matrimony;
+	
+	
+	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
+	@LazyToOne(LazyToOneOption.NO_PROXY)
+	@JsonManagedReference
+	private MatrimonyImage matrimonyImage;
+	
 	
 	public Matrimony getMatrimony() {
 		return this.matrimony;
@@ -285,6 +295,15 @@ public class User  {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public MatrimonyImage getMatrimonyImage() {
+		return matrimonyImage;
+	}
+
+	public void setMatrimonyImage(MatrimonyImage matrimonyImage) {
+		this.matrimonyImage = matrimonyImage;
+		if (null != matrimonyImage) matrimonyImage.setUser(this);
 	}
 
 }

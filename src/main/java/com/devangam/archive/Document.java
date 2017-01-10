@@ -13,6 +13,7 @@ public class Document extends DocumentMetadata implements Serializable {
     private static final long serialVersionUID = 2004955454853853315L;
     
     private byte[] fileData;
+    private String userId;
     
     public Document( byte[] fileData, String fileName, Date documentDate, String personName) {
         super(fileName, documentDate, personName);
@@ -27,7 +28,13 @@ public class Document extends DocumentMetadata implements Serializable {
         super(metadata.getUuid(), metadata.getFileName(), metadata.getDocumentDate(), metadata.getPersonName());
     }
 
-    public byte[] getFileData() {
+    public Document(byte[] bytes, String originalFilename, String userId) {
+    	this.fileData = bytes;
+    	this.fileName = originalFilename;
+    	this.userId = userId;
+	}
+
+	public byte[] getFileData() {
         return fileData;
     }
     public void setFileData(byte[] fileData) {
@@ -37,5 +44,13 @@ public class Document extends DocumentMetadata implements Serializable {
     public DocumentMetadata getMetadata() {
         return new DocumentMetadata(getUuid(), getFileName(), getDocumentDate(), getPersonName());
     }
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
     
 }

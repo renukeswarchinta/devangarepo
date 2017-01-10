@@ -4,16 +4,22 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Date;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.devangam.archive.Document;
 import com.devangam.archive.DocumentMetadata;
+import com.devangam.entity.MatrimonyImage;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class FileSystemDocumentService {
 
 
@@ -28,7 +34,7 @@ public class FileSystemDocumentService {
  * 
  */
 
-    public static final String DIRECTORY = "/home/ec2-user/archive";
+    public static final String DIRECTORY = "archive";//"/home/ec2-user/archive/matrimony";
     public static final String META_DATA_FILE_NAME = "metadata.properties";
     
     @PostConstruct
@@ -55,9 +61,13 @@ public class FileSystemDocumentService {
         }
     }
     
-    
-    
-
+    public String renameFile(String toFileName, String fromFileName) {
+    	    String[] fileNameSplits = toFileName.split("\\.");
+    	    // extension is assumed to be the last part
+    	    int extensionIndex = fileNameSplits.length - 1;
+    	    String newFileName = fromFileName + "." + fileNameSplits[extensionIndex];
+    	    return newFileName;
+	}
 
     private boolean isMatched(DocumentMetadata metadata, String personName, Date date) {
         if(metadata==null) {
@@ -72,8 +82,6 @@ public class FileSystemDocumentService {
         }
         return match;
     }
-
-   
     
     private void saveFileData(Document document) throws IOException {
         String path = getDirectoryPath(document);
@@ -85,12 +93,21 @@ public class FileSystemDocumentService {
     
     private String createDirectory(Document document) {
         String path = getDirectoryPath(document);
+		log.info("createDirectory PATH=" + path);
         createDirectory(path);
         return path;
     }
 
-    private String getDirectoryPath(Document document) {
-       return getDirectoryPath(document.getFileName());
+    public String getDirectoryPath(Document document) {
+       return getDirectoryPath(document.getUserId());
+    }
+    
+    public String getImagePath(Document document){
+    	String directoryPath = getDirectoryPath(document.getFileName());
+    	StringBuilder sb = new StringBuilder();
+        sb.append(directoryPath).append(File.separator).append(document.getUserId());
+        String path = sb.toString();
+        return path;
     }
     
     private String getDirectoryPath(String uuid) {
