@@ -24,7 +24,6 @@ import com.devangam.service.EducationHelpingHandImpl;
 import com.devangam.service.OldAgeHomeHelpingHandImpl;
 import com.devangam.service.PatientHelpingHandImpl;
 import com.google.gson.Gson;
-
 @RestController
 public class HelpingHandController {
 	
@@ -45,11 +44,9 @@ public class HelpingHandController {
 		return educationHelpingHand.createEducationDetails(educationDetails);
 	} 
 	@RequestMapping(value ="/api/getEducationDetails",method=RequestMethod.GET)
-	public @ResponseBody Gson getEducationDetailsDTO(){
+	public @ResponseBody List<Education> getEducationDetailsDTO(){
 		List<Education> listOfEducaitonDetails =  educationHelpingHand.getEducationDetails();
-		Gson gson = new Gson();
-		gson.toJson(listOfEducaitonDetails);
-		return gson;
+		return listOfEducaitonDetails;
 	}
 	
 	@RequestMapping(value="/api/addPatientDetails",method=RequestMethod.POST)
@@ -58,11 +55,8 @@ public class HelpingHandController {
 	}
 	
 	@RequestMapping(value ="/api/getPatientDetails",method=RequestMethod.GET)
-	public @ResponseBody Gson getPatientDetailsDTO(){
-		List<Patients> listOfPatinetDetails =  patientHelpingHand.getPatientDetailsDTO();
-		Gson gson = new Gson();
-		gson.toJson(listOfPatinetDetails);
-		return gson;
+	public @ResponseBody List<Patients> getPatientDetailsDTO(){
+		return  patientHelpingHand.getPatientDetailsDTO();
 	}
 	 
 	
@@ -73,11 +67,9 @@ public class HelpingHandController {
 	} 
 
 	@RequestMapping(value ="/api/getOldAgeHomeDetails",method=RequestMethod.GET)
-	public @ResponseBody Gson getOldAgeHomeDetailsDTO(){
-		List<OldageHome> listOfOldAgeHomeDetails =  oldAgeHomeHelpingHand.getOldAgeHomeDetailsDTO();
-		Gson gson = new Gson();
-		gson.toJson(listOfOldAgeHomeDetails);
-		return gson;
+	public @ResponseBody List<OldageHome>  getOldAgeHomeDetailsDTO(){
+		return oldAgeHomeHelpingHand.getOldAgeHomeDetailsDTO();
+		
 	}
 	 
 	@RequestMapping(value ="/api/saveDonationDetails",method=RequestMethod.GET)
@@ -89,7 +81,7 @@ public class HelpingHandController {
 	}
 	// How do we send big comments and which helping hand he is asking for
 	@RequestMapping(value ="/api/saveHelpingHandUserComments",method=RequestMethod.POST)
-	public @ResponseBody CommonResponseDTO saveHelpingHandUserComments(@ModelAttribute UserCommentsDTO userComments){
+	public @ResponseBody CommonResponseDTO saveHelpingHandUserComments(){
 		
 		return null;
 		
