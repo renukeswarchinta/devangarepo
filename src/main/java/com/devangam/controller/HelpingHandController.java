@@ -3,7 +3,6 @@ package com.devangam.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,7 +14,6 @@ import com.devangam.dto.DonationDetailsDTO;
 import com.devangam.dto.EducationDetailsDTO;
 import com.devangam.dto.OldAgeHomeHelpingHandDTO;
 import com.devangam.dto.PatientDetailsDTO;
-import com.devangam.dto.UserCommentsDTO;
 import com.devangam.entity.Education;
 import com.devangam.entity.OldageHome;
 import com.devangam.entity.Patients;
@@ -23,7 +21,6 @@ import com.devangam.service.DonationDetailsImpl;
 import com.devangam.service.EducationHelpingHandImpl;
 import com.devangam.service.OldAgeHomeHelpingHandImpl;
 import com.devangam.service.PatientHelpingHandImpl;
-import com.google.gson.Gson;
 @RestController
 public class HelpingHandController {
 	
