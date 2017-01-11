@@ -1,6 +1,5 @@
 package com.devangam.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,10 +7,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "T_MATRIMONY_IMAGE")
@@ -24,9 +26,10 @@ public class MatrimonyImage {
 		this.imageUrl = imageUrl;
 	}
 
-	public MatrimonyImage(String key, String imageUrl) {
+	public MatrimonyImage(String key, String imageUrl,String imageType) {
 		this.key = key;
 		this.imageUrl = imageUrl;
+		this.imageType = imageType;
 	}
 
 	@Id
@@ -40,10 +43,15 @@ public class MatrimonyImage {
 	@Column(name = "IMAGE_URL")
 	private String imageUrl;
 	
-	@OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
-	@JoinColumn(name="USER_ID")
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="MATRIMONY_ID")
 	@JsonBackReference
-	private User user;
+	private Matrimony matrimony;
+	
+	@JoinColumn(name="IMAGE_TYPE")
+	@Getter
+	@Setter
+	private String imageType;
 
 	public int getMatrimonyImageId() {
 		return matrimonyImageId;
@@ -69,12 +77,12 @@ public class MatrimonyImage {
 		this.imageUrl = imageUrl;
 	}
 
-	public User getUser() {
-		return user;
+	public Matrimony getMatrimony() {
+		return matrimony;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setMatrimony(Matrimony matrimony) {
+		this.matrimony = matrimony;
 	}
 
 }

@@ -26,7 +26,6 @@ public class UserRequestDTO implements Serializable{
 	private String state;
 	private String district;
 	private MatrimonyDTO matrimony;
-	private MatrimonyImage matrimonyImage;
 	private PersonalDetailDTO personalDetail;
 	private LocationDTO location;
 	private ProfessionalDetailsDTO professionalDetail;

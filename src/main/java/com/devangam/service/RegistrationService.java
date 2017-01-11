@@ -31,6 +31,7 @@ import com.devangam.entity.MatrimonyImage;
 import com.devangam.entity.Role;
 import com.devangam.entity.User;
 import com.devangam.entity.VerificationToken;
+import com.devangam.enums.MatrimonyImageType;
 import com.devangam.repository.CommunityLeaderRepository;
 import com.devangam.repository.RoleRepository;
 import com.devangam.repository.UserRepository;
@@ -78,9 +79,11 @@ public class RegistrationService {
 				MultipartFile multipartFile = userRequestDto.getMultipartFile();
 				if(null != multipartFile) {
 					String key = Instant.now().getEpochSecond() + "_" + "MPS";
-					fileSystemDocumentService.insert(new Document(multipartFile.getBytes(),multipartFile.getOriginalFilename(),String.valueOf(key)));
-					userRequestDto.setMatrimonyImage(new MatrimonyImage(key, multipartFile.getOriginalFilename()));
+					userRequestDto.getMatrimony().getMatrimonyImages().add(new MatrimonyImage(key,"/"+ key+"/"+ multipartFile.getOriginalFilename(),MatrimonyImageType.PROFILE.name()));
 					repositoryUser = saveUserFromUserDto(userRequestDto);
+					if(null != repositoryUser){
+						fileSystemDocumentService.insert(new Document(multipartFile.getBytes(),multipartFile.getOriginalFilename(),String.valueOf(key)));
+					}
 				}
 				isSuccess = true;
 				message = "Successfully registered";
@@ -176,12 +179,12 @@ public class RegistrationService {
 			 Map<String,String> map =new HashMap<String,String>();
 			 final String token = UUID.randomUUID().toString();
 			 createVerificationTokenForUser(user, token);
-			 final String confirmationUrl = DevangamProperty.getInstance().getProperties("devangam.home")+ "/api/registrationConfirm?token=" + token;
+			 /*final String confirmationUrl = DevangamProperty.getInstance().getProperties("devangam.home")+ "/api/registrationConfirm?token=" + token;
 			 
 			 map.put("firstName", user.getFirstname());
 			 map.put("link", confirmationUrl);
 			 mail.setValueMap(map);
-			 emailService.sendMail(mail);
+			 emailService.sendMail(mail);*/
 		}
 		return repositoryUser;
 	}

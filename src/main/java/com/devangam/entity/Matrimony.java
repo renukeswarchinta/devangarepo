@@ -1,6 +1,8 @@
 package com.devangam.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,14 +13,22 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import lombok.Getter;
+import lombok.Setter;
 
 
 /**
@@ -60,6 +70,14 @@ public class Matrimony  {
 	@JoinColumn(name="USER_ID")
 	@JsonBackReference
 	private User user;
+	
+	//@OneToOne(mappedBy="matrimony", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
+	//@LazyToOne(LazyToOneOption.NO_PROXY)
+	@OneToMany(mappedBy="matrimony" , cascade = CascadeType.ALL,fetch=FetchType.LAZY)
+	@JsonManagedReference
+	@Setter
+	@Getter
+	private List<MatrimonyImage> matrimonyImages = new ArrayList<MatrimonyImage>();
 
 	public Matrimony() {
 	}
