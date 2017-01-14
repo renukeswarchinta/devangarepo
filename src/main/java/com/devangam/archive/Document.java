@@ -14,6 +14,7 @@ public class Document extends DocumentMetadata implements Serializable {
     
     private byte[] fileData;
     private String userId;
+    private String directory;
     
     public Document( byte[] fileData, String fileName, Date documentDate, String personName) {
         super(fileName, documentDate, personName);
@@ -28,10 +29,11 @@ public class Document extends DocumentMetadata implements Serializable {
         super(metadata.getUuid(), metadata.getFileName(), metadata.getDocumentDate(), metadata.getPersonName());
     }
 
-    public Document(byte[] bytes, String originalFilename, String userId) {
+    public Document(byte[] bytes, String originalFilename, String userId,String directory) {
     	this.fileData = bytes;
     	this.fileName = originalFilename;
     	this.userId = userId;
+    	this.directory = directory;
 	}
 
 	public byte[] getFileData() {
@@ -51,6 +53,14 @@ public class Document extends DocumentMetadata implements Serializable {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public String getDirectory() {
+		return directory;
+	}
+
+	public void setDirectory(String directory) {
+		this.directory = directory;
 	}
     
 }
