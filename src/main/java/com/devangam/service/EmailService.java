@@ -42,6 +42,7 @@ public class EmailService {
 	{
 		templateMap.put(EmailService.VERIFY_EMAIL + "_SUBJECT", "Please verify your email address");
 		templateMap.put(EmailService.VERIFY_EMAIL + "_TEMPLATE", "Email_Verification.vm");
+		templateMap.put("EMAIL_FROM", "renu.javatechnews@gmail.com");
 	}
 
 	public void sendMail(Mail mail)
@@ -101,11 +102,8 @@ public class EmailService {
         properties.setProperty("mail.transport.protocol", "smtp");
         properties.setProperty("mail.smtp.auth", "true");
         properties.setProperty("mail.smtp.starttls.enable", "true");
-        //properties.setProperty("mail.smtp.ssl.enable", "true");
-        //props.setProperty("mail.imap.ssl.enable", "true");
         properties.setProperty("mail.debug", "true");
         properties.setProperty("mail.smtp.ssl.enable", "true");
-        //properties.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         
         return properties;
     }
@@ -115,28 +113,12 @@ public class EmailService {
 		    javaMailSender.setProtocol("smtp");
 		    javaMailSender.setHost("smtp.gmail.com");
 		    javaMailSender.setPort(587);
-		    //javaMailSender.setPort(465);
-		    /*javaMailSender.setUsername("CC@mic.co.in");
-		    javaMailSender.setPassword("RDNtestID");*/
 		    javaMailSender.setUsername("renu.javatechnews@gmail.com");
 		    javaMailSender.setPassword("RenuAmmu9703");
 		    javaMailSender.setJavaMailProperties(getMailProperties());
 
 		    return javaMailSender;
 	}
-	@Bean
-	public VelocityEngine velocityEngine() throws VelocityException, IOException{
-		VelocityEngineFactoryBean factory = new VelocityEngineFactoryBean();
-		Properties props = new Properties();
-		props.put("resource.loader", "class");
-		props.put("class.resource.loader.class",
-				  "org.apache.velocity.runtime.resource.loader." +
-				  "ClasspathResourceLoader");
-		factory.setVelocityProperties(props);
-
-		return factory.createVelocityEngine();
-	}
-	
 	
 
 }

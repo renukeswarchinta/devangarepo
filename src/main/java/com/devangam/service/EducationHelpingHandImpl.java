@@ -39,7 +39,7 @@ public class EducationHelpingHandImpl implements IHelpingHandService {
 	}
 
 	public List<Education> getEducationDetails() {
-		return educationRepository.findAll();
+		return educationRepository.findActiveEducationDetails();
 	}
 
 

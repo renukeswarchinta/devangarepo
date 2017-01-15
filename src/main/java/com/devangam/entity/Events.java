@@ -35,6 +35,8 @@ public class Events {
 	@Column(name="EVENT_POST_END_DATE")
 	private Date eventPostEndDate;
 	
+	private boolean isActive;
+	
 	Events(){}
 
 	public int getEventId() {

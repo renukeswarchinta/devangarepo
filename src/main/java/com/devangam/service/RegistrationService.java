@@ -63,7 +63,8 @@ public class RegistrationService {
 	private EmailService emailService;
 	@Value("${matrimony.directory}")
 	private String matrimonyDirectory;
-	
+	 @Value("${devangam.home.url}")
+	 private String devangamHomeURL;
 	
 	public CommonResponseDTO saveMatrimonyUser(UserRequestDTO userJsonRequestDto) {
 		CommonResponseDTO userResponseDto = new CommonResponseDTO();
@@ -179,16 +180,15 @@ public class RegistrationService {
 			
 			Mail mail = new Mail();
 			 mail.setTemplateName(EmailService.VERIFY_EMAIL);
-			 mail.setMailTo("crenukeswar2010@gmail.com");
+			 mail.setMailTo(userRequestDto.getEmail());
 			 Map<String,String> map =new HashMap<String,String>();
 			 final String token = UUID.randomUUID().toString();
 			 createVerificationTokenForUser(user, token);
-			 /*final String confirmationUrl = DevangamProperty.getInstance().getProperties("devangam.home")+ "/api/registrationConfirm?token=" + token;
-			 
-			 map.put("firstName", user.getFirstname());
+			 final String confirmationUrl = devangamHomeURL + "/api/registrationConfirm?token=" + token;
+			 map.put("firstName",  userRequestDto.getFirstname());
 			 map.put("link", confirmationUrl);
 			 mail.setValueMap(map);
-			 emailService.sendMail(mail);*/
+			 emailService.sendMail(mail);
 		}
 		return repositoryUser;
 	}

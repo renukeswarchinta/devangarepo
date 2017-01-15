@@ -16,7 +16,7 @@ public class HelpingHandCommonAttributes {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", updatable = false, nullable = false)
-	 private int id ;
+	 private int Id ;
 	
 	@Temporal(TemporalType.TIMESTAMP)
     @Column(name = "LAST_UPDATE")
@@ -117,6 +117,12 @@ public class HelpingHandCommonAttributes {
 		return true;
 	}
 */	
+	public int getId() {
+		return Id;
+	}
+	public void setId(int id) {
+		Id = id;
+	}
 	public Date getLastUpdate() {
 		return lastUpdate;
 	}

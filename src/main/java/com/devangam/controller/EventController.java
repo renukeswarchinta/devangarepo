@@ -3,10 +3,13 @@ package com.devangam.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.devangam.dto.CommonResponseDTO;
 import com.devangam.dto.EventDTO;
 import com.devangam.entity.Events;
 import com.devangam.service.EventService;
@@ -25,8 +28,18 @@ public class EventController {
 		return eventService.getListOfEvents();
 	}
 	@RequestMapping(value ="/api/saveEventDetails",method=RequestMethod.POST)
-	public void saveEventDetails(EventDTO eventDTO){
-		Events event = objectMapper.convertValue(eventDTO, Events.class);
-		eventService.saveEventRepository(event);
+	public @ResponseBody CommonResponseDTO saveEventDetails(@RequestBody EventDTO eventDTO){
+		CommonResponseDTO common = new CommonResponseDTO();
+		try{
+			Events event = objectMapper.convertValue(eventDTO, Events.class);
+			eventService.saveEventRepository(event);
+			common.setMessage("Events Saved Succefully");
+			common.setStatus("Success");
+		}catch(Exception e){
+			common.setMessage("Failed to save Events " );
+			common.setStatus("Failed");
+		}
+		return common;
+		
 	}
 }

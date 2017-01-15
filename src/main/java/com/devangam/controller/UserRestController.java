@@ -158,7 +158,7 @@ public class UserRestController {
 
 		model.addAttribute("message", DevangamProperty.getInstance().getProperties("auth.message.validToken"));
 		//return "redirect:{/authenticate1}";
-		return new ModelAndView(new RedirectView("/rdnwebportal/authenticate1"));
+		return new ModelAndView(new RedirectView("/"));
 	}
 	
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -78,13 +79,11 @@ public class HelpingHandController {
 	}
 	// How do we send big comments and which helping hand he is asking for
 	@RequestMapping(value ="/api/saveHelpingHandUserComments",method=RequestMethod.POST)
-	public @ResponseBody CommonResponseDTO saveHelpingHandUserComments(){
+	public @ResponseBody CommonResponseDTO saveHelpingHandUserComments(@RequestParam int id,@RequestParam String content){
+		// Need to send email with the comments 
 		
 		return null;
 		
 	}
-	
-
-	
 	
 }
