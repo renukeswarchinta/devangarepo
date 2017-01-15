@@ -1,8 +1,8 @@
 package com.devangam.controller;
 import static com.devangam.constants.DevangamConstants.FAILURE;
 import static com.devangam.constants.DevangamConstants.SUCCESS;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mobile.device.Device;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,13 +18,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.devangam.dto.CommonResponseDTO;
 import com.devangam.security.JwtAuthenticationRequest;
 import com.devangam.security.JwtTokenUtil;
-import com.devangam.security.JwtUser;
 import com.devangam.security.service.JwtAuthenticationResponse;
 
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class AuthenticationRestController {

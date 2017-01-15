@@ -78,6 +78,11 @@ public class UserRestController {
 	public @ResponseBody CommonResponseDTO signupUser(@RequestBody UserRequestDTO userRequestDto) {
 		return registrationService.saveUserFromUserRequest(userRequestDto);
 	}
+	
+	@RequestMapping(value = "/api/admin/createAdminUser", method = RequestMethod.POST)
+	public @ResponseBody CommonResponseDTO createAdminUser(@RequestBody UserRequestDTO userRequestDto) {
+		return registrationService.saveAdminUser(userRequestDto);
+	}
 
 	@RequestMapping(value = "userdto", method = RequestMethod.GET)
 	public @ResponseBody UserRequestDTO getUserDTO() {

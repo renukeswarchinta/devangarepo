@@ -7,6 +7,7 @@ import com.devangam.entity.MatrimonyImage;
 import lombok.Data;
 @Data
 public class MatrimonyDTO {
+	private int matrimonyId;
 	private String cratedFor;
 	private String dob;
 	private String firstname;

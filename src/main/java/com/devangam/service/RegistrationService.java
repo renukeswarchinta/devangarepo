@@ -65,6 +65,65 @@ public class RegistrationService {
 	private String matrimonyDirectory;
 	 @Value("${devangam.home.url}")
 	 private String devangamHomeURL;
+	 
+	 
+	 public CommonResponseDTO saveAdminUser(UserRequestDTO userRequestDto){
+			CommonResponseDTO userResponseDto = new CommonResponseDTO();
+			// TODO : Pre validation check and Required filed validation is required
+			User repositoryUser = null;
+			String message = null;
+			String status = null;
+			boolean isError = false;
+			boolean isSuccess = false;
+			if(null == userRequestDto || StringUtils.isEmpty(userRequestDto.getEmail())){
+				isError = true;
+				message = "User request is empty or null";
+			} else {
+				try {
+					repositoryUser = userRepository.findByUsername(userRequestDto.getEmail());
+					if (null == repositoryUser) {
+						///User repositoryUser = null;
+						User user = convertUserRequestDtoToUser(userRequestDto);
+						if (null != user) {
+							//user.setActive(Boolean.TRUE);
+							user.setActive(Boolean.FALSE);
+							user.setCreatedDate(new Date());
+							user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+							if (user.getRoles() != null) {
+								user.setRoles(userRolesRepository.findAll());
+							}
+							user.setUsername(userRequestDto.getEmail());
+							repositoryUser = userRepository.save(user);
+						}
+						//saveUserFromUserDto(userRequestDto);
+						isSuccess = true;
+						message = "Successfully registered";
+						if (logger.isInfoEnabled()) {
+							logger.info("Successfully created user. EmailId=" + userRequestDto.getEmail());
+						}
+					} else {
+						isError = true;
+						message = "This email address is already in use";
+					}
+				} catch (Exception exception) {
+					isError = true;
+					message = "User creation failed. Please try after some time.";
+					if (logger.isErrorEnabled()) {
+						logger.error("Create user failed. EmailId=" + userRequestDto.getEmail(), exception);
+					}
+				}
+			}
+			if (isSuccess) {
+				status = SUCCESS;
+			} else {
+				status = FAILURE;
+			}
+			userResponseDto.setStatus(status);
+			userResponseDto.setMessage(message);
+			return userResponseDto;
+		
+			
+		}
 	
 	public CommonResponseDTO saveMatrimonyUser(UserRequestDTO userJsonRequestDto) {
 		CommonResponseDTO userResponseDto = new CommonResponseDTO();

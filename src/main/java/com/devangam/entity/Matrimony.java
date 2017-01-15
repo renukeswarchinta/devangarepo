@@ -43,7 +43,6 @@ public class Matrimony  {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="MATRIMONY_ID")
-	@JsonIgnore
 	private int matrimonyId;
 
 	@Column(name="CRATED_FOR")
