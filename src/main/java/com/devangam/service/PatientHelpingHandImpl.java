@@ -1,5 +1,6 @@
 package com.devangam.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -36,8 +37,19 @@ public class PatientHelpingHandImpl {
 		return commonResponseDTO;
 	}
 
-	public List<Patients> getPatientDetailsDTO() {
-		return patientHelpingHandRepository.findAll();
+	public List<PatientDetailsDTO> getPatientDetailsDTO() {
+		List<PatientDetailsDTO> listOfPatients = new ArrayList<PatientDetailsDTO>();
+		List<Patients> listOfPatienst =  patientHelpingHandRepository.findAll();
+		convertEntityToDTO(listOfPatients, listOfPatienst);
+		return listOfPatients;
+	}
+
+	private List<PatientDetailsDTO> convertEntityToDTO(List<PatientDetailsDTO> listOfPatients, List<Patients> listOfPatienst) {
+		listOfPatienst.stream().forEach(patient -> {
+			PatientDetailsDTO p = objectMapper.convertValue(patient, PatientDetailsDTO.class);
+			listOfPatients.add(p);
+		});
+		return listOfPatients;
 	}
 
 	

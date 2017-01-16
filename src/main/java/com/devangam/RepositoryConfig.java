@@ -24,21 +24,5 @@ public class RepositoryConfig extends RepositoryRestConfigurerAdapter {
 	        					OldageHome.class,
 	        					Patients.class);
 	    }
- /*   @Override
-    public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
-        ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(true);
-        provider.addIncludeFilter(new AssignableTypeFilter(IdentifiableEntity.class));
-        Set<BeanDefinition> components = provider.findCandidateComponents(this.getClass().getPackage().getName());
-        List<Class<?>> classes = new ArrayList<>();
- 
-        components.forEach(component -> {
-            try {
-                classes.add(Class.forName(component.getBeanClassName()));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
- 
-        config.exposeIdsFor(classes.toArray(new Class[classes.size()]));
-    }*/
+  
 }

@@ -53,7 +53,7 @@ public class HelpingHandController {
 	}
 	
 	@RequestMapping(value ="/api/getPatientDetails",method=RequestMethod.GET)
-	public @ResponseBody List<Patients> getPatientDetailsDTO(){
+	public @ResponseBody List<PatientDetailsDTO> getPatientDetailsDTO(){
 		return  patientHelpingHand.getPatientDetailsDTO();
 	}
 	 

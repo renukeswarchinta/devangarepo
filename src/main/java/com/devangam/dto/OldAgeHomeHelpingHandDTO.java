@@ -1,10 +1,9 @@
 package com.devangam.dto;
 
-import com.devangam.entity.OldageHome;
-
 import lombok.Data;
+
 @Data
-public class OldAgeHomeHelpingHandDTO extends OldageHome{
+public class OldAgeHomeHelpingHandDTO extends HelpingHandCommonDTO{
 
 	private int noOfPeople;
 	private String oldageHomeGovtId;

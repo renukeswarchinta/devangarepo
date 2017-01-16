@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 public class HelpingHandCommonDTO {
-
+	private int Id ;
 	private Date lastUpdate;
 	private String name;
 	private String address;
