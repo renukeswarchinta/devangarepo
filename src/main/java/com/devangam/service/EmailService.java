@@ -42,7 +42,7 @@ public class EmailService {
 	{
 		templateMap.put(EmailService.VERIFY_EMAIL + "_SUBJECT", "Please verify your email address");
 		templateMap.put(EmailService.VERIFY_EMAIL + "_TEMPLATE", "Email_Verification.vm");
-		templateMap.put("EMAIL_FROM", "renu.javatechnews@gmail.com");
+		templateMap.put("EMAIL_FROM", "contact@devanga.org");
 	}
 
 	public void sendMail(Mail mail)
@@ -111,10 +111,10 @@ public class EmailService {
 	public JavaMailSenderImpl mailSender() {
 			JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
 		    javaMailSender.setProtocol("smtp");
-		    javaMailSender.setHost("smtp.gmail.com");
+		    javaMailSender.setHost("smtp.devanga.org");
 		    javaMailSender.setPort(587);
-		    javaMailSender.setUsername("renu.javatechnews@gmail.com");
-		    javaMailSender.setPassword("RenuAmmu9703");
+		    javaMailSender.setUsername("contact@devanga.org");
+		    javaMailSender.setPassword("nS*#RS$@1");
 		    javaMailSender.setJavaMailProperties(getMailProperties());
 
 		    return javaMailSender;
