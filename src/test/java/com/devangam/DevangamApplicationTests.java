@@ -44,7 +44,7 @@ public class DevangamApplicationTests {
 	@Test
 	public void testUserSignUp() throws Exception {
 		UserRequestDTO dto = new UserRequestDTO();
-		  String json = "{\"email\":\"renukeswar2010@gmail.com\",\"username\":\"renukeswar2010@gmail.com\",\"password\":\"renu\","
+		  String json = "{\"email\":\"crenukeswar2010@gmail.com\",\"username\":\"crenukeswar2010@gmail.com\",\"password\":\"renu\","
 		  		+ "\"firstname\":\"renu\",\"lastname\":\"chinta\",\"country\":\"india\","
 		  		+ "\"state\":\"AP\",\"district\":\"ATP\"}";
 		dto.setEmail("renukeswar2010@gmail.com");dto.setUsername("renu.javatechnews@gmail.com");
