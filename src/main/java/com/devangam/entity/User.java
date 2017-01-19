@@ -1,20 +1,30 @@
 package com.devangam.entity;
-import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import lombok.Getter;
-import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 
 /**
@@ -24,6 +34,7 @@ import java.util.Set;
 @Entity
 @Table(name="t_user")
 @NamedQuery(name="User.findAll", query="SELECT u FROM User u")
+//@JsonIdentityInfo(generator =  ObjectIdGenerators.IntSequenceGenerator.class,property = "@id")
 public class User  {
 
 	@Id
@@ -83,15 +94,38 @@ public class User  {
 
 	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
 	@LazyToOne(LazyToOneOption.NO_PROXY)
-	@JsonManagedReference
+	@JsonManagedReference(value="userLocations")
 	private Location location;
 
 	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
 	@LazyToOne(LazyToOneOption.NO_PROXY)
-	@JsonManagedReference
+	//@JsonManagedReference(value="userMatrimony")
+	@JsonBackReference(value="userMatrimony")
 	private Matrimony matrimony;
 	
+	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
+	@LazyToOne(LazyToOneOption.NO_PROXY)
+	@JsonManagedReference(value="userPersonalDetals")
+	private PersonalDetail personalDetail;
 	
+	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
+	@LazyToOne(LazyToOneOption.NO_PROXY)
+	@JsonManagedReference(value="userPremium")
+	private PremiumUser premiumUser;
+
+	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
+	@LazyToOne(LazyToOneOption.NO_PROXY)
+	@JsonManagedReference(value="user-Religion")
+	private ReligionDetails religionDetail;
+
+	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
+	@LazyToOne(LazyToOneOption.NO_PROXY)
+	@JsonManagedReference(value="userProfessionalDetails")
+	private ProfessionalDetails professionalDetail;
+	
+
+	public User() {
+	}
 	public Matrimony getMatrimony() {
 		return this.matrimony;
 	}
@@ -101,30 +135,6 @@ public class User  {
 		if (null != matrimony) matrimony.setUser(this);
 	}
 	
-	
-	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
-	@LazyToOne(LazyToOneOption.NO_PROXY)
-	@JsonManagedReference
-	private PersonalDetail personalDetail;
-
-	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
-	@LazyToOne(LazyToOneOption.NO_PROXY)
-	@JsonManagedReference
-	private PremiumUser premiumUser;
-
-	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
-	@LazyToOne(LazyToOneOption.NO_PROXY)
-	@JsonManagedReference
-	private ReligionDetails religionDetail;
-
-	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
-	@LazyToOne(LazyToOneOption.NO_PROXY)
-	@JsonManagedReference
-	private ProfessionalDetails professionalDetail;
-
-	public User() {
-	}
-
 	public int getUserId() {
 		return this.userId;
 	}
@@ -198,11 +208,9 @@ public class User  {
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
-
 	public Location getLocation() {
 		return this.location;
 	}
-
 	public String getCountry() {
 		return country;
 	}
@@ -241,7 +249,7 @@ public class User  {
 		this.personalDetail = personalDetail;
 		if (null != personalDetail) personalDetail.setUser(this);
 	}
-
+	
 	public PremiumUser getPremiumUser() {
 		return this.premiumUser;
 	}

@@ -19,6 +19,7 @@ import javax.persistence.TemporalType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
 /**
@@ -58,7 +59,7 @@ public class PremiumUser  {
 
 	@OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinColumn(name="USER_ID")
-	@JsonBackReference
+	@JsonBackReference(value="userPremium")
 	private User user;
 	
 	public User getUser() {
@@ -120,12 +121,6 @@ public class PremiumUser  {
 		this.premiumType = premiumType;
 	}
 
-/*	public User getUser() {
-		return this.user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}*/
+	
 
 }

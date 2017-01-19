@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.devangam.entity.MatrimonyImage;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;

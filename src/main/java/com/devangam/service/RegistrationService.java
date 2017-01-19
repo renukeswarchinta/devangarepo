@@ -69,7 +69,6 @@ public class RegistrationService {
 	 
 	 public CommonResponseDTO saveAdminUser(UserRequestDTO userRequestDto){
 			CommonResponseDTO userResponseDto = new CommonResponseDTO();
-			// TODO : Pre validation check and Required filed validation is required
 			User repositoryUser = null;
 			String message = null;
 			String status = null;
@@ -127,13 +126,15 @@ public class RegistrationService {
 	
 	public CommonResponseDTO saveMatrimonyUser(UserRequestDTO userJsonRequestDto) {
 		CommonResponseDTO userResponseDto = new CommonResponseDTO();
-		// TODO : Pre validation check and Required filed validation is required
 		User repositoryUser = null;
 		String message = null;
 		String status = null;
 		boolean isError = false;
 		boolean isSuccess = false;
 		UserRequestDTO userRequestDto = null;
+		
+		
+		
 		try {
 			userRequestDto = objectMapper.readValue(userJsonRequestDto.getUserRequestJson(), UserRequestDTO.class);
 			userRequestDto.setMultipartFile(userJsonRequestDto.getMultipartFile());
@@ -180,7 +181,6 @@ public class RegistrationService {
     }
 	public CommonResponseDTO saveUserFromUserRequest(UserRequestDTO userRequestDto) {
 		CommonResponseDTO userResponseDto = new CommonResponseDTO();
-		// TODO : Pre validation check and Required filed validation is required
 		
 		User repositoryUser = null;
 		String message = null;
@@ -281,11 +281,11 @@ public class RegistrationService {
 				User user = convertUserRequestDtoToUser(userRequestDto);
 				repositoryUser.setMatrimony(user.getMatrimony());
 				repositoryUser.setMatrimonyUser(true);
-				repositoryUser.setLocation(user.getLocation());
-				repositoryUser.setPersonalDetail(user.getPersonalDetail());
-				repositoryUser.setProfessionalDetail(user.getProfessionalDetail());
-				repositoryUser.setReligionDetail(user.getReligionDetail());
-				repositoryUser.setPremiumUser(user.getPremiumUser());
+				//repositoryUser.setLocation(user.getLocation());
+				//repositoryUser.setPersonalDetail(user.getPersonalDetail());
+				//repositoryUser.setProfessionalDetail(user.getProfessionalDetail());
+				//repositoryUser.setReligionDetail(user.getReligionDetail());
+				//repositoryUser.setPremiumUser(user.getPremiumUser());
 				userRepository.save(repositoryUser);
 				status = SUCCESS;
 				message = "Successfully registered";

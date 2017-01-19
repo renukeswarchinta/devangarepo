@@ -14,6 +14,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
 /**
@@ -47,10 +48,9 @@ public class PersonalDetail  {
 	@Column(name="MARITAL_STATUS")
 	private String maritalStatus;
 
-	//bi-directional one-to-one association to User
 	@OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinColumn(name="USER_ID")
-	@JsonBackReference
+	@JsonBackReference(value="userPersonalDetals")
 	private User user;
 
 	public PersonalDetail() {

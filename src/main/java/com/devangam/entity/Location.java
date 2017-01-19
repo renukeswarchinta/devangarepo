@@ -14,6 +14,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
 /**
@@ -41,7 +42,8 @@ public class Location  {
 
 	@OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinColumn(name="USER_ID")
-	@JsonBackReference
+	@JsonBackReference(value="userLocations")
+	//@JsonManagedReference(value="userLocations")
 	private User user;
 
 	public Location() {
@@ -87,7 +89,7 @@ public class Location  {
 		this.state = state;
 	}
 
-	public User getUser() {
+public User getUser() {
 		return this.user;
 	}
 
