@@ -7,6 +7,7 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapt
 import com.devangam.entity.AdvertisementEntity;
 import com.devangam.entity.Education;
 import com.devangam.entity.Events;
+import com.devangam.entity.JobOpportunities;
 import com.devangam.entity.Matrimony;
 import com.devangam.entity.OldageHome;
 import com.devangam.entity.Patients;
@@ -22,7 +23,8 @@ public class RepositoryConfig extends RepositoryRestConfigurerAdapter {
 	        					AdvertisementEntity.class,
 	        					Matrimony.class,
 	        					OldageHome.class,
-	        					Patients.class);
+	        					Patients.class,
+	        					JobOpportunities.class);
 	    }
   
 }

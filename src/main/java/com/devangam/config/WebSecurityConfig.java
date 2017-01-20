@@ -41,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder());
     }
     
-    /*@Bean
+    @Bean
     public WebMvcConfigurerAdapter corsConfigurer() {
         return new WebMvcConfigurerAdapter() {
             public void addCorsMappings(CorsRegistry registry) {
@@ -49,7 +49,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             }
         };
     }
-    */
     
     @Bean
     public PasswordEncoder passwordEncoder() {

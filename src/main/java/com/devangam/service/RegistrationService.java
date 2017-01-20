@@ -281,11 +281,11 @@ public class RegistrationService {
 				User user = convertUserRequestDtoToUser(userRequestDto);
 				repositoryUser.setMatrimony(user.getMatrimony());
 				repositoryUser.setMatrimonyUser(true);
-				//repositoryUser.setLocation(user.getLocation());
-				//repositoryUser.setPersonalDetail(user.getPersonalDetail());
-				//repositoryUser.setProfessionalDetail(user.getProfessionalDetail());
-				//repositoryUser.setReligionDetail(user.getReligionDetail());
-				//repositoryUser.setPremiumUser(user.getPremiumUser());
+				repositoryUser.setLocation(user.getLocation());
+				repositoryUser.setPersonalDetail(user.getPersonalDetail());
+				repositoryUser.setProfessionalDetail(user.getProfessionalDetail());
+				repositoryUser.setReligionDetail(user.getReligionDetail());
+				repositoryUser.setPremiumUser(user.getPremiumUser());
 				userRepository.save(repositoryUser);
 				status = SUCCESS;
 				message = "Successfully registered";

@@ -167,5 +167,9 @@ public class UserRestController {
 		//return "redirect:{/authenticate1}";
 		return new ModelAndView(new RedirectView("/"));
 	}
+	// User profile 
+	/*public @ResponseBody User getProfileDetails(){
+		
+	} */
 	
 }

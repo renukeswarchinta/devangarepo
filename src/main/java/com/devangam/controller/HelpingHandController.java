@@ -13,13 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.devangam.dto.CommonResponseDTO;
 import com.devangam.dto.DonationDetailsDTO;
 import com.devangam.dto.EducationDetailsDTO;
+import com.devangam.dto.JobOpportunityDTO;
 import com.devangam.dto.OldAgeHomeHelpingHandDTO;
 import com.devangam.dto.PatientDetailsDTO;
 import com.devangam.entity.Education;
+import com.devangam.entity.JobOpportunities;
 import com.devangam.entity.OldageHome;
 import com.devangam.entity.Patients;
 import com.devangam.service.DonationDetailsImpl;
 import com.devangam.service.EducationHelpingHandImpl;
+import com.devangam.service.JobOpportunitiesServiceImpl;
 import com.devangam.service.OldAgeHomeHelpingHandImpl;
 import com.devangam.service.PatientHelpingHandImpl;
 @RestController
@@ -36,6 +39,9 @@ public class HelpingHandController {
 	
 	@Autowired
 	private DonationDetailsImpl donationDetailsImpl;
+	
+	@Autowired 
+	private JobOpportunitiesServiceImpl jobOpportunitiesServiceImpl;
 	
 	@RequestMapping(value="/api/addEducationDetails",method=RequestMethod.POST)
 	public @ResponseBody CommonResponseDTO addEducationDetails(@RequestBody EducationDetailsDTO educationDetails){
@@ -70,11 +76,23 @@ public class HelpingHandController {
 		
 	}
 	 
-	@RequestMapping(value ="/api/saveDonationDetails",method=RequestMethod.GET)
+	@RequestMapping(value ="/api/saveDonationDetails",method=RequestMethod.POST)
 	public @ResponseBody CommonResponseDTO saveDonationDetails(@RequestBody DonationDetailsDTO donationDetailsDTO){
 		
 		donationDetailsImpl.saveDonationDetails(donationDetailsDTO);
 		return null;
+		
+	}
+	
+	@RequestMapping(value ="/api/getJobOpportunities",method=RequestMethod.GET)
+	public @ResponseBody List<JobOpportunities> getJobOpportunities(){
+		return jobOpportunitiesServiceImpl.getJobOpportunities();
+		
+	}
+	
+	@RequestMapping(value ="/api/saveJobDetails",method=RequestMethod.POST)
+	public @ResponseBody CommonResponseDTO saveJobDetails(@RequestBody JobOpportunityDTO jobOpportunityDTO){
+		return jobOpportunitiesServiceImpl.saveJobOpportunities(jobOpportunityDTO);
 		
 	}
 	// How do we send big comments and which helping hand he is asking for
