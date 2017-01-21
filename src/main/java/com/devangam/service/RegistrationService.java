@@ -236,6 +236,7 @@ public class RegistrationService {
 			}
 			user.setUsername(userRequestDto.getEmail());
 			repositoryUser = userRepository.save(user);
+			
 			emailService.sendEmailForVerification(new EmailOrMobileOtpDTO(repositoryUser));
 			otpService.sendSMSForVerification(new EmailOrMobileOtpDTO(repositoryUser));
 			
@@ -382,7 +383,8 @@ public class RegistrationService {
 		try {
 			otp = otpService.verifyOTP(otp);
 			if ("VERIFIED".equals(otp.getStatus())) {
-				userRepository.acticateUserByMobileNumber(true,mobileNumber);
+				int value = userRepository.updateUser(Boolean.TRUE,mobileNumber);
+				logger.info("Update User activity: ACTIVE=" + value);
 				response.setMessage("Succcessfully verified Mobile Number");
 				response.setStatus(SUCCESS);
 			} else if ("EXPIRED".equals(otp.getStatus())) {
