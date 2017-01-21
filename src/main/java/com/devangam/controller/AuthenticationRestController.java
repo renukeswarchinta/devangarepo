@@ -1,5 +1,5 @@
 package com.devangam.controller;
-import static com.devangam.constants.DevangamConstants.FAILURE;
+import static com.devangam.constants.DevangamConstants.FAIL;
 import static com.devangam.constants.DevangamConstants.SUCCESS;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,10 +54,10 @@ public class AuthenticationRestController {
 			jwtAuthenticationResponse.setStatus(SUCCESS);
 			jwtAuthenticationResponse.setMessage("Authentication Token Created Successfully");
 		} catch (AuthenticationException authenticationException) {
-			jwtAuthenticationResponse.setStatus(FAILURE);
+			jwtAuthenticationResponse.setStatus(FAIL);
 			jwtAuthenticationResponse.setMessage("Username doesn't exist.EmailID=" + authenticationRequest.getUsername());
 		} catch (Exception exception) {
-			jwtAuthenticationResponse.setStatus(FAILURE);
+			jwtAuthenticationResponse.setStatus(FAIL);
 			jwtAuthenticationResponse.setMessage("Create Authentication Token failed.EmailID=" + authenticationRequest.getUsername());
 		}
 		return jwtAuthenticationResponse;

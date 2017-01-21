@@ -167,9 +167,13 @@ public class UserRestController {
 		//return "redirect:{/authenticate1}";
 		return new ModelAndView(new RedirectView("/"));
 	}
-	// User profile 
-	/*public @ResponseBody User getProfileDetails(){
-		
-	} */
+	
+	@RequestMapping(value = "/api/user/verifyMobileNumber", method = RequestMethod.GET)
+	public @ResponseBody CommonResponseDTO verifyMobileNumber(@RequestParam String token,
+			@RequestParam String mobileNumber) {
+		logger.info("Request received for Get My Profile");
+		CommonResponseDTO commonResponseDTO = registrationService.verifyMobileNumberByOtp(token, mobileNumber);
+		return commonResponseDTO;
+	}
 	
 }

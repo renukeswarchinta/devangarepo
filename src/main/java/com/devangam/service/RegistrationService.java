@@ -1,6 +1,6 @@
 package com.devangam.service;
 
-import static com.devangam.constants.DevangamConstants.FAILURE;
+import static com.devangam.constants.DevangamConstants.FAIL;
 import static com.devangam.constants.DevangamConstants.SUCCESS;
 
 import java.time.Instant;
@@ -11,24 +11,26 @@ import java.util.UUID;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.devangam.archive.Document;
 import com.devangam.dto.CommonResponseDTO;
 import com.devangam.dto.CommunityLeadersDTO;
+import com.devangam.dto.EmailOrMobileOtpDTO;
 import com.devangam.dto.Mail;
 import com.devangam.dto.UserRequestDTO;
 import com.devangam.dto.UserResponseDTO;
 import com.devangam.entity.AuthorityName;
 import com.devangam.entity.CommunityLeader;
 import com.devangam.entity.MatrimonyImage;
+import com.devangam.entity.Otp;
 import com.devangam.entity.Role;
 import com.devangam.entity.User;
 import com.devangam.entity.VerificationToken;
@@ -37,7 +39,6 @@ import com.devangam.repository.CommunityLeaderRepository;
 import com.devangam.repository.RoleRepository;
 import com.devangam.repository.UserRepository;
 import com.devangam.repository.VerificationTokenRepository;
-import com.devangam.utils.DevangamProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -63,8 +64,10 @@ public class RegistrationService {
 	private EmailService emailService;
 	@Value("${matrimony.directory}")
 	private String matrimonyDirectory;
-	 @Value("${devangam.home.url}")
-	 private String devangamHomeURL;
+	@Value("${devangam.home.url}")
+	private String devangamHomeURL;
+	@Autowired
+	private OTPService otpService;
 	 
 	 
 	 public CommonResponseDTO saveAdminUser(UserRequestDTO userRequestDto){
@@ -115,7 +118,7 @@ public class RegistrationService {
 			if (isSuccess) {
 				status = SUCCESS;
 			} else {
-				status = FAILURE;
+				status = FAIL;
 			}
 			userResponseDto.setStatus(status);
 			userResponseDto.setMessage(message);
@@ -132,9 +135,6 @@ public class RegistrationService {
 		boolean isError = false;
 		boolean isSuccess = false;
 		UserRequestDTO userRequestDto = null;
-		
-		
-		
 		try {
 			userRequestDto = objectMapper.readValue(userJsonRequestDto.getUserRequestJson(), UserRequestDTO.class);
 			userRequestDto.setMultipartFile(userJsonRequestDto.getMultipartFile());
@@ -169,7 +169,7 @@ public class RegistrationService {
 		if (isSuccess) {
 			status = SUCCESS;
 		} else {
-			status = FAILURE;
+			status = FAIL;
 		}
 		userResponseDto.setStatus(status);
 		userResponseDto.setMessage(message);
@@ -195,6 +195,7 @@ public class RegistrationService {
 				repositoryUser = userRepository.findByUsername(userRequestDto.getEmail());
 				if (null == repositoryUser) {
 					saveUserFromUserDto(userRequestDto);
+					// send OTP to registered mobile or Email
 					isSuccess = true;
 					message = "Successfully registered";
 					if (logger.isInfoEnabled()) {
@@ -215,7 +216,7 @@ public class RegistrationService {
 		if (isSuccess) {
 			status = SUCCESS;
 		} else {
-			status = FAILURE;
+			status = FAIL;
 		}
 		userResponseDto.setStatus(status);
 		userResponseDto.setMessage(message);
@@ -226,7 +227,6 @@ public class RegistrationService {
 		User repositoryUser = null;
 		User user = convertUserRequestDtoToUser(userRequestDto);
 		if (null != user) {
-			//user.setActive(Boolean.TRUE);
 			user.setActive(Boolean.FALSE);
 			user.setCreatedDate(new Date());
 			user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -236,8 +236,10 @@ public class RegistrationService {
 			}
 			user.setUsername(userRequestDto.getEmail());
 			repositoryUser = userRepository.save(user);
+			emailService.sendEmailForVerification(new EmailOrMobileOtpDTO(repositoryUser));
+			otpService.sendSMSForVerification(new EmailOrMobileOtpDTO(repositoryUser));
 			
-			Mail mail = new Mail();
+			 /*Mail mail = new Mail();
 			 mail.setTemplateName(EmailService.VERIFY_EMAIL);
 			 mail.setMailTo(userRequestDto.getEmail());
 			 Map<String,String> map =new HashMap<String,String>();
@@ -247,7 +249,7 @@ public class RegistrationService {
 			 map.put("firstName",  userRequestDto.getFirstname());
 			 map.put("link", confirmationUrl);
 			 mail.setValueMap(map);
-			 emailService.sendMail(mail);
+			 emailService.sendMail(mail);*/
 		}
 		return repositoryUser;
 	}
@@ -294,7 +296,7 @@ public class RegistrationService {
 				}
 			}
 		} catch (Exception exception) {
-			status = FAILURE;
+			status = FAIL;
 			message = "Currently Service is not available";
 			logger.error("Matrimony user creation failed. EmailId=" + userRequestDto.getEmail(), exception);
 		}
@@ -341,7 +343,7 @@ public class RegistrationService {
 			isError = false;
 			message = "Email Id empty or null";
 		}
-		String status= isSuccess == true ? SUCCESS : FAILURE; 
+		String status= isSuccess == true ? SUCCESS : FAIL; 
 		userResponsetDto.setStatus(status);
 		userResponsetDto.setMessage(message);
 		return userResponsetDto;
@@ -356,9 +358,47 @@ public class RegistrationService {
 			commonResponseDTO.setMessage("Saved Successfully");
 		} catch (Exception exception) {
 			commonResponseDTO.setMessage("Error while saving community leaders data");
-			commonResponseDTO.setStatus(FAILURE);
+			commonResponseDTO.setStatus(FAIL);
 		}
 		return commonResponseDTO;
 
 	}
+
+	public boolean verifyMobileNO(String mobileNo) {
+		boolean result = true;
+		User user = userRepository.findByMobileNumber(mobileNo);
+		if (user != null && user.getEmail() != null) {
+			result = false;
+		}
+		return result;
+	}
+
+	public CommonResponseDTO verifyMobileNumberByOtp(String token, String mobileNumber) {
+		Otp otp = new Otp();
+		otp.setOtp(token);
+		otp.setVerificationId(mobileNumber);
+		otp.setType("MOBILE");
+		CommonResponseDTO response = new CommonResponseDTO();
+		try {
+			otp = otpService.verifyOTP(otp);
+			if ("VERIFIED".equals(otp.getStatus())) {
+				userRepository.acticateUserByMobileNumber(true,mobileNumber);
+				response.setMessage("Succcessfully verified Mobile Number");
+				response.setStatus(SUCCESS);
+			} else if ("EXPIRED".equals(otp.getStatus())) {
+				response.setMessage("OTP Expired. Please generate another OTP");
+				response.setStatus(FAIL);
+			} else {
+				response.setMessage("Invalid OTP");
+				response.setStatus(FAIL);
+			}
+		} catch (Exception exception) {
+			response.setMessage("System error occured while verifying OTP");
+			response.setStatus(FAIL);
+			logger.error("Failed OTP Mobile Number verification.",exception);
+		}
+		return response;
+
+	}
+	
 }

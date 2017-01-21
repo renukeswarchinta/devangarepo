@@ -1,6 +1,5 @@
 package com.devangam.service;
 
-import java.io.IOException;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,16 +10,18 @@ import javax.mail.internet.MimeMessage;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.exception.VelocityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.velocity.VelocityEngineFactoryBean;
 
+import com.devangam.dto.EmailOrMobileOtpDTO;
 import com.devangam.dto.Mail;
+import com.devangam.entity.Otp;
+import com.devangam.entity.User;
+import com.devangam.utils.PasswordProtector;
 
 @Service("emailService")
 public class EmailService {
@@ -31,6 +32,8 @@ public class EmailService {
 
 	@Autowired
 	private VelocityEngine velocityEngine;
+	@Autowired
+	private OTPService otpService;
 
 	public static final String VERIFY_EMAIL = "VERIFY_EMAIL";
 	public static final String RESET_PASSWORD = "RESET_PASSWORD";
@@ -44,6 +47,28 @@ public class EmailService {
 		templateMap.put(EmailService.VERIFY_EMAIL + "_TEMPLATE", "Email_Verification.vm");
 		templateMap.put("EMAIL_FROM", "contact@devanga.org");
 	}
+	
+	public void sendEmailForVerification(EmailOrMobileOtpDTO emailOrMobileOtpDTO){
+		User repositoryUser = emailOrMobileOtpDTO.getUser();
+		
+		Otp emailOTP = new Otp();
+		emailOTP.setUserId(repositoryUser.getUserId());
+		emailOTP.setVerificationId(repositoryUser.getEmail());
+		emailOTP.setType("EMAIL");
+		otpService.reCreateOTP(emailOTP);
+		
+		 Mail mail = new Mail();
+		 mail.setTemplateName(EmailService.VERIFY_EMAIL);
+		 mail.setMailTo(emailOrMobileOtpDTO.getUser().getEmail());
+		 Map<String,String> map =new HashMap<String,String>();
+		 final String token = emailOTP.getOtp();
+		 map.put("firstName",  repositoryUser.getFirstname());
+		 map.put("link", PasswordProtector.decrypt(token));
+		 mail.setValueMap(map);
+		 sendMail(mail);
+	}
+	
+	
 
 	public void sendMail(Mail mail)
 	{

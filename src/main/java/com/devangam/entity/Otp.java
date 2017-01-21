@@ -12,6 +12,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.Data;
+
 
 /**
  * The persistent class for the t_otp database table.
@@ -20,6 +22,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name="t_otp")
 @NamedQuery(name="Otp.findAll", query="SELECT o FROM Otp o")
+@Data
 public class Otp  {
 
 	@Id
@@ -41,65 +44,6 @@ public class Otp  {
 	private Date validUpto;
 
 	@Column(name="VERIFICATION_ID")
-	private int verificationId;
-
-	public Otp() {
-	}
-
-	public int getOtpId() {
-		return this.otpId;
-	}
-
-	public void setOtpId(int otpId) {
-		this.otpId = otpId;
-	}
-
-	public String getOtp() {
-		return this.otp;
-	}
-
-	public void setOtp(String otp) {
-		this.otp = otp;
-	}
-
-	public String getStatus() {
-		return this.status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public String getType() {
-		return this.type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public int getUserId() {
-		return this.userId;
-	}
-
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
-
-	public Date getValidUpto() {
-		return this.validUpto;
-	}
-
-	public void setValidUpto(Date validUpto) {
-		this.validUpto = validUpto;
-	}
-
-	public int getVerificationId() {
-		return this.verificationId;
-	}
-
-	public void setVerificationId(int verificationId) {
-		this.verificationId = verificationId;
-	}
+	private String verificationId;
 
 }
