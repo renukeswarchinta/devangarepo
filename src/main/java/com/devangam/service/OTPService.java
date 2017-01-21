@@ -45,8 +45,8 @@ public class OTPService {
 	public Otp verifyOTP(Otp otp) {
 		Otp otpEntity = otpRepository.findByVerificationId(otp.getVerificationId());
 		if (otpEntity != null && "WAITING".equals(otpEntity.getStatus())) {
-			if (otp.getType().equals(otpEntity.getType())
-					&& PasswordProtector.encrypt(otp.getOtp()).equals(otpEntity.getOtp())) {
+			if (/*otp.getType().equals(otpEntity.getType())
+					&&*/ PasswordProtector.encrypt(otp.getOtp()).equals(otpEntity.getOtp())) {
 				if (otpEntity.getValidUpto().getTime() > System.currentTimeMillis()) {
 					otp.setStatus("VERIFIED");
 				} else {

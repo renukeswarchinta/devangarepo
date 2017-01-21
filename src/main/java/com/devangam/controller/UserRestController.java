@@ -168,11 +168,11 @@ public class UserRestController {
 		return new ModelAndView(new RedirectView("/"));
 	}
 	
-	@RequestMapping(value = "/api/user/verifyMobileNumber", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/user/verifyEmail", method = RequestMethod.GET)
 	public @ResponseBody CommonResponseDTO verifyMobileNumber(@RequestParam String token,
-			@RequestParam String mobileNumber) {
+			@RequestParam String email) {
 		logger.info("Request received for Get My Profile");
-		CommonResponseDTO commonResponseDTO = registrationService.verifyMobileNumberByOtp(token, mobileNumber);
+		CommonResponseDTO commonResponseDTO = registrationService.verifyMobileNumberByOtp(token, email);
 		return commonResponseDTO;
 	}
 	
