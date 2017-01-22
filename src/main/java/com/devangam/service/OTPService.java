@@ -53,7 +53,7 @@ public class OTPService {
 					otp.setStatus("EXPIRED");
 				}
 				otpEntity.setStatus(otp.getStatus());
-				otpRepository.save(otpEntity);
+				otpRepository.saveAndFlush(otpEntity);
 			} else {
 				otp.setStatus("INVALID");
 			}
