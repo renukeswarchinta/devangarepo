@@ -64,11 +64,4 @@ public class PasswordProtector {
         return Base64.getDecoder().decode(property.getBytes());
     }
     
-    public static void main(String[] args) {
-    	String encrypt = encrypt("276540");
-    	System.out.println("---Encrypt->"+encrypt);
-    	System.out.println("--decrypt-->"+decrypt(encrypt));
-	}
-
-    
 }

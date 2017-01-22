@@ -274,11 +274,14 @@ public class RegistrationService {
 	// From UI when user wants to register for Matrimony then we need to create
 	// all details like matrimony, location etc...after that we set
 	// all other objects from user object
-	public CommonResponseDTO saveOptUserMatrimony(UserRequestDTO userRequestDto) {
+	public CommonResponseDTO saveOptUserMatrimony(UserRequestDTO userJsonRequestDto) {
 		CommonResponseDTO commonResponseDto = new CommonResponseDTO();
 		String message = null;
 		String status = null;
+		UserRequestDTO userRequestDto = null;
 		try {
+			userRequestDto = objectMapper.readValue(userJsonRequestDto.getUserRequestJson(), UserRequestDTO.class);
+			userRequestDto.setMultipartFile(userJsonRequestDto.getMultipartFile());
 			if (userRequestDto.isMatrimonyUser()) {
 				User repositoryUser = userRepository.findByUsername(userRequestDto.getEmail());
 				User user = convertUserRequestDtoToUser(userRequestDto);
@@ -290,6 +293,16 @@ public class RegistrationService {
 				repositoryUser.setReligionDetail(user.getReligionDetail());
 				repositoryUser.setPremiumUser(user.getPremiumUser());
 				userRepository.save(repositoryUser);
+				//save image into file system
+				MultipartFile multipartFile = userRequestDto.getMultipartFile();
+				if(null != multipartFile) {
+					String key = Instant.now().getEpochSecond() + "_" + "MPS";
+					userRequestDto.getMatrimony().getMatrimonyImages().add(new MatrimonyImage(key,"/"+ key+"/"+ multipartFile.getOriginalFilename(),MatrimonyImageType.PROFILE.name()));
+					repositoryUser = saveUserFromUserDto(userRequestDto);
+					if(null != repositoryUser){
+						fileSystemDocumentService.insert(new Document(multipartFile.getBytes(),multipartFile.getOriginalFilename(),String.valueOf(key),matrimonyDirectory));
+					}
+				}
 				status = SUCCESS;
 				message = "Successfully registered";
 				if (logger.isInfoEnabled()) {

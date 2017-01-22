@@ -102,8 +102,13 @@ public class UserRestController {
 	}
 
 	@RequestMapping(path = "/api/optMatrimonyRegistation", method = RequestMethod.POST)
-	public @ResponseBody CommonResponseDTO optMatrimonyRegistation(@RequestBody UserRequestDTO userRequestDto) {
-		return registrationService.saveOptUserMatrimony(userRequestDto);
+	public @ResponseBody CommonResponseDTO optMatrimonyRegistation(
+			@RequestParam(value = "file", required = false) MultipartFile file,
+			@RequestParam(value = "userRequestJson", required = true) String userRequestJson) {
+		UserRequestDTO userRequestDTO = new UserRequestDTO();
+		userRequestDTO.setMultipartFile(file);
+		userRequestDTO.setUserRequestJson(userRequestJson);
+		return registrationService.saveOptUserMatrimony(userRequestDTO);
 	}
 
 	@RequestMapping(value = "/api/getUserDetails/{emailId}", method = RequestMethod.GET)
