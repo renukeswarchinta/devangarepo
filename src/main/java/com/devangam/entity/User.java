@@ -105,7 +105,7 @@ public class User  {
 	
 	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
 	@LazyToOne(LazyToOneOption.NO_PROXY)
-	@JsonManagedReference(value="userPersonalDetals")
+	//@JsonManagedReference(value="userPersonalDetals")
 	private PersonalDetail personalDetail;
 	
 	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)

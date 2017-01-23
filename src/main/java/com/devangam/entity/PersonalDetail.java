@@ -29,7 +29,6 @@ public class PersonalDetail  {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="PERSONAL_DETAILS_ID")
-	@JsonIgnore
 	private int personalDetailsId;
 
 	private String disability;
@@ -50,7 +49,7 @@ public class PersonalDetail  {
 
 	@OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinColumn(name="USER_ID")
-	@JsonBackReference(value="userPersonalDetals")
+	//@JsonBackReference(value="userPersonalDetals")
 	private User user;
 
 	public PersonalDetail() {

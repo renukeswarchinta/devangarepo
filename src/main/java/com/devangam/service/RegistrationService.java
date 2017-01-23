@@ -25,10 +25,12 @@ import com.devangam.dto.CommonResponseDTO;
 import com.devangam.dto.CommunityLeadersDTO;
 import com.devangam.dto.EmailOrMobileOtpDTO;
 import com.devangam.dto.Mail;
+import com.devangam.dto.MatrimonyDTO;
 import com.devangam.dto.UserRequestDTO;
 import com.devangam.dto.UserResponseDTO;
 import com.devangam.entity.AuthorityName;
 import com.devangam.entity.CommunityLeader;
+import com.devangam.entity.Matrimony;
 import com.devangam.entity.MatrimonyImage;
 import com.devangam.entity.Otp;
 import com.devangam.entity.Role;
@@ -149,6 +151,8 @@ public class RegistrationService {
 					if(null != repositoryUser){
 						fileSystemDocumentService.insert(new Document(multipartFile.getBytes(),multipartFile.getOriginalFilename(),String.valueOf(key),matrimonyDirectory));
 					}
+				}else{
+					repositoryUser = saveUserFromUserDto(userRequestDto);
 				}
 				isSuccess = true;
 				message = "Successfully registered";
@@ -227,6 +231,16 @@ public class RegistrationService {
 		User repositoryUser = null;
 		User user = convertUserRequestDtoToUser(userRequestDto);
 		if (null != user) {
+			//Quick FIX 
+			MatrimonyDTO matrimonyDto= userRequestDto.getMatrimony();
+			Matrimony matrimony = new Matrimony();
+			matrimony.setFirstname(matrimonyDto.getFirstname());
+			matrimony.setLastname(matrimonyDto.getLastname());
+			matrimony.setCratedFor(matrimonyDto.getCratedFor());
+			matrimony.setGender(matrimonyDto.getGender());
+			matrimony.setImageUrl(matrimonyDto.getImageUrl());
+			matrimony.setMotherToungue(matrimonyDto.getMotherToungue());
+			user.setMatrimony(matrimony);
 			user.setActive(Boolean.FALSE);
 			user.setCreatedDate(new Date());
 			user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
