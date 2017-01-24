@@ -68,7 +68,7 @@ public class Matrimony  {
 	@OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinColumn(name="USER_ID")
 	//@JsonBackReference(value="userMatrimony")
-	@JsonManagedReference(value="userMatrimony")
+	//@JsonManagedReference(value="userMatrimony")
 	private User user;
 	
 	//@OneToOne(mappedBy="matrimony", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)

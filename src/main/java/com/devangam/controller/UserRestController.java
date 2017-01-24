@@ -25,10 +25,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.devangam.dto.CommonResponseDTO;
 import com.devangam.dto.LocationDTO;
 import com.devangam.dto.MatrimonyDTO;
-import com.devangam.dto.PersonalDetailDTO;
-import com.devangam.dto.PremiumUserDTO;
-import com.devangam.dto.ProfessionalDetailsDTO;
-import com.devangam.dto.ReligionDetailsDTO;
 import com.devangam.dto.UserRequestDTO;
 import com.devangam.dto.UserResponseDTO;
 import com.devangam.entity.User;
@@ -101,7 +97,7 @@ public class UserRestController {
 		return userRequestDto;
 	}
 
-	@RequestMapping(path = "/api/optMatrimonyRegistation", method = RequestMethod.POST)
+	@RequestMapping(path = "/api/user/optMatrimonyRegistation", method = RequestMethod.POST)
 	public @ResponseBody CommonResponseDTO optMatrimonyRegistation(
 			@RequestParam(value = "file", required = false) MultipartFile file,
 			@RequestParam(value = "userRequestJson", required = true) String userRequestJson) {

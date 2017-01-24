@@ -6,9 +6,6 @@ import static com.devangam.constants.DevangamConstants.SUCCESS;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -26,7 +23,6 @@ import com.devangam.dto.CommonResponseDTO;
 import com.devangam.dto.CommunityLeadersDTO;
 import com.devangam.dto.EmailOrMobileOtpDTO;
 import com.devangam.dto.LocationDTO;
-import com.devangam.dto.Mail;
 import com.devangam.dto.MatrimonyDTO;
 import com.devangam.dto.PersonalDetailDTO;
 import com.devangam.dto.PremiumUserDTO;
@@ -34,7 +30,6 @@ import com.devangam.dto.ProfessionalDetailsDTO;
 import com.devangam.dto.ReligionDetailsDTO;
 import com.devangam.dto.UserRequestDTO;
 import com.devangam.dto.UserResponseDTO;
-import com.devangam.entity.AdvertisementEntity;
 import com.devangam.entity.AuthorityName;
 import com.devangam.entity.CommunityLeader;
 import com.devangam.entity.Location;
@@ -243,29 +238,22 @@ public class RegistrationService {
 	public User saveUserFromUserDto(UserRequestDTO userRequestDto) {
 		User repositoryUser = null;
 		User user = convertUserRequestDtoToUser(userRequestDto);
-		PersonalDetail pd = convertPersonDetailsDtoToPersonEntity(userRequestDto.getPersonalDetail());
-		Location location = convertLocationDetailsFromJsonToEntity(userRequestDto.getLocation());
-		PremiumUser pu = convertPremiumUserFromJsonToEntity(userRequestDto.getPremiumUser());
-		ReligionDetails rd = convertReligionDetailsFromJsonToEntity(userRequestDto.getReligionDetail());
-		ProfessionalDetails profDetails = convertProffesionalDetailsToEntity(userRequestDto.getProfessionalDetail());
-		user.setPersonalDetail(pd);
-		user.setLocation(location);
-		user.setPremiumUser(pu);
-		user.setReligionDetail(rd);
-		;
-		user.setProfessionalDetail(profDetails);
-		if (null != user) {
-			// Quick FIX
-			MatrimonyDTO matrimonyDto = userRequestDto.getMatrimony();
-			Matrimony matrimony = new Matrimony();
-			matrimony.setFirstname(matrimonyDto.getFirstname());
-			matrimony.setLastname(matrimonyDto.getLastname());
-			matrimony.setCratedFor(matrimonyDto.getCratedFor());
-			matrimony.setGender(matrimonyDto.getGender());
-			matrimony.setImageUrl(matrimonyDto.getImageUrl());
-			matrimony.setMotherToungue(matrimonyDto.getMotherToungue());
+		if(null != userRequestDto.getMatrimony()){
+			PersonalDetail pd = convertPersonDetailsDtoToPersonEntity(userRequestDto.getPersonalDetail());
+			Location location = convertLocationDetailsFromJsonToEntity(userRequestDto.getLocation());
+			PremiumUser pu = convertPremiumUserFromJsonToEntity(userRequestDto.getPremiumUser());
+			ReligionDetails rd = convertReligionDetailsFromJsonToEntity(userRequestDto.getReligionDetail());
+			ProfessionalDetails profDetails = convertProffesionalDetailsToEntity(userRequestDto.getProfessionalDetail());
+			Matrimony matrimony = convertMatrimonyDtoToEntity(userRequestDto.getMatrimony());
 			user.setMatrimony(matrimony);
-			user.setActive(Boolean.FALSE);
+			user.setPersonalDetail(pd);
+			user.setLocation(location);
+			user.setPremiumUser(pu);
+			user.setReligionDetail(rd);
+			user.setProfessionalDetail(profDetails);
+			user.setMatrimonyUser(Boolean.TRUE);
+		}
+		if (null != user) {
 			user.setCreatedDate(new Date());
 			user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 			if (user.getRoles() != null) {
@@ -273,14 +261,15 @@ public class RegistrationService {
 				user.getRoles().add(role);
 			}
 			user.setUsername(userRequestDto.getEmail());
-			user.setMatrimonyUser(Boolean.TRUE);
 			repositoryUser = userRepository.save(user);
-
 			 emailService.sendEmailForVerification(new EmailOrMobileOtpDTO(repositoryUser));
 			 otpService.sendSMSForVerification(new EmailOrMobileOtpDTO(repositoryUser));
-		
 		}
 		return repositoryUser;
+	}
+	
+	private Matrimony convertMatrimonyDtoToEntity(MatrimonyDTO matrimonyDto) {
+		return objectMapper.convertValue(matrimonyDto, Matrimony.class);
 	}
 
 	private ProfessionalDetails convertProffesionalDetailsToEntity(ProfessionalDetailsDTO professionalDetail) {
@@ -338,13 +327,19 @@ public class RegistrationService {
 			if (userRequestDto.isMatrimonyUser()) {
 				User repositoryUser = userRepository.findByUsername(userRequestDto.getEmail());
 				User user = convertUserRequestDtoToUser(userRequestDto);
-				repositoryUser.setMatrimony(user.getMatrimony());
+				PersonalDetail pd = convertPersonDetailsDtoToPersonEntity(userRequestDto.getPersonalDetail());
+				Location location = convertLocationDetailsFromJsonToEntity(userRequestDto.getLocation());
+				PremiumUser pu = convertPremiumUserFromJsonToEntity(userRequestDto.getPremiumUser());
+				ReligionDetails rd = convertReligionDetailsFromJsonToEntity(userRequestDto.getReligionDetail());
+				ProfessionalDetails profDetails = convertProffesionalDetailsToEntity(userRequestDto.getProfessionalDetail());
+				Matrimony matrimony = convertMatrimonyDtoToEntity(userRequestDto.getMatrimony());
+				repositoryUser.setMatrimony(matrimony);
 				repositoryUser.setMatrimonyUser(true);
-				repositoryUser.setLocation(user.getLocation());
-				repositoryUser.setPersonalDetail(user.getPersonalDetail());
-				repositoryUser.setProfessionalDetail(user.getProfessionalDetail());
-				repositoryUser.setReligionDetail(user.getReligionDetail());
-				repositoryUser.setPremiumUser(user.getPremiumUser());
+				repositoryUser.setLocation(location);
+				repositoryUser.setPersonalDetail(pd);
+				repositoryUser.setProfessionalDetail(profDetails);
+				repositoryUser.setReligionDetail(rd);
+				repositoryUser.setPremiumUser(pu);
 				repositoryUser = userRepository.save(repositoryUser);
 				if (null != repositoryUser) {
 					fileSystemDocumentService.insert(new Document(multipartFile.getBytes(),

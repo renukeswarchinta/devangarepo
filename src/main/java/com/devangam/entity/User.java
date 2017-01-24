@@ -100,7 +100,7 @@ public class User  {
 	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
 	@LazyToOne(LazyToOneOption.NO_PROXY)
 	//@JsonManagedReference(value="userMatrimony")
-	@JsonBackReference(value="userMatrimony")
+	//@JsonBackReference(value="userMatrimony")
 	private Matrimony matrimony;
 	
 	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
