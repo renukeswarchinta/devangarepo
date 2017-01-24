@@ -3,6 +3,7 @@ package com.devangam.service;
 import static com.devangam.constants.DevangamConstants.FAIL;
 import static com.devangam.constants.DevangamConstants.SUCCESS;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,15 +25,26 @@ import com.devangam.archive.Document;
 import com.devangam.dto.CommonResponseDTO;
 import com.devangam.dto.CommunityLeadersDTO;
 import com.devangam.dto.EmailOrMobileOtpDTO;
+import com.devangam.dto.LocationDTO;
 import com.devangam.dto.Mail;
 import com.devangam.dto.MatrimonyDTO;
+import com.devangam.dto.PersonalDetailDTO;
+import com.devangam.dto.PremiumUserDTO;
+import com.devangam.dto.ProfessionalDetailsDTO;
+import com.devangam.dto.ReligionDetailsDTO;
 import com.devangam.dto.UserRequestDTO;
 import com.devangam.dto.UserResponseDTO;
+import com.devangam.entity.AdvertisementEntity;
 import com.devangam.entity.AuthorityName;
 import com.devangam.entity.CommunityLeader;
+import com.devangam.entity.Location;
 import com.devangam.entity.Matrimony;
 import com.devangam.entity.MatrimonyImage;
 import com.devangam.entity.Otp;
+import com.devangam.entity.PersonalDetail;
+import com.devangam.entity.PremiumUser;
+import com.devangam.entity.ProfessionalDetails;
+import com.devangam.entity.ReligionDetails;
 import com.devangam.entity.Role;
 import com.devangam.entity.User;
 import com.devangam.entity.VerificationToken;
@@ -59,9 +71,9 @@ public class RegistrationService {
 	@Autowired
 	private CommunityLeaderRepository communityLeaderRepo;
 	@Autowired
-    private FileSystemDocumentService fileSystemDocumentService;
+	private FileSystemDocumentService fileSystemDocumentService;
 	@Autowired
-    private VerificationTokenRepository tokenRepository;
+	private VerificationTokenRepository tokenRepository;
 	@Autowired
 	private EmailService emailService;
 	@Value("${matrimony.directory}")
@@ -70,65 +82,63 @@ public class RegistrationService {
 	private String devangamHomeURL;
 	@Autowired
 	private OTPService otpService;
-	 
-	 
-	 public CommonResponseDTO saveAdminUser(UserRequestDTO userRequestDto){
-			CommonResponseDTO userResponseDto = new CommonResponseDTO();
-			User repositoryUser = null;
-			String message = null;
-			String status = null;
-			boolean isError = false;
-			boolean isSuccess = false;
-			if(null == userRequestDto || StringUtils.isEmpty(userRequestDto.getEmail())){
-				isError = true;
-				message = "User request is empty or null";
-			} else {
-				try {
-					repositoryUser = userRepository.findByUsername(userRequestDto.getEmail());
-					if (null == repositoryUser) {
-						///User repositoryUser = null;
-						User user = convertUserRequestDtoToUser(userRequestDto);
-						if (null != user) {
-							//user.setActive(Boolean.TRUE);
-							user.setActive(Boolean.FALSE);
-							user.setCreatedDate(new Date());
-							user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-							if (user.getRoles() != null) {
-								user.setRoles(userRolesRepository.findAll());
-							}
-							user.setUsername(userRequestDto.getEmail());
-							repositoryUser = userRepository.save(user);
+
+	public CommonResponseDTO saveAdminUser(UserRequestDTO userRequestDto) {
+		CommonResponseDTO userResponseDto = new CommonResponseDTO();
+		User repositoryUser = null;
+		String message = null;
+		String status = null;
+		boolean isError = false;
+		boolean isSuccess = false;
+		if (null == userRequestDto || StringUtils.isEmpty(userRequestDto.getEmail())) {
+			isError = true;
+			message = "User request is empty or null";
+		} else {
+			try {
+				repositoryUser = userRepository.findByUsername(userRequestDto.getEmail());
+				if (null == repositoryUser) {
+					/// User repositoryUser = null;
+					User user = convertUserRequestDtoToUser(userRequestDto);
+					if (null != user) {
+						// user.setActive(Boolean.TRUE);
+						user.setActive(Boolean.FALSE);
+						user.setCreatedDate(new Date());
+						user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+						if (user.getRoles() != null) {
+							user.setRoles(userRolesRepository.findAll());
 						}
-						//saveUserFromUserDto(userRequestDto);
-						isSuccess = true;
-						message = "Successfully registered";
-						if (logger.isInfoEnabled()) {
-							logger.info("Successfully created user. EmailId=" + userRequestDto.getEmail());
-						}
-					} else {
-						isError = true;
-						message = "This email address is already in use";
+						user.setUsername(userRequestDto.getEmail());
+						repositoryUser = userRepository.save(user);
 					}
-				} catch (Exception exception) {
+					// saveUserFromUserDto(userRequestDto);
+					isSuccess = true;
+					message = "Successfully registered";
+					if (logger.isInfoEnabled()) {
+						logger.info("Successfully created user. EmailId=" + userRequestDto.getEmail());
+					}
+				} else {
 					isError = true;
-					message = "User creation failed. Please try after some time.";
-					if (logger.isErrorEnabled()) {
-						logger.error("Create user failed. EmailId=" + userRequestDto.getEmail(), exception);
-					}
+					message = "This email address is already in use";
+				}
+			} catch (Exception exception) {
+				isError = true;
+				message = "User creation failed. Please try after some time.";
+				if (logger.isErrorEnabled()) {
+					logger.error("Create user failed. EmailId=" + userRequestDto.getEmail(), exception);
 				}
 			}
-			if (isSuccess) {
-				status = SUCCESS;
-			} else {
-				status = FAIL;
-			}
-			userResponseDto.setStatus(status);
-			userResponseDto.setMessage(message);
-			return userResponseDto;
-		
-			
 		}
-	
+		if (isSuccess) {
+			status = SUCCESS;
+		} else {
+			status = FAIL;
+		}
+		userResponseDto.setStatus(status);
+		userResponseDto.setMessage(message);
+		return userResponseDto;
+
+	}
+
 	public CommonResponseDTO saveMatrimonyUser(UserRequestDTO userJsonRequestDto) {
 		CommonResponseDTO userResponseDto = new CommonResponseDTO();
 		User repositoryUser = null;
@@ -142,16 +152,18 @@ public class RegistrationService {
 			userRequestDto.setMultipartFile(userJsonRequestDto.getMultipartFile());
 			repositoryUser = userRepository.findByUsername(userRequestDto.getEmail());
 			if (null == repositoryUser) {
-				//save image into file system
+				// save image into file system
 				MultipartFile multipartFile = userRequestDto.getMultipartFile();
-				if(null != multipartFile) {
+				if (null != multipartFile) {
 					String key = Instant.now().getEpochSecond() + "_" + "MPS";
-					userRequestDto.getMatrimony().getMatrimonyImages().add(new MatrimonyImage(key,"/"+ key+"/"+ multipartFile.getOriginalFilename(),MatrimonyImageType.PROFILE.name()));
+					userRequestDto.getMatrimony().getMatrimonyImages().add(new MatrimonyImage(key,
+							"/" + key + "/" + multipartFile.getOriginalFilename(), MatrimonyImageType.PROFILE.name()));
 					repositoryUser = saveUserFromUserDto(userRequestDto);
-					if(null != repositoryUser){
-						fileSystemDocumentService.insert(new Document(multipartFile.getBytes(),multipartFile.getOriginalFilename(),String.valueOf(key),matrimonyDirectory));
+					if (null != repositoryUser) {
+						fileSystemDocumentService.insert(new Document(multipartFile.getBytes(),
+								multipartFile.getOriginalFilename(), String.valueOf(key), matrimonyDirectory));
 					}
-				}else{
+				} else {
 					repositoryUser = saveUserFromUserDto(userRequestDto);
 				}
 				isSuccess = true;
@@ -179,19 +191,20 @@ public class RegistrationService {
 		userResponseDto.setMessage(message);
 		return userResponseDto;
 	}
-	
+
 	public VerificationToken getVerificationToken(final String VerificationToken) {
-        return tokenRepository.findByToken(VerificationToken);
-    }
+		return tokenRepository.findByToken(VerificationToken);
+	}
+
 	public CommonResponseDTO saveUserFromUserRequest(UserRequestDTO userRequestDto) {
 		CommonResponseDTO userResponseDto = new CommonResponseDTO();
-		
+
 		User repositoryUser = null;
 		String message = null;
 		String status = null;
 		boolean isError = false;
 		boolean isSuccess = false;
-		if(null == userRequestDto || StringUtils.isEmpty(userRequestDto.getEmail())){
+		if (null == userRequestDto || StringUtils.isEmpty(userRequestDto.getEmail())) {
 			isError = true;
 			message = "User request is empty or null";
 		} else {
@@ -226,13 +239,24 @@ public class RegistrationService {
 		userResponseDto.setMessage(message);
 		return userResponseDto;
 	}
-	
-	public User saveUserFromUserDto(UserRequestDTO userRequestDto){
+
+	public User saveUserFromUserDto(UserRequestDTO userRequestDto) {
 		User repositoryUser = null;
 		User user = convertUserRequestDtoToUser(userRequestDto);
+		PersonalDetail pd = convertPersonDetailsDtoToPersonEntity(userRequestDto.getPersonalDetail());
+		Location location = convertLocationDetailsFromJsonToEntity(userRequestDto.getLocation());
+		PremiumUser pu = convertPremiumUserFromJsonToEntity(userRequestDto.getPremiumUser());
+		ReligionDetails rd = convertReligionDetailsFromJsonToEntity(userRequestDto.getReligionDetail());
+		ProfessionalDetails profDetails = convertProffesionalDetailsToEntity(userRequestDto.getProfessionalDetail());
+		user.setPersonalDetail(pd);
+		user.setLocation(location);
+		user.setPremiumUser(pu);
+		user.setReligionDetail(rd);
+		;
+		user.setProfessionalDetail(profDetails);
 		if (null != user) {
-			//Quick FIX 
-			MatrimonyDTO matrimonyDto= userRequestDto.getMatrimony();
+			// Quick FIX
+			MatrimonyDTO matrimonyDto = userRequestDto.getMatrimony();
 			Matrimony matrimony = new Matrimony();
 			matrimony.setFirstname(matrimonyDto.getFirstname());
 			matrimony.setLastname(matrimonyDto.getLastname());
@@ -249,32 +273,42 @@ public class RegistrationService {
 				user.getRoles().add(role);
 			}
 			user.setUsername(userRequestDto.getEmail());
+			user.setMatrimonyUser(Boolean.TRUE);
 			repositoryUser = userRepository.save(user);
-			
-			emailService.sendEmailForVerification(new EmailOrMobileOtpDTO(repositoryUser));
-			otpService.sendSMSForVerification(new EmailOrMobileOtpDTO(repositoryUser));
-			
-			 /*Mail mail = new Mail();
-			 mail.setTemplateName(EmailService.VERIFY_EMAIL);
-			 mail.setMailTo(userRequestDto.getEmail());
-			 Map<String,String> map =new HashMap<String,String>();
-			 final String token = UUID.randomUUID().toString();
-			 createVerificationTokenForUser(user, token);
-			 final String confirmationUrl = devangamHomeURL + "/api/registrationConfirm?token=" + token;
-			 map.put("firstName",  userRequestDto.getFirstname());
-			 map.put("link", confirmationUrl);
-			 mail.setValueMap(map);
-			 emailService.sendMail(mail);*/
+
+			 emailService.sendEmailForVerification(new EmailOrMobileOtpDTO(repositoryUser));
+			 otpService.sendSMSForVerification(new EmailOrMobileOtpDTO(repositoryUser));
+		
 		}
 		return repositoryUser;
 	}
-	
-	private void createVerificationTokenForUser(User user, String token) {
-		final VerificationToken myToken = new VerificationToken(token, user);
-        tokenRepository.save(myToken);
+
+	private ProfessionalDetails convertProffesionalDetailsToEntity(ProfessionalDetailsDTO professionalDetail) {
+		return objectMapper.convertValue(professionalDetail, ProfessionalDetails.class);
 	}
 
-	public User convertUserRequestDtoToUser(UserRequestDTO userRequestDto){
+	private ReligionDetails convertReligionDetailsFromJsonToEntity(ReligionDetailsDTO religionDetail) {
+		return objectMapper.convertValue(religionDetail, ReligionDetails.class);
+	}
+
+	private PremiumUser convertPremiumUserFromJsonToEntity(PremiumUserDTO premiumUser) {
+		return objectMapper.convertValue(premiumUser, PremiumUser.class);
+	}
+
+	private Location convertLocationDetailsFromJsonToEntity(LocationDTO location) {
+		return objectMapper.convertValue(location, Location.class);
+	}
+
+	private PersonalDetail convertPersonDetailsDtoToPersonEntity(PersonalDetailDTO personalDetail) {
+		return objectMapper.convertValue(personalDetail, PersonalDetail.class);
+	}
+
+	private void createVerificationTokenForUser(User user, String token) {
+		final VerificationToken myToken = new VerificationToken(token, user);
+		tokenRepository.save(myToken);
+	}
+
+	public User convertUserRequestDtoToUser(UserRequestDTO userRequestDto) {
 		User user = null;
 		try {
 			user = objectMapper.convertValue(userRequestDto, User.class);
@@ -283,7 +317,6 @@ public class RegistrationService {
 		}
 		return user;
 	}
-	
 
 	// From UI when user wants to register for Matrimony then we need to create
 	// all details like matrimony, location etc...after that we set
@@ -298,8 +331,9 @@ public class RegistrationService {
 			userRequestDto.setMultipartFile(userJsonRequestDto.getMultipartFile());
 			MultipartFile multipartFile = userRequestDto.getMultipartFile();
 			String key = Instant.now().getEpochSecond() + "_" + "MPS";
-			if(null != multipartFile) {
-				userRequestDto.getMatrimony().getMatrimonyImages().add(new MatrimonyImage(key,"/"+ key+"/"+ multipartFile.getOriginalFilename(),MatrimonyImageType.PROFILE.name()));
+			if (null != multipartFile) {
+				userRequestDto.getMatrimony().getMatrimonyImages().add(new MatrimonyImage(key,
+						"/" + key + "/" + multipartFile.getOriginalFilename(), MatrimonyImageType.PROFILE.name()));
 			}
 			if (userRequestDto.isMatrimonyUser()) {
 				User repositoryUser = userRepository.findByUsername(userRequestDto.getEmail());
@@ -312,8 +346,9 @@ public class RegistrationService {
 				repositoryUser.setReligionDetail(user.getReligionDetail());
 				repositoryUser.setPremiumUser(user.getPremiumUser());
 				repositoryUser = userRepository.save(repositoryUser);
-				if(null != repositoryUser){
-					fileSystemDocumentService.insert(new Document(multipartFile.getBytes(),multipartFile.getOriginalFilename(),String.valueOf(key),matrimonyDirectory));
+				if (null != repositoryUser) {
+					fileSystemDocumentService.insert(new Document(multipartFile.getBytes(),
+							multipartFile.getOriginalFilename(), String.valueOf(key), matrimonyDirectory));
 				}
 				status = SUCCESS;
 				message = "Successfully registered";
@@ -344,7 +379,7 @@ public class RegistrationService {
 				if (null != repositoryUser) {
 					UserRequestDTO userResquestDto = objectMapper.convertValue(repositoryUser, UserRequestDTO.class);
 					userResponsetDto.setUserRequestDto(userResquestDto);
-					//Add this to recover password
+					// Add this to recover password
 					userResquestDto.setPassword(bCryptPasswordEncoder.encode(repositoryUser.getPassword()));
 					isSuccess = true;
 					message = "Retriving user details successfully";
@@ -369,25 +404,34 @@ public class RegistrationService {
 			isError = false;
 			message = "Email Id empty or null";
 		}
-		String status= isSuccess == true ? SUCCESS : FAIL; 
+		String status = isSuccess == true ? SUCCESS : FAIL;
 		userResponsetDto.setStatus(status);
 		userResponsetDto.setMessage(message);
 		return userResponsetDto;
 	}
 
+	@Value("${communityLeaders.directory}")
+	private String communityLeadersDirectory;
+
 	public CommonResponseDTO saveCommunityLeaders(CommunityLeadersDTO communityLeadersDTO) {
 		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
+		CommunityLeader communityLeaderEntity = objectMapper
+				.convertValue(communityLeadersDTO.getCommunityLeadersRequestJson(), CommunityLeader.class);
+		String uuid = String.valueOf(Instant.now().getEpochSecond());
+		String imagePathKey = communityLeadersDTO.getMultipartFiles().getOriginalFilename();
+		communityLeaderEntity.setImagePath(imagePathKey);
+		communityLeaderRepo.save(communityLeaderEntity);
 		try {
-			CommunityLeader communityLeader = objectMapper.convertValue(communityLeadersDTO, CommunityLeader.class);
-			communityLeaderRepo.save(communityLeader);
-			commonResponseDTO.setStatus(SUCCESS);
-			commonResponseDTO.setMessage("Saved Successfully");
-		} catch (Exception exception) {
-			commonResponseDTO.setMessage("Error while saving community leaders data");
-			commonResponseDTO.setStatus(FAIL);
+			fileSystemDocumentService.insert(new Document(communityLeadersDTO.getMultipartFiles().getBytes(),
+					communityLeadersDTO.getMultipartFiles().getOriginalFilename(), "", communityLeadersDirectory));
+		} catch (IOException e) {
+			commonResponseDTO.setMessage("Exeption while saving community leaders");
+			commonResponseDTO.setStatus("500");
+			e.printStackTrace();
 		}
+		commonResponseDTO.setMessage("Saved Successfully");
+		commonResponseDTO.setStatus("200");
 		return commonResponseDTO;
-
 	}
 
 	public boolean verifyMobileNO(String mobileNo) {
@@ -408,7 +452,7 @@ public class RegistrationService {
 		try {
 			otp = otpService.verifyOTP(otp);
 			if ("VERIFIED".equals(otp.getStatus())) {
-				int value = userRepository.updateUser(Boolean.TRUE,mobileNumber);
+				int value = userRepository.updateUser(Boolean.TRUE, mobileNumber);
 				logger.info("Update User activity: ACTIVE=" + value);
 				response.setMessage("Succcessfully verified Mobile Number");
 				response.setStatus(SUCCESS);
@@ -422,10 +466,10 @@ public class RegistrationService {
 		} catch (Exception exception) {
 			response.setMessage("System error occured while verifying OTP");
 			response.setStatus(FAIL);
-			logger.error("Failed OTP Mobile Number verification.",exception);
+			logger.error("Failed OTP Mobile Number verification.", exception);
 		}
 		return response;
 
 	}
-	
+
 }

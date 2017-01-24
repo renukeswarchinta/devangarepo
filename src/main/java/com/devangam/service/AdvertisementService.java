@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.devangam.archive.Document;
 import com.devangam.dto.AdvertisementDTO;
+import com.devangam.dto.CommonResponseDTO;
 import com.devangam.entity.AdvertisementEntity;
 import com.devangam.repository.AdvertisementRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,10 +30,11 @@ public class AdvertisementService {
 	@Autowired
     private FileSystemDocumentService fileSystemDocumentService;
 
-	public void saveAdvertisement(AdvertisementDTO advertisementDTO) {
+	public CommonResponseDTO  saveAdvertisement(AdvertisementDTO advertisementDTO) {
+		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
 		advertisementDTO.getMultipartFiles().forEach(multipartFile->{
 			if(null != multipartFile) {
-				AdvertisementEntity advertisementEntity = objectMapper.convertValue(advertisementDTO, AdvertisementEntity.class);
+				AdvertisementEntity advertisementEntity = objectMapper.convertValue(advertisementDTO.getAdvertisementRequestJson(), AdvertisementEntity.class);
 				String uuid = String.valueOf(Instant.now().getEpochSecond());
 				//String imagePathKey = "/"+ uuid+"/"+ multipartFile.getOriginalFilename();
 				String imagePathKey =  multipartFile.getOriginalFilename();
@@ -42,12 +44,15 @@ public class AdvertisementService {
 					try {
 						fileSystemDocumentService.insert(new Document(multipartFile.getBytes(),multipartFile.getOriginalFilename(),"",advertisementDirectory));
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
+						commonResponseDTO.setMessage("Exeption while saving ads");
+						commonResponseDTO.setStatus("500");
 						e.printStackTrace();
 					}
 			}
 		});
-		 
+		commonResponseDTO.setMessage("Saved Successfully");
+		commonResponseDTO.setStatus("200");
+		return commonResponseDTO;
 	}
 	
 	public List<AdvertisementEntity> getAllAdvertisementDetails() {

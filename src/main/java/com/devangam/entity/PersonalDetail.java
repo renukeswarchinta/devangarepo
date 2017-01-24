@@ -29,6 +29,7 @@ public class PersonalDetail  {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="PERSONAL_DETAILS_ID")
+	@JsonIgnore
 	private int personalDetailsId;
 
 	private String disability;

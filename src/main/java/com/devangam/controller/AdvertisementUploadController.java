@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.devangam.dto.AdvertisementDTO;
+import com.devangam.dto.CommonResponseDTO;
 import com.devangam.dto.UserRequestDTO;
 import com.devangam.entity.AdvertisementEntity;
 import com.devangam.service.AdvertisementService;
@@ -36,11 +37,11 @@ public class AdvertisementUploadController {
 	private AdvertisementService advertisementService;
 	
 	@RequestMapping(value="/api/saveAdvertisementDetails",method=RequestMethod.POST)
-	public void saveAdvertisement(@RequestParam(value = "files", required = true) List<MultipartFile> files, @RequestParam(value = "advertisementRequestJson", required = true) String advertisementRequestJson){
+	public @ResponseBody CommonResponseDTO saveAdvertisement(@RequestParam(value = "files", required = false) List<MultipartFile> files, @RequestParam(value = "advertisementRequestJson", required = true) String advertisementRequestJson){
 		AdvertisementDTO advertisementDTO = new AdvertisementDTO();
 		advertisementDTO.setAdvertisementRequestJson(advertisementRequestJson);
 		advertisementDTO.setMultipartFiles(files);
-		advertisementService.saveAdvertisement(advertisementDTO);
+		return advertisementService.saveAdvertisement(advertisementDTO);
 	}
 	
 	@RequestMapping(value="/api/getAdvertisement")
