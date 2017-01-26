@@ -1,5 +1,7 @@
 package com.devangam.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,10 @@ public class UserService {
 
 	public void updateUserEntity(User persistObj) {
 		userRepository.save(persistObj);
+	}
+
+	public List<User> getUserList() {
+		return userRepository.findAll();
 	}
 	
 	

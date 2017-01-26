@@ -32,7 +32,7 @@ public class HelpingHandCommonAttributes {
 	private String description;
 	
 	@Column(name="PHONE_NUMBER")
-	private Integer phoneNumber;
+	private String phoneNumber;
 	
 	@Column(name="IS_ENABLE")
 	private boolean isEnable;
@@ -147,10 +147,10 @@ public class HelpingHandCommonAttributes {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Integer getPhoneNumber() {
+	public String getPhoneNumber() {
 		return phoneNumber;
 	}
-	public void setPhoneNumber(Integer phoneNumber) {
+	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 	public boolean isEnable() {

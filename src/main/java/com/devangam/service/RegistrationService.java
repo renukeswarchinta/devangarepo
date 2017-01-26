@@ -410,9 +410,9 @@ public class RegistrationService {
 
 	public CommonResponseDTO saveCommunityLeaders(CommunityLeadersDTO communityLeadersDTO) {
 		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
-		CommunityLeader communityLeaderEntity = objectMapper
-				.convertValue(communityLeadersDTO.getCommunityLeadersRequestJson(), CommunityLeader.class);
-		String uuid = String.valueOf(Instant.now().getEpochSecond());
+		CommunityLeader communityLeaderEntity;
+		try {
+		communityLeaderEntity = objectMapper.readValue(communityLeadersDTO.getCommunityLeadersRequestJson(), CommunityLeader.class);
 		String imagePathKey = communityLeadersDTO.getMultipartFiles().getOriginalFilename();
 		communityLeaderEntity.setImagePath(imagePathKey);
 		communityLeaderRepo.save(communityLeaderEntity);
@@ -423,6 +423,10 @@ public class RegistrationService {
 			commonResponseDTO.setMessage("Exeption while saving community leaders");
 			commonResponseDTO.setStatus("500");
 			e.printStackTrace();
+		}} catch (IOException e1) {
+			commonResponseDTO.setMessage("Exeption while saving community leaders");
+			commonResponseDTO.setStatus("500");
+			e1.printStackTrace();
 		}
 		commonResponseDTO.setMessage("Saved Successfully");
 		commonResponseDTO.setStatus("200");

@@ -1,6 +1,7 @@
 package com.devangam.controller;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -59,7 +60,10 @@ public class UserRestController {
 		JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
 		return user;
 	}
-
+	@RequestMapping(value = "api/getUserList", method = RequestMethod.GET)
+	public @ResponseBody List<User> getUserList() {
+		return userService.getUserList();
+	}
 	@RequestMapping(value = "/api/user/matrimonyUserRegistation", method = RequestMethod.POST)
 	public @ResponseBody CommonResponseDTO matrimonyUserRegistation(
 			@RequestParam(value = "file", required = false) MultipartFile file,

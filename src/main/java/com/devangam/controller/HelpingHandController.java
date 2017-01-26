@@ -104,4 +104,11 @@ public class HelpingHandController {
 		
 	}
 	
+	/*@RequestMapping(value ="/api/updateHelpingHand",method=RequestMethod.GET)
+	public @ResponseBody CommonResponseDTO updateHelpingHand(@RequestParam int helpingHandId,@RequestParam int recordId){
+		
+		return ;
+		
+	}
+	*/
 }

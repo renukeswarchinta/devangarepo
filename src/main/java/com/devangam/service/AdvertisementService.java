@@ -34,7 +34,10 @@ public class AdvertisementService {
 		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
 		advertisementDTO.getMultipartFiles().forEach(multipartFile->{
 			if(null != multipartFile) {
-				AdvertisementEntity advertisementEntity = objectMapper.convertValue(advertisementDTO.getAdvertisementRequestJson(), AdvertisementEntity.class);
+				AdvertisementEntity advertisementEntity;
+				try {
+					advertisementEntity = objectMapper.readValue(advertisementDTO.getAdvertisementRequestJson(), AdvertisementEntity.class);
+				
 				String uuid = String.valueOf(Instant.now().getEpochSecond());
 				//String imagePathKey = "/"+ uuid+"/"+ multipartFile.getOriginalFilename();
 				String imagePathKey =  multipartFile.getOriginalFilename();
@@ -47,6 +50,10 @@ public class AdvertisementService {
 						commonResponseDTO.setMessage("Exeption while saving ads");
 						commonResponseDTO.setStatus("500");
 						e.printStackTrace();
+					}
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
 					}
 			}
 		});

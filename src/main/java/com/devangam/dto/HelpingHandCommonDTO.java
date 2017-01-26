@@ -13,6 +13,6 @@ public class HelpingHandCommonDTO {
 	private String name;
 	private String address;
 	private String description;
-	private Integer phoneNumber;
+	private String phoneNumber;
 	private boolean isEnable;
 }
