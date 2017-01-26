@@ -181,4 +181,12 @@ public class UserRestController {
 		return commonResponseDTO;
 	}
 	
+	@RequestMapping(value="/api/user/updateUserProfile")
+	public @ResponseBody CommonResponseDTO updateUserProfile(@RequestBody UserRequestDTO userRequestDto){
+		CommonResponseDTO commonResponseDTO= registrationService.updateUserProfile(userRequestDto);
+		return commonResponseDTO;
+	}
+
+	
+	
 }

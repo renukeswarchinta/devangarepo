@@ -471,4 +471,45 @@ public class RegistrationService {
 
 	}
 
+	public CommonResponseDTO updateUserProfile(UserRequestDTO userRequestDto) {
+		CommonResponseDTO response = new CommonResponseDTO();
+		try {
+			User repositoryUser = userRepository.findByUsername(userRequestDto.getEmail());
+			if(null != repositoryUser){
+				User user = convertUserRequestDtoToUser(userRequestDto);
+				repositoryUser.setFirstname(user.getFirstname());
+				repositoryUser.setLastname(user.getLastname());
+				repositoryUser.setCountry(user.getCountry());
+				repositoryUser.setDistrict(user.getDistrict());
+				repositoryUser.setState(user.getState());
+				if (null != userRequestDto.getMatrimony()){
+					PersonalDetail pd = convertPersonDetailsDtoToPersonEntity(userRequestDto.getPersonalDetail());
+					Location location = convertLocationDetailsFromJsonToEntity(userRequestDto.getLocation());
+					PremiumUser pu = convertPremiumUserFromJsonToEntity(userRequestDto.getPremiumUser());
+					ReligionDetails rd = convertReligionDetailsFromJsonToEntity(userRequestDto.getReligionDetail());
+					ProfessionalDetails profDetails = convertProffesionalDetailsToEntity(userRequestDto.getProfessionalDetail());
+					Matrimony matrimony = convertMatrimonyDtoToEntity(userRequestDto.getMatrimony());
+					repositoryUser.setMatrimony(matrimony);
+					repositoryUser.setLocation(location);
+					repositoryUser.setPersonalDetail(pd);
+					repositoryUser.setProfessionalDetail(profDetails);
+					repositoryUser.setReligionDetail(rd);
+					repositoryUser.setPremiumUser(pu);
+				}
+				userRepository.save(repositoryUser);
+				response.setStatus(SUCCESS);
+				response.setMessage("Successfully updated");
+			}else{
+				response.setStatus(FAIL);
+				response.setMessage("Fail to update profile. Please enter valid email");
+			}
+		} catch (Exception exception) {
+			logger.error("Update user profile failed. EmailId="+userRequestDto.getEmail(), exception);
+			response.setStatus(FAIL);
+			response.setMessage("Fail to update profile. Please try after some time");
+		}
+		// Need to send an email with Successfully updated profile.
+		return response;
+	}
+
 }
