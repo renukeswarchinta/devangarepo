@@ -19,12 +19,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.LazyToOne;
-import org.hibernate.annotations.LazyToOneOption;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
@@ -61,8 +56,6 @@ public class Matrimony  {
 	@Column(name="MOTHER_TOUNGUE")
 	private String motherToungue;
 
-	@Column(name="IMAGE_URL")
-    private String imageUrl;
 
 	//bi-directional one-to-one association to User
 	@OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
@@ -145,13 +138,5 @@ public class Matrimony  {
 
 	public void setUser(User user) {
 		this.user = user;
-	}
-
-	public String getImageUrl() {
-		return imageUrl;
-	}
-
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
 	}
 }

@@ -373,9 +373,11 @@ public class RegistrationService {
 				User repositoryUser = userRepository.findByUsername(emailId);
 				if (null != repositoryUser) {
 					UserRequestDTO userResquestDto = objectMapper.convertValue(repositoryUser, UserRequestDTO.class);
+					MatrimonyDTO matrimonyDTO = objectMapper.convertValue(repositoryUser.getMatrimony(), MatrimonyDTO.class);
+					userResquestDto.setMatrimony(matrimonyDTO);
 					userResponsetDto.setUserRequestDto(userResquestDto);
 					// Add this to recover password
-					userResquestDto.setPassword(bCryptPasswordEncoder.encode(repositoryUser.getPassword()));
+					//userResquestDto.setPassword(bCryptPasswordEncoder.encode(repositoryUser.getPassword()));
 					isSuccess = true;
 					message = "Retriving user details successfully";
 				} else {
@@ -475,31 +477,56 @@ public class RegistrationService {
 		CommonResponseDTO response = new CommonResponseDTO();
 		try {
 			User repositoryUser = userRepository.findByUsername(userRequestDto.getEmail());
-			if(null != repositoryUser){
+			if (null != repositoryUser) {
 				User user = convertUserRequestDtoToUser(userRequestDto);
 				repositoryUser.setFirstname(user.getFirstname());
 				repositoryUser.setLastname(user.getLastname());
 				repositoryUser.setCountry(user.getCountry());
 				repositoryUser.setDistrict(user.getDistrict());
 				repositoryUser.setState(user.getState());
-				if (null != userRequestDto.getMatrimony()){
-					PersonalDetail pd = convertPersonDetailsDtoToPersonEntity(userRequestDto.getPersonalDetail());
-					Location location = convertLocationDetailsFromJsonToEntity(userRequestDto.getLocation());
-					PremiumUser pu = convertPremiumUserFromJsonToEntity(userRequestDto.getPremiumUser());
-					ReligionDetails rd = convertReligionDetailsFromJsonToEntity(userRequestDto.getReligionDetail());
-					ProfessionalDetails profDetails = convertProffesionalDetailsToEntity(userRequestDto.getProfessionalDetail());
+				if (null != userRequestDto.getMatrimony()) {
+
+					Matrimony repositoryMatrimony = repositoryUser.getMatrimony();
 					Matrimony matrimony = convertMatrimonyDtoToEntity(userRequestDto.getMatrimony());
-					repositoryUser.setMatrimony(matrimony);
-					repositoryUser.setLocation(location);
-					repositoryUser.setPersonalDetail(pd);
-					repositoryUser.setProfessionalDetail(profDetails);
-					repositoryUser.setReligionDetail(rd);
-					repositoryUser.setPremiumUser(pu);
+					repositoryMatrimony.setFirstname(matrimony.getFirstname());
+					repositoryMatrimony.setLastname(matrimony.getLastname());
+					repositoryMatrimony.setGender(matrimony.getGender());
+					repositoryMatrimony.setMotherToungue(matrimony.getMotherToungue());
+					repositoryMatrimony.setDob(matrimony.getDob());
+					
+					PersonalDetail personalDetail = convertPersonDetailsDtoToPersonEntity(userRequestDto.getPersonalDetail());
+					PersonalDetail repositoryPersonalDetails = repositoryUser.getPersonalDetail();
+					repositoryPersonalDetails.setMaritalStatus(personalDetail.getMaritalStatus());
+					repositoryPersonalDetails.setDisability(personalDetail.getDisability());
+					repositoryPersonalDetails.setFamilyStatus(personalDetail.getFamilyStatus());
+					repositoryPersonalDetails.setFamilyType(personalDetail.getFamilyType());
+					repositoryPersonalDetails.setFamilyValues(personalDetail.getFamilyValues());
+					repositoryPersonalDetails.setHeight(personalDetail.getHeight());
+					
+					Location location = convertLocationDetailsFromJsonToEntity(userRequestDto.getLocation());
+					Location repositoryLocation = repositoryUser.getLocation();
+					repositoryLocation.setCountry(location.getCountry());
+					repositoryLocation.setState(location.getState());
+					repositoryLocation.setCity(location.getCity());
+					repositoryLocation.setPincode(location.getPincode());
+					
+					ReligionDetails religionDetails = convertReligionDetailsFromJsonToEntity(userRequestDto.getReligionDetail());
+					ReligionDetails repositoryReligionDetail = repositoryUser.getReligionDetail();
+					repositoryReligionDetail.setDosham(religionDetails.getDosham());
+					repositoryReligionDetail.setGothram(religionDetails.getGothram());
+					repositoryReligionDetail.setSubcaste(religionDetails.getSubcaste());
+					
+					ProfessionalDetails professionalDetails = convertProffesionalDetailsToEntity(userRequestDto.getProfessionalDetail());
+					ProfessionalDetails repositoryProfessionalDetails = repositoryUser.getProfessionalDetail();
+					repositoryProfessionalDetails.setEmployedIn(professionalDetails.getEmployedIn());
+					repositoryProfessionalDetails.setHighestEducaiton(professionalDetails.getHighestEducaiton());
+					repositoryProfessionalDetails.setIncome(professionalDetails.getIncome());
+					repositoryProfessionalDetails.setOccupation(professionalDetails.getOccupation());
 				}
 				userRepository.save(repositoryUser);
 				response.setStatus(SUCCESS);
 				response.setMessage("Successfully updated");
-			}else{
+			} else {
 				response.setStatus(FAIL);
 				response.setMessage("Fail to update profile. Please enter valid email");
 			}

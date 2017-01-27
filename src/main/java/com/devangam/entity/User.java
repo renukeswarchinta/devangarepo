@@ -22,7 +22,6 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -34,7 +33,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 @Table(name="t_user")
 @NamedQuery(name="User.findAll", query="SELECT u FROM User u")
-//@JsonIdentityInfo(generator =  ObjectIdGenerators.IntSequenceGenerator.class,property = "@id")
 public class User  {
 
 	@Id
@@ -99,13 +97,10 @@ public class User  {
 
 	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
 	@LazyToOne(LazyToOneOption.NO_PROXY)
-	//@JsonManagedReference(value="userMatrimony")
-	//@JsonBackReference(value="userMatrimony")
 	private Matrimony matrimony;
 	
 	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
 	@LazyToOne(LazyToOneOption.NO_PROXY)
-	//@JsonManagedReference(value="userPersonalDetals")
 	private PersonalDetail personalDetail;
 	
 	@OneToOne(mappedBy="user", cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)

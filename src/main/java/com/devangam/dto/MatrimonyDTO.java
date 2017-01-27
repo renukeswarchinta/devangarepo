@@ -14,6 +14,5 @@ public class MatrimonyDTO {
 	private String gender;
 	private String lastname;
 	private String motherToungue;
-	private String imageUrl;
 	private List<MatrimonyImage> matrimonyImages = new ArrayList<MatrimonyImage>();
 }

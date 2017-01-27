@@ -92,12 +92,6 @@ public class UserRestController {
 		UserRequestDTO userRequestDto = new UserRequestDTO();
 		userRequestDto.setMatrimony(new MatrimonyDTO());
 		userRequestDto.setLocation(new LocationDTO());
-		/*userRequestDto.setPersonalDetail(new PersonalDetailDTO());
-		userRequestDto.setProfessionalDetail(new ProfessionalDetailsDTO());
-		userRequestDto.setReligionDetail(new ReligionDetailsDTO());
-		userRequestDto.setPremiumUser(new PremiumUserDTO());*/
-		userRequestDto.setCountry("India");
-		
 		return userRequestDto;
 	}
 
