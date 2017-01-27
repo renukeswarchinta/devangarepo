@@ -1,6 +1,6 @@
 Hi ${firstName}, Welcome to Devanga community
  	Are you ready to get started ?
- 	Please click on below link to activate your account
+ 	This is OTP generated to register user in Devanga Community. Please enter this OTP in web application  
 <p>
 		${link}
 <p>

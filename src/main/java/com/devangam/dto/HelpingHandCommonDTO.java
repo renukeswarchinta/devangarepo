@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Data
@@ -15,4 +17,5 @@ public class HelpingHandCommonDTO {
 	private String description;
 	private String phoneNumber;
 	private boolean isEnable;
+	private String helpingHandType;
 }
