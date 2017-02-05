@@ -197,10 +197,6 @@ public class UserRestController {
 	
 	@RequestMapping(value = "/api/user/resetPassword", method = RequestMethod.POST)
 	public @ResponseBody CommonResponseDTO resetPassword(@RequestBody ForgotPasswordDTO forgotPasswordDto) {
-		registrationService.resetPassword(forgotPasswordDto);
-		return null;
+		return registrationService.resetPassword(forgotPasswordDto);
 	}
-	
-	
-	
 }

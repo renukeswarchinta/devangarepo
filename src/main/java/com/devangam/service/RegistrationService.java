@@ -566,11 +566,12 @@ public class RegistrationService {
 			User repositoryUser = userRepository.findByMobileNumber(mobileNumber);
 			if (repositoryUser != null) {
 				otpService.sendSMSForVerification(new EmailOrMobileOtpDTO(repositoryUser));
-				response.setMessage("Success");
-				response.setStatus("OK");
+				response.setMessage("Regenerated Mobile OTP");
+				response.setStatus(SUCCESS);
 			} else {
-				response.setMessage("Invalid user Id");
+				response.setMessage("Invalid Mobile Number");
 				response.setStatus("Fail");
+				logger.warn("Invalid Mobile Number. Mobile=" + mobileNumber);
 			}
 		} catch (Exception exception) {
 			response.setMessage("Error occuured while creating OTP");
