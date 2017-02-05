@@ -182,7 +182,7 @@ public class UserRestController {
 		return commonResponseDTO;
 	}
 	
-	@RequestMapping(value = "/api/getNewEmailOTP", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/user/getNewEmailOTP", method = RequestMethod.GET)
 	public @ResponseBody CommonResponseDTO regenerateEmailOTP(@RequestParam String email) {
 		CommonResponseDTO commonResponseDTO = registrationService.regenerateEmailOTP(email);
 		return commonResponseDTO;
