@@ -22,6 +22,7 @@ import com.devangam.archive.Document;
 import com.devangam.dto.CommonResponseDTO;
 import com.devangam.dto.CommunityLeadersDTO;
 import com.devangam.dto.EmailOrMobileOtpDTO;
+import com.devangam.dto.ForgotPasswordDTO;
 import com.devangam.dto.LocationDTO;
 import com.devangam.dto.MatrimonyDTO;
 import com.devangam.dto.PersonalDetailDTO;
@@ -341,7 +342,7 @@ public class RegistrationService {
 				repositoryUser.setReligionDetail(rd);
 				repositoryUser.setPremiumUser(pu);
 				repositoryUser = userRepository.save(repositoryUser);
-				if (null != repositoryUser) {
+				if (null != repositoryUser && null != multipartFile) {
 					fileSystemDocumentService.insert(new Document(multipartFile.getBytes(),
 							multipartFile.getOriginalFilename(), String.valueOf(key), matrimonyDirectory));
 				}
@@ -537,6 +538,94 @@ public class RegistrationService {
 		}
 		// Need to send an email with Successfully updated profile.
 		return response;
+	}
+	
+	public CommonResponseDTO regenerateEmailOTP(String email) {
+		CommonResponseDTO response = new CommonResponseDTO();
+		try {
+			User repositoryUser = userRepository.findByUsername(email);
+			if (repositoryUser != null) {
+				emailService.sendEmailForVerification(new EmailOrMobileOtpDTO(repositoryUser));
+				response.setMessage("Success");
+				response.setStatus("OK");
+			} else {
+				response.setMessage("Invalid user Id");
+				response.setStatus("Fail");
+			}
+		} catch (Exception exception) {
+			response.setMessage("Error occuured while creating OTP");
+			response.setStatus("Error");
+			logger.error("while new email creating OTP failed. Email=" + email, exception);
+		}
+		return response;
+	}
+
+	public CommonResponseDTO regenerateMobileOTP(String mobileNumber) {
+		CommonResponseDTO response = new CommonResponseDTO();
+		try {
+			User repositoryUser = userRepository.findByMobileNumber(mobileNumber);
+			if (repositoryUser != null) {
+				otpService.sendSMSForVerification(new EmailOrMobileOtpDTO(repositoryUser));
+				response.setMessage("Success");
+				response.setStatus("OK");
+			} else {
+				response.setMessage("Invalid user Id");
+				response.setStatus("Fail");
+			}
+		} catch (Exception exception) {
+			response.setMessage("Error occuured while creating OTP");
+			response.setStatus("Error");
+			logger.error("while new email creating OTP failed. MobileNumber=" + mobileNumber, exception);
+		}
+		return response;
+	}
+
+	public CommonResponseDTO resetPassword(ForgotPasswordDTO forgotPassword) {
+		CommonResponseDTO response = new CommonResponseDTO();
+		try {
+			Otp otp = new Otp();
+			otp.setOtp(forgotPassword.getOtp());
+			User user = userRepository.findByUsername(forgotPassword.getUserName());
+			if (forgotPassword.getNewPassword() != null && forgotPassword.getConfirmPassword() != null
+					&& forgotPassword.getNewPassword().equals(forgotPassword.getConfirmPassword())) {
+				if (user != null) {
+					if(forgotPassword.getVerificationType().equals("Email")){
+						otp.setVerificationId(user.getEmail());
+						otp.setType("Email");
+					} else if(forgotPassword.getVerificationType().equals("Mobile")){
+						otp.setVerificationId(user.getMobileNumber());
+						otp.setType("Mobile");
+					}
+					otpService.verifyOTP(otp);
+					if ("VERIFIED".equals(otp.getStatus())) {
+						user.setPassword(bCryptPasswordEncoder.encode(forgotPassword.getNewPassword()));
+						userRepository.save(user);
+						response.setMessage("Successfully set reset password");
+						response.setStatus(SUCCESS);
+					} else if ("EXPIRED".equals(otp.getStatus())) {
+						response.setMessage("OTP Expired. Please generate another OTP");
+						response.setStatus(FAIL);
+					} else {
+						response.setMessage("Invalid OTP");
+						response.setStatus(FAIL);
+					}
+				} else {
+					response.setMessage("Invalid Login Id");
+					response.setStatus(FAIL);
+				}
+			} else {
+				response.setMessage("Password and confirm  password does not match");
+				response.setStatus(FAIL);
+			}
+
+		} catch (Exception exception) {
+			logger.error("reset password failed." , exception);
+			response.setMessage("Error in reset password failed.");
+			response.setStatus(FAIL);
+			
+		}
+		return response;
+
 	}
 
 }

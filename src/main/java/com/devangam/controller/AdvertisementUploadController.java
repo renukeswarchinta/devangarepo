@@ -1,11 +1,8 @@
 package com.devangam.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,10 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.devangam.dto.AdvertisementDTO;
 import com.devangam.dto.CommonResponseDTO;
-import com.devangam.dto.UserRequestDTO;
 import com.devangam.entity.AdvertisementEntity;
 import com.devangam.service.AdvertisementService;
-import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
 

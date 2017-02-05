@@ -23,7 +23,10 @@ import com.devangam.entity.Otp;
 import com.devangam.entity.User;
 import com.devangam.utils.PasswordProtector;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service("emailService")
+@Slf4j
 public class EmailService {
 
 
@@ -50,22 +53,23 @@ public class EmailService {
 	
 	public void sendEmailForVerification(EmailOrMobileOtpDTO emailOrMobileOtpDTO){
 		User repositoryUser = emailOrMobileOtpDTO.getUser();
-		
 		Otp emailOTP = new Otp();
 		emailOTP.setUserId(repositoryUser.getUserId());
 		emailOTP.setVerificationId(repositoryUser.getEmail());
 		emailOTP.setType("EMAIL");
-		otpService.reCreateOTP(emailOTP);
-		
-		 Mail mail = new Mail();
-		 mail.setTemplateName(EmailService.VERIFY_EMAIL);
-		 mail.setMailTo(emailOrMobileOtpDTO.getUser().getEmail());
-		 Map<String,String> map =new HashMap<String,String>();
-		 final String token = emailOTP.getOtp();
-		 map.put("firstName",  repositoryUser.getFirstname());
-		 map.put("link", PasswordProtector.decrypt(token));
-		 mail.setValueMap(map);
-		 sendMail(mail);
+		 Otp reCreateOTP = otpService.reCreateOTP(emailOTP);
+		 if(null != reCreateOTP){
+			 Mail mail = new Mail();
+			 mail.setTemplateName(EmailService.VERIFY_EMAIL);
+			 mail.setMailTo(emailOrMobileOtpDTO.getUser().getEmail());
+			 Map<String,String> map =new HashMap<String,String>();
+			 map.put("firstName",  repositoryUser.getFirstname());
+			 map.put("link", PasswordProtector.decrypt(reCreateOTP.getOtp()));
+			 mail.setValueMap(map);
+			 sendMail(mail);
+		 }else{
+			 log.warn("Email OTP null or empty");
+		 }
 	}
 	
 	

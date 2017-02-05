@@ -53,7 +53,7 @@ public class FileSystemDocumentService {
 			String message = "Error while inserting document";
 			log.error("Error while inserting document",e);
 			// LOG.error(message, e);
-			throw new RuntimeException(message, e);
+			//throw new RuntimeException(message, e);
 		}
 	}
 

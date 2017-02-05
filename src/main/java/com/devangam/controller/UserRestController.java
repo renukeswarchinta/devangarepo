@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.devangam.dto.CommonResponseDTO;
+import com.devangam.dto.ForgotPasswordDTO;
 import com.devangam.dto.LocationDTO;
 import com.devangam.dto.MatrimonyDTO;
 import com.devangam.dto.UserRequestDTO;
@@ -127,7 +128,7 @@ public class UserRestController {
 	 * @param emailId
 	 * @return Response either success or failure
 	 */
-	@RequestMapping(value = "/api/forgetPassword/{emailId}", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/api/forgetPassword/{emailId}", method = RequestMethod.GET)
 	public @ResponseBody UserResponseDTO forgetPassword(@PathVariable String emailId) {
 		logger.debug("Fetch UserDetails start. EmailID=" + emailId);
 		UserResponseDTO userDetails =  registrationService.getUserDetails(emailId);
@@ -136,7 +137,7 @@ public class UserRestController {
 		//Send this password thru email to user.
 		
 		return userDetails;
-	}
+	}*/
 	@RequestMapping(value = "/api/registrationConfirm", method = RequestMethod.GET)
 	public ModelAndView confirmRegistration(final HttpServletRequest request, final Model model,
 			@RequestParam("token") final String token) {
@@ -180,7 +181,26 @@ public class UserRestController {
 		CommonResponseDTO commonResponseDTO= registrationService.updateUserProfile(userRequestDto);
 		return commonResponseDTO;
 	}
-
+	
+	@RequestMapping(value = "/api/getNewEmailOTP", method = RequestMethod.GET)
+	public @ResponseBody CommonResponseDTO regenerateEmailOTP(@RequestParam String email) {
+		CommonResponseDTO commonResponseDTO = registrationService.regenerateEmailOTP(email);
+		return commonResponseDTO;
+	}
+	
+	@RequestMapping(value = "/api/user/getNewMobileOTP", method = RequestMethod.GET)
+	public @ResponseBody CommonResponseDTO regenerateMobileOTP(@RequestParam String mobileNumber) {
+		CommonResponseDTO commonResponseDTO = registrationService.regenerateMobileOTP(mobileNumber);
+		return commonResponseDTO;
+	}
+	
+	
+	@RequestMapping(value = "/api/user/resetPassword", method = RequestMethod.POST)
+	public @ResponseBody CommonResponseDTO resetPassword(@RequestBody ForgotPasswordDTO forgotPasswordDto) {
+		registrationService.resetPassword(forgotPasswordDto);
+		return null;
+	}
+	
 	
 	
 }

@@ -72,13 +72,13 @@ public class OTPService {
 			Calendar calendar = Calendar.getInstance();
 			calendar.add(Calendar.MINUTE, 30);
 			otpEntity.setValidUpto(new Date(calendar.getTimeInMillis()));
-			String generateIntToken = OTPUtil.generateIntToken();
-			otp.setOtp(generateIntToken);
-			otpEntity.setOtp(PasswordProtector.encrypt(generateIntToken));
+			String generateIntToken = PasswordProtector.encrypt(OTPUtil.generateIntToken());
+			//otp.setOtp(generateIntToken);
+			otpEntity.setOtp(generateIntToken);
 			// TODO Send Email Notification to user
 			// TODO send SMS Verification to user
 			otpEntity.setStatus("WAITING");
-			otpRepository.save(otpEntity);
+			return otpRepository.save(otpEntity);
 		} else {
 			otp = createOTP(otp);
 		}
