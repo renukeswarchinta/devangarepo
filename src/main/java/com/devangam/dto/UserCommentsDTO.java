@@ -8,4 +8,5 @@ public class UserCommentsDTO {
 	private String comments;
 	private String helpingHandType;
 	private String helpingHandId;
+	private int userId;
 }

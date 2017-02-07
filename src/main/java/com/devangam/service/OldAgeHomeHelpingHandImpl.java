@@ -36,4 +36,23 @@ public class OldAgeHomeHelpingHandImpl {
 	public List<OldageHome> getOldAgeHomeDetailsDTO() {
 		return oldAgeHomeHelpingHandRepo.findAll();
 	}
+	
+	public CommonResponseDTO updateOldAgeHomeDetails(OldAgeHomeHelpingHandDTO oldAgeHome) {
+		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
+		try{
+				OldageHome oldAgeHomeEntity = oldAgeHomeHelpingHandRepo.findOne(oldAgeHome.getId());
+				oldAgeHomeEntity.setName(oldAgeHome.getName());
+				oldAgeHomeEntity.setAddress(oldAgeHome.getAddress());
+				oldAgeHomeEntity.setDescription(oldAgeHome.getDescription());
+				oldAgeHomeEntity.setNoOfPeople(oldAgeHome.getNoOfPeople());
+				oldAgeHomeEntity.setOldageHomeGovtId(oldAgeHome.getOldageHomeGovtId());
+				oldAgeHomeEntity.setPhoneNumber(oldAgeHome.getPhoneNumber());
+				oldAgeHomeHelpingHandRepo.save(oldAgeHomeEntity);
+				commonResponseDTO.setMessage("Success");
+				
+		}catch(Exception e){
+			commonResponseDTO.setMessage("Failed to update ");
+		}
+		return commonResponseDTO;
+	}
 }

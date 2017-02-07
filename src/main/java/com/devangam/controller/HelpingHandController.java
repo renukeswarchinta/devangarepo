@@ -16,6 +16,7 @@ import com.devangam.dto.EducationDetailsDTO;
 import com.devangam.dto.JobOpportunityDTO;
 import com.devangam.dto.OldAgeHomeHelpingHandDTO;
 import com.devangam.dto.PatientDetailsDTO;
+import com.devangam.dto.UserCommentsDTO;
 import com.devangam.entity.Education;
 import com.devangam.entity.JobOpportunities;
 import com.devangam.entity.OldageHome;
@@ -24,6 +25,7 @@ import com.devangam.service.EducationHelpingHandImpl;
 import com.devangam.service.JobOpportunitiesServiceImpl;
 import com.devangam.service.OldAgeHomeHelpingHandImpl;
 import com.devangam.service.PatientHelpingHandImpl;
+import com.devangam.service.UserCommentsService;
 @RestController
 public class HelpingHandController {
 	
@@ -41,6 +43,8 @@ public class HelpingHandController {
 	
 	@Autowired 
 	private JobOpportunitiesServiceImpl jobOpportunitiesServiceImpl;
+	@Autowired 
+	private UserCommentsService userCommentsService;
 	
 	@RequestMapping(value="/api/addEducationDetails",method=RequestMethod.POST)
 	public @ResponseBody CommonResponseDTO addEducationDetails(@RequestBody EducationDetailsDTO educationDetails){
@@ -102,12 +106,22 @@ public class HelpingHandController {
 		return null;
 		
 	}
-	
-	/*@RequestMapping(value ="/api/updateHelpingHand",method=RequestMethod.GET)
-	public @ResponseBody CommonResponseDTO updateHelpingHand(@RequestParam int helpingHandId,@RequestParam int recordId){
-		
-		return ;
-		
+	@RequestMapping(value ="/api/editEducationHelpingHands",method=RequestMethod.POST)
+ 	public @ResponseBody CommonResponseDTO editEducationHelpingHands(@RequestBody  EducationDetailsDTO educationDetailsDTO){
+			return  educationHelpingHand.updateEducationHelpingHandDetails(educationDetailsDTO);
+ 	}
+ 	@RequestMapping(value ="/api/editOldAgeHomeHelpingHands",method=RequestMethod.POST)
+ 	public @ResponseBody CommonResponseDTO editOldAgeHomeHelpingHands(@RequestBody  OldAgeHomeHelpingHandDTO oldAgeHomeHelpingHandDTO){
+			return  oldAgeHomeHelpingHand.updateOldAgeHomeDetails(oldAgeHomeHelpingHandDTO);
+ 		
+ 	}
+ 	@RequestMapping(value ="/api/editPatientHelpingHands",method=RequestMethod.POST)
+ 	public @ResponseBody CommonResponseDTO editPatientHelpingHands(@RequestBody  PatientDetailsDTO patientDetailsDTO){
+			return patientHelpingHand.updatePatientDetails(patientDetailsDTO);
 	}
-	*/
+	
+	@RequestMapping(value ="/api/submitUserComments",method=RequestMethod.POST)
+	public @ResponseBody CommonResponseDTO submitUserComments(@RequestBody  UserCommentsDTO userCommentsDTO){
+			return userCommentsService.submitUserComments(userCommentsDTO);
+ 	}
 }

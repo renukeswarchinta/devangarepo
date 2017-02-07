@@ -52,7 +52,26 @@ public class PatientHelpingHandImpl {
 		return listOfPatients;
 	}
 
-	
+	public CommonResponseDTO updatePatientDetails(PatientDetailsDTO patient) {
+		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
+		try{
+				Patients patientEntity = patientHelpingHandRepository.findOne(patient.getId());
+				patientEntity.setAddress(patient.getAddress());
+				patientEntity.setDescription(patient.getDescription());
+				patientEntity.setName(patient.getName());
+				patientEntity.setPatientAge(patient.getPatientAge());
+				patientEntity.setCurrentHealthCondition(patient.getCurrentHealthCondition());
+				patientEntity.setPhoneNumber(patient.getPhoneNumber());
+				patientEntity.setSuffereingFromdisease(patient.getSuffereingFromdisease());
+				patientHelpingHandRepository.save(patientEntity);
+				commonResponseDTO.setMessage("Success");
+				
+		}catch(Exception e){
+			commonResponseDTO.setMessage("Failed to update ");
+		}
+		return commonResponseDTO;
+		
+	}
 }
 
 
