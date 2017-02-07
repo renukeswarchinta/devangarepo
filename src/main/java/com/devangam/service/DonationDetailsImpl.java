@@ -3,6 +3,7 @@ package com.devangam.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.devangam.dto.CommonResponseDTO;
 import com.devangam.dto.DonationDetailsDTO;
 import com.devangam.entity.DonationDetails;
 import com.devangam.repository.DonationDetailsRepository;
@@ -17,9 +18,18 @@ public class DonationDetailsImpl {
 	private ObjectMapper objectMapper;
 	
 	
-	public void saveDonationDetails(DonationDetailsDTO donationDetailsDTO) {
+	public CommonResponseDTO saveDonationDetails(DonationDetailsDTO donationDetailsDTO) {
 		DonationDetails donationDetails =objectMapper.convertValue(donationDetailsDTO, DonationDetails.class);
-		DonationDetails saveDonationDetails = donationRepository.save(donationDetails);
+		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
+		try{
+			DonationDetails saveDonationDetails = donationRepository.save(donationDetails);
+			commonResponseDTO.setMessage("Successfully saved Donations");
+			commonResponseDTO.setStatus("200");
+		}catch(Exception e){
+			commonResponseDTO.setMessage("Failed to load successfully ");
+			commonResponseDTO.setStatus("404");
+		}
+		return commonResponseDTO;
 		
 	}
 

@@ -81,9 +81,7 @@ public class HelpingHandController {
 	 
 	@RequestMapping(value ="/api/saveDonationDetails",method=RequestMethod.POST)
 	public @ResponseBody CommonResponseDTO saveDonationDetails(@RequestBody DonationDetailsDTO donationDetailsDTO){
-		
-		donationDetailsImpl.saveDonationDetails(donationDetailsDTO);
-		return null;
+		return donationDetailsImpl.saveDonationDetails(donationDetailsDTO);
 		
 	}
 	
@@ -124,4 +122,5 @@ public class HelpingHandController {
 	public @ResponseBody CommonResponseDTO submitUserComments(@RequestBody  UserCommentsDTO userCommentsDTO){
 			return userCommentsService.submitUserComments(userCommentsDTO);
  	}
+	
 }
