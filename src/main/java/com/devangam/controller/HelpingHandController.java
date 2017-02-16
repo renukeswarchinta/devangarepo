@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.devangam.dto.CommonResponseDTO;
 import com.devangam.dto.DonationDetailsDTO;
 import com.devangam.dto.EducationDetailsDTO;
+import com.devangam.dto.HelpingHandDonationDetails;
 import com.devangam.dto.JobOpportunityDTO;
 import com.devangam.dto.OldAgeHomeHelpingHandDTO;
 import com.devangam.dto.PatientDetailsDTO;
@@ -96,6 +97,8 @@ public class HelpingHandController {
 		return jobOpportunitiesServiceImpl.saveJobOpportunities(jobOpportunityDTO);
 		
 	}
+	
+	
 	// How do we send big comments and which helping hand he is asking for
 	@RequestMapping(value ="/api/saveHelpingHandUserComments",method=RequestMethod.POST)
 	public @ResponseBody CommonResponseDTO saveHelpingHandUserComments(@RequestParam int id,@RequestParam String content){
@@ -122,5 +125,13 @@ public class HelpingHandController {
 	public @ResponseBody CommonResponseDTO submitUserComments(@RequestBody  UserCommentsDTO userCommentsDTO){
 			return userCommentsService.submitUserComments(userCommentsDTO);
  	}
+	// 
+	@RequestMapping(value ="/api/getDonationDetailsByHelpingHandId",method=RequestMethod.GET)
+	public @ResponseBody HelpingHandDonationDetails getDonationDetailsByHelpingHandId(@RequestParam String helpingHandId,
+			@RequestParam String helpingHandType){
+		HelpingHandDonationDetails donationDetails = donationDetailsImpl.getDonationDetailsById(helpingHandId,helpingHandType);
+		System.out.println(donationDetails.getDonationAmount());
+		return null;
+	}
 	
 }

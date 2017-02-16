@@ -1,7 +1,8 @@
-package com.devangam;
+/*package com.devangam;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -14,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.devangam.controller.UserRestController;
@@ -55,4 +57,16 @@ public class DevangamApplicationTests {
 				//.andExpect(jsonPath("$.id").value(3));
 				
 	}
+	
+	public void testDonationDetails() throws Exception{
+		String helpingHandId = "1";
+		String helpingHandType = "Education";
+		 mvc.perform(get("/api/getDonationDetailsByHelpingHandId")
+	                .param("helpingHandId", helpingHandId)
+	                .param("helpingHandType", helpingHandType)               
+	        ).andExpect(status().isOk())
+	                .andExpect(content().contentType("application/json"))
+	                .andExpect(jsonPath("$[0].id").exists());
+	}
 }
+*/

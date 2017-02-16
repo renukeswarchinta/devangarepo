@@ -46,4 +46,5 @@ sudo service devanga start/stop
 apache restart :
 sudo service httpd start/stops
 
-
+git fetch --all
+git reset --hard origin/master

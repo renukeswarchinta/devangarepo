@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.devangam.dto.CommonResponseDTO;
 import com.devangam.dto.DonationDetailsDTO;
+import com.devangam.dto.HelpingHandDonationDetails;
 import com.devangam.entity.DonationDetails;
 import com.devangam.repository.DonationDetailsRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,6 +32,11 @@ public class DonationDetailsImpl {
 		}
 		return commonResponseDTO;
 		
+	}
+
+	public HelpingHandDonationDetails getDonationDetailsById(String helpingHandId, String helpingHandType) {
+		
+		return donationRepository.getDonationDetails(helpingHandId,helpingHandType);
 	}
 
 	
