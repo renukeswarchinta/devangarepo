@@ -63,5 +63,9 @@ public class EducationHelpingHandImpl implements IHelpingHandService {
 		return commonResponseDTO;
 	}
 
+	public int disableEducationDetailsById(String helpingHandId,int disable) {
+		return educationRepository.disableEducationDetailsById(helpingHandId,disable);
+	}
+
 
 }

@@ -55,4 +55,8 @@ public class OldAgeHomeHelpingHandImpl {
 		}
 		return commonResponseDTO;
 	}
+
+	public int disableOldAgeHomeDetailsById(String helpingHandId, int disable) {
+		return oldAgeHomeHelpingHandRepo.disableOldAgeHomeDetailsById(helpingHandId,disable);
+	}
 }

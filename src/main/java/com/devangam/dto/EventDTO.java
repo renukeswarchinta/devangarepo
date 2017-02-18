@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class EventDTO {
 
-	private int eventId;
+	private long eventId;
 	private String eventName;
 	private String eventDescription;
 	private String hostedBy;

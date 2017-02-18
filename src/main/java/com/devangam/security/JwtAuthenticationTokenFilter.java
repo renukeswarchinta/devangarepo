@@ -3,6 +3,7 @@ package com.devangam.security;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -37,7 +38,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     	String authToken = request.getHeader(this.tokenHeader);
-        // authToken.startsWith("Bearer ")
+    	/*Cookie ck=new Cookie("user","sonoo jaiswal");
+    	response.addCookie(ck);
+        */// authToken.startsWith("Bearer ")
         // String authToken = header.substring(7);
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
         logger.info("checking authentication für user " + username);

@@ -3,6 +3,7 @@ package com.devangam.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.devangam.dto.AdvertisementDTO;
 import com.devangam.dto.CommonResponseDTO;
+import com.devangam.dto.OldAgeHomeHelpingHandDTO;
 import com.devangam.entity.AdvertisementEntity;
 import com.devangam.service.AdvertisementService;
 
@@ -48,19 +50,17 @@ public class AdvertisementUploadController {
 	@RequestMapping(value="/api/getAdvertisementDetails",method=RequestMethod.GET)
 	public @ResponseBody List<AdvertisementEntity> getAdvertisementDetails(){
 		return advertisementService.getAllAdvertisementDetails();
-		/*List<AdvertisementEntity> adverstimentCostGreaterThan1000 = listOfAdvertisements.stream()
-							.filter(advertisement  -> advertisement.getAdvertisementCost() > 1000)
-							.collect(Collectors.toList());
-		
-		List<AdvertisementEntity> adverstimentCostLessThan1000 = listOfAdvertisements.stream()
-									.filter(advertisement  -> advertisement.getAdvertisementCost() < 1000)
-									.collect(Collectors.toList());
-		Gson gson = new Gson();
-//		adverstimentCostGreaterThan1000.forEach(advertisement -> System.out.println(advertisement.getAdvertisementCost()));
-	//	adverstimentCostLessThan1000.forEach(advertisement -> System.out.println(advertisement.getAdvertisementCost()));
-		gson.toJson(adverstimentCostLessThan1000);
-		gson.toJson(adverstimentCostGreaterThan1000);*/
 	}
+	@RequestMapping(value ="/api/updateAdvertisementDetails",method=RequestMethod.POST)
+ 	public @ResponseBody CommonResponseDTO updateAdvertisementDetails(@RequestBody  AdvertisementDTO advertisementDTO){
+			return  advertisementService.updateAdvertisementDetails(advertisementDTO);
+ 		
+ 	}
 	
+	@RequestMapping(value ="/api/disableAdvertisementDetails",method=RequestMethod.POST)
+ 	public @ResponseBody CommonResponseDTO disableAdvertisementDetails(@RequestParam("id") long id){
+			return  advertisementService.disableAdvertisementDetails(id);
+ 		
+ 	}
 	
 }

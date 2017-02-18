@@ -11,8 +11,10 @@ import org.springframework.stereotype.Service;
 import com.devangam.archive.Document;
 import com.devangam.dto.AdvertisementDTO;
 import com.devangam.dto.CommonResponseDTO;
+import com.devangam.dto.CommunityLeadersDTO;
 import com.devangam.entity.AdvertisementEntity;
 import com.devangam.entity.CommunityLeader;
+import com.devangam.entity.Education;
 import com.devangam.repository.AdvertisementRepository;
 import com.devangam.repository.CommunityLeaderRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -68,5 +70,23 @@ public class CommunityLeaderService {
 		return  communityLeaderRepository.findAll();
 	}
 
+	public CommonResponseDTO updateCommunityLeaderDetails(CommunityLeadersDTO communityLeadersDTO) {
+		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
+		try{
+				CommunityLeader communityLeader = communityLeaderRepository.findOne(communityLeadersDTO.getId());
+				communityLeader.setCurrentDesignation(communityLeadersDTO.getCurrentDesignation());
+				communityLeader.setDescription(communityLeadersDTO.getCurrentDesignation());
+				communityLeader.setName(communityLeadersDTO.getName());
+				communityLeaderRepository.save(communityLeader);
+				commonResponseDTO.setMessage("Success");
+				
+		}catch(Exception e){
+			commonResponseDTO.setMessage("Failed to update ");
+		}
+		return commonResponseDTO;
+	
+	}
+
+	
 	
 }

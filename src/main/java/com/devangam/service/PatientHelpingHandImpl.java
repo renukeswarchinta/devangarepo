@@ -72,6 +72,10 @@ public class PatientHelpingHandImpl {
 		return commonResponseDTO;
 		
 	}
+
+	public int disablePatientDetailsById(String helpingHandId, int disable) {
+		return patientHelpingHandRepository.disablePatientDetailsById(helpingHandId,disable);
+	}
 }
 
 

@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devangam.dto.CommonResponseDTO;
 import com.devangam.dto.EventDTO;
+import com.devangam.dto.OldAgeHomeHelpingHandDTO;
 import com.devangam.entity.Events;
 import com.devangam.service.EventService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,5 +43,16 @@ public class EventController {
 		}
 		return common;
 		
+	}
+	
+	@RequestMapping(value ="/api/updateEvents",method=RequestMethod.POST)
+ 	public @ResponseBody CommonResponseDTO updateEvents(@RequestBody  EventDTO eventDTO){
+			return  eventService.updateEvents(eventDTO);
+ 		
+ 	}
+	
+	@RequestMapping(value ="/api/disableEventById",method=RequestMethod.GET)
+	public @ResponseBody CommonResponseDTO disableEventById(@RequestParam("id") String id){
+		return eventService.disableEventById(id,0);
 	}
 }

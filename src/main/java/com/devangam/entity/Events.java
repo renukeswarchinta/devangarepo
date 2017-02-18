@@ -37,6 +37,14 @@ public class Events {
 	
 	private boolean isActive;
 	
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+
 	Events(){}
 
 	public int getEventId() {

@@ -12,6 +12,7 @@ import com.devangam.archive.Document;
 import com.devangam.dto.AdvertisementDTO;
 import com.devangam.dto.CommonResponseDTO;
 import com.devangam.entity.AdvertisementEntity;
+import com.devangam.entity.Education;
 import com.devangam.repository.AdvertisementRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -64,6 +65,38 @@ public class AdvertisementService {
 	
 	public List<AdvertisementEntity> getAllAdvertisementDetails() {
 		return  advertisementRepository.findAll();
+	}
+
+	public CommonResponseDTO updateAdvertisementDetails(AdvertisementDTO advertisementDTO) {
+
+		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
+		try{
+				AdvertisementEntity advertisementEntity = advertisementRepository.findOne(advertisementDTO.getId());
+				advertisementEntity.setAdvertisementCost(advertisementDTO.getAdvertisementCost());
+//				advertisementEntity.setAdvertisementType(advertisementType);
+				advertisementEntity.setEndDate(advertisementDTO.getEndDate());
+				advertisementEntity.setStartDate(advertisementDTO.getStartDate());
+				advertisementRepository.save(advertisementEntity);
+				commonResponseDTO.setMessage("Success");
+				
+		}catch(Exception e){
+			commonResponseDTO.setMessage("Failed to update ");
+		}
+		return commonResponseDTO;
+	
+	}
+
+	public CommonResponseDTO disableAdvertisementDetails(long id) {
+		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
+		try{
+				AdvertisementEntity advertisementEntity = advertisementRepository.findOne(id);
+				advertisementEntity.setExpired(true);
+				advertisementRepository.save(advertisementEntity);
+		}catch(Exception e){
+			commonResponseDTO.setMessage("Failed to update ");
+		}
+		return commonResponseDTO;
+		
 	}
 
 	

@@ -56,7 +56,10 @@ public class HelpingHandController {
 		List<Education> listOfEducaitonDetails =  educationHelpingHand.getEducationDetails();
 		return listOfEducaitonDetails;
 	}
-	
+	@RequestMapping(value ="/api/disableEducationDetailsById",method=RequestMethod.GET)
+	public @ResponseBody int disableEducationDetailsById(@RequestParam("helpingHandId") String helpingHandId){
+		return educationHelpingHand.disableEducationDetailsById(helpingHandId,0);
+	}
 	@RequestMapping(value="/api/addPatientDetails",method=RequestMethod.POST)
 	public @ResponseBody CommonResponseDTO addPatientDetails(@RequestBody PatientDetailsDTO patientDetailsDTO){
 		return patientHelpingHand.savePatientHelpingHandDetails(patientDetailsDTO);
@@ -67,6 +70,10 @@ public class HelpingHandController {
 		return  patientHelpingHand.getPatientDetailsDTO();
 	}
 	 
+	@RequestMapping(value ="/api/disablePatientDetailsById",method=RequestMethod.GET)
+	public @ResponseBody int disablePatientDetailsById(@RequestParam("helpingHandId") String helpingHandId){
+		return patientHelpingHand.disablePatientDetailsById(helpingHandId,0);
+	}
 	
 
 	@RequestMapping(value="/api/addOldAgeHomeDetails",method=RequestMethod.POST)
@@ -79,7 +86,13 @@ public class HelpingHandController {
 		return oldAgeHomeHelpingHand.getOldAgeHomeDetailsDTO();
 		
 	}
-	 
+	
+	@RequestMapping(value ="/api/disableOldAgeHomeDetailsById",method=RequestMethod.GET)
+	public @ResponseBody int disableOldAgeHomeDetailsById(@RequestParam("helpingHandId") String helpingHandId){
+		return oldAgeHomeHelpingHand.disableOldAgeHomeDetailsById(helpingHandId,0);
+	}
+	
+	
 	@RequestMapping(value ="/api/saveDonationDetails",method=RequestMethod.POST)
 	public @ResponseBody CommonResponseDTO saveDonationDetails(@RequestBody DonationDetailsDTO donationDetailsDTO){
 		return donationDetailsImpl.saveDonationDetails(donationDetailsDTO);
