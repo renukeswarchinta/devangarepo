@@ -61,7 +61,7 @@ public class AdvertisementUploadController {
 		return  advertisementService.editAdevertisement(advertisementDTO);
  	}
 	
-	@RequestMapping(value = "/api/disableAdvertisementDetails", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/disableAdvertisementDetails", method = RequestMethod.DELETE)
 	public @ResponseBody CommonResponseDTO disableAdvertisementDetails(@RequestParam("id") long id) {
 		return advertisementService.disableAdvertisementDetails(id);
 

@@ -56,7 +56,7 @@ public class HelpingHandController {
 		List<Education> listOfEducaitonDetails =  educationHelpingHand.getEducationDetails();
 		return listOfEducaitonDetails;
 	}
-	@RequestMapping(value ="/api/disableEducationDetailsById",method=RequestMethod.GET)
+	@RequestMapping(value ="/api/disableEducationDetailsById",method=RequestMethod.DELETE)
 	public @ResponseBody CommonResponseDTO disableEducationDetailsById(@RequestParam("helpingHandId") String helpingHandId){
 		return educationHelpingHand.disableEducationDetailsById(helpingHandId);
 	}
@@ -70,7 +70,7 @@ public class HelpingHandController {
 		return  patientHelpingHand.getPatientDetailsDTO();
 	}
 	 
-	@RequestMapping(value ="/api/disablePatientDetailsById",method=RequestMethod.GET)
+	@RequestMapping(value ="/api/disablePatientDetailsById",method=RequestMethod.DELETE)
 	public @ResponseBody CommonResponseDTO disablePatientDetailsById(@RequestParam("helpingHandId") String helpingHandId){
 		return patientHelpingHand.disablePatientDetailsById(helpingHandId);
 	}

@@ -1,6 +1,8 @@
 package com.devangam.service;
 
 import java.io.IOException;
+import static com.devangam.constants.DevangamConstants.SUCCESS;
+import static com.devangam.constants.DevangamConstants.FAIL;
 import java.time.Instant;
 import java.util.List;
 
@@ -81,12 +83,13 @@ public class AdvertisementService {
 	public CommonResponseDTO disableAdvertisementDetails(long id) {
 		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
 		try {
-			AdvertisementEntity advertisementEntity = advertisementRepository.findOne(id);
-			advertisementEntity.setExpired(true);
-			advertisementRepository.save(advertisementEntity);
+			advertisementRepository.delete(id);
+			commonResponseDTO.setMessage("Failed to delete ");
+			commonResponseDTO.setStatus(SUCCESS);
 		} catch (Exception exception) {
 			commonResponseDTO.setMessage("Failed to update ");
 			log.error("disable advertisement failed",exception);
+			commonResponseDTO.setStatus(FAIL);
 		}
 		return commonResponseDTO;
 

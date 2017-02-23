@@ -1,5 +1,8 @@
 package com.devangam.service;
 
+import static com.devangam.constants.DevangamConstants.FAIL;
+import static com.devangam.constants.DevangamConstants.SUCCESS;
+
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
@@ -85,6 +88,21 @@ public class CommunityLeaderService {
 		}
 		return commonResponseDTO;
 	
+	}
+
+	public CommonResponseDTO deleteCommunityLeaderDetails(String id) {
+		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
+		try {
+			communityLeaderRepository.delete(Long.valueOf(id));
+			commonResponseDTO.setMessage("Failed to delete ");
+			commonResponseDTO.setStatus(SUCCESS);
+		} catch (Exception exception) {
+			commonResponseDTO.setMessage("Failed to update ");
+			log.error("disable advertisement failed",exception);
+			commonResponseDTO.setStatus(FAIL);
+		}
+		return commonResponseDTO;
+
 	}
 
 	
