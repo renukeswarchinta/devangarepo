@@ -9,4 +9,5 @@ public class HelpingHandDonationDetails {
 	private String firstName;
 	private String email;
 	private String phoneNumber;
+	private String helpingHandType;
 }

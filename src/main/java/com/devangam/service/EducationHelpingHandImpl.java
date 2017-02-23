@@ -1,5 +1,7 @@
 package com.devangam.service;
 
+import static com.devangam.constants.DevangamConstants.SUCCESS;
+
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -7,6 +9,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.devangam.constants.DevangamConstants;
 import com.devangam.dto.CommonResponseDTO;
 import com.devangam.dto.EducationDetailsDTO;
 import com.devangam.entity.Education;
@@ -63,8 +66,16 @@ public class EducationHelpingHandImpl implements IHelpingHandService {
 		return commonResponseDTO;
 	}
 
-	public int disableEducationDetailsById(String helpingHandId,int disable) {
-		return educationRepository.disableEducationDetailsById(helpingHandId,disable);
+	public CommonResponseDTO disableEducationDetailsById(String helpingHandId) {
+		//return educationRepository.disableEducationDetailsById(helpingHandId,disable);
+		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
+		try{
+			educationRepository.delete(Long.valueOf(helpingHandId));
+			commonResponseDTO.setStatus(SUCCESS);
+		}catch(Exception e){
+			commonResponseDTO.setStatus(DevangamConstants.FAIL);
+		}
+		return commonResponseDTO;
 	}
 
 

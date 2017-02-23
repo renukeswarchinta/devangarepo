@@ -16,7 +16,7 @@ public class Events {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="EVENT_ID")
-	private int eventId;
+	private long eventId;
 	
 	@Column(name="EVENT_NAME")
 	private String eventName;
@@ -47,11 +47,11 @@ public class Events {
 
 	Events(){}
 
-	public int getEventId() {
+	public long getEventId() {
 		return eventId;
 	}
 
-	public void setEventId(int eventId) {
+	public void setEventId(long eventId) {
 		this.eventId = eventId;
 	}
 

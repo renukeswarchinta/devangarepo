@@ -51,7 +51,7 @@ public class EventController {
  		
  	}
 	
-	@RequestMapping(value ="/api/disableEventById",method=RequestMethod.GET)
+	@RequestMapping(value ="/api/disableEventById",method=RequestMethod.DELETE)
 	public @ResponseBody CommonResponseDTO disableEventById(@RequestParam("id") String id){
 		return eventService.disableEventById(id,0);
 	}

@@ -49,9 +49,7 @@ public class EventService {
 	public CommonResponseDTO disableEventById(String id, int disable) {
 		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
 		try{
-			Events event = eventRepository.findOne(Long.valueOf(id));
-			event.setActive(false);
-			eventRepository.save(event);
+			eventRepository.delete(Long.valueOf(id));
 		}catch(Exception e){
 			commonResponseDTO.setMessage("Failed to update ");
 			commonResponseDTO.setStatus(FAIL);

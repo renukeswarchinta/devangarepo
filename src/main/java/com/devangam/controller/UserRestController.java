@@ -27,6 +27,7 @@ import com.devangam.dto.CommonResponseDTO;
 import com.devangam.dto.ForgotPasswordDTO;
 import com.devangam.dto.LocationDTO;
 import com.devangam.dto.MatrimonyDTO;
+import com.devangam.dto.UserProfileDonationDetails;
 import com.devangam.dto.UserRequestDTO;
 import com.devangam.dto.UserResponseDTO;
 import com.devangam.entity.User;
@@ -36,6 +37,7 @@ import com.devangam.security.JwtUser;
 import com.devangam.service.RegistrationService;
 import com.devangam.service.UserService;
 import com.devangam.utils.DevangamProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RestController
 public class UserRestController {
@@ -198,5 +200,15 @@ public class UserRestController {
 	@RequestMapping(value = "/api/user/resetPassword", method = RequestMethod.POST)
 	public @ResponseBody CommonResponseDTO resetPassword(@RequestBody ForgotPasswordDTO forgotPasswordDto) {
 		return registrationService.resetPassword(forgotPasswordDto);
+	}
+	
+	@RequestMapping(value = "/api/userServices", method = RequestMethod.POST)
+	public @ResponseBody List<UserProfileDonationDetails> getUserServices(@RequestParam("userId") long userId) throws JsonProcessingException {
+		return userService.getUserServices(userId);
+	}
+	
+	@RequestMapping(value = "/api/getRegisteredUsers", method = RequestMethod.POST)
+	public @ResponseBody List<User> getRegisteredUsers(){
+		return userService.getRegisteredUsers();
 	}
 }

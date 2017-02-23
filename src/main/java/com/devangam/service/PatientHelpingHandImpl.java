@@ -1,5 +1,7 @@
 package com.devangam.service;
 
+import static com.devangam.constants.DevangamConstants.SUCCESS;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +10,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.devangam.constants.DevangamConstants;
 import com.devangam.dto.CommonResponseDTO;
 import com.devangam.dto.PatientDetailsDTO;
 import com.devangam.entity.Education;
@@ -73,8 +76,16 @@ public class PatientHelpingHandImpl {
 		
 	}
 
-	public int disablePatientDetailsById(String helpingHandId, int disable) {
-		return patientHelpingHandRepository.disablePatientDetailsById(helpingHandId,disable);
+	public CommonResponseDTO disablePatientDetailsById(String helpingHandId) {
+		//return patientHelpingHandRepository.disablePatientDetailsById(helpingHandId,disable);
+		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
+		try{
+			patientHelpingHandRepository.delete(Long.valueOf(helpingHandId));
+			commonResponseDTO.setStatus(SUCCESS);
+		}catch(Exception e){
+			commonResponseDTO.setStatus(DevangamConstants.FAIL);
+		}
+		return commonResponseDTO;
 	}
 }
 

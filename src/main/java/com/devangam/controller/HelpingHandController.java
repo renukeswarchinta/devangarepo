@@ -57,8 +57,8 @@ public class HelpingHandController {
 		return listOfEducaitonDetails;
 	}
 	@RequestMapping(value ="/api/disableEducationDetailsById",method=RequestMethod.GET)
-	public @ResponseBody int disableEducationDetailsById(@RequestParam("helpingHandId") String helpingHandId){
-		return educationHelpingHand.disableEducationDetailsById(helpingHandId,0);
+	public @ResponseBody CommonResponseDTO disableEducationDetailsById(@RequestParam("helpingHandId") String helpingHandId){
+		return educationHelpingHand.disableEducationDetailsById(helpingHandId);
 	}
 	@RequestMapping(value="/api/addPatientDetails",method=RequestMethod.POST)
 	public @ResponseBody CommonResponseDTO addPatientDetails(@RequestBody PatientDetailsDTO patientDetailsDTO){
@@ -71,8 +71,8 @@ public class HelpingHandController {
 	}
 	 
 	@RequestMapping(value ="/api/disablePatientDetailsById",method=RequestMethod.GET)
-	public @ResponseBody int disablePatientDetailsById(@RequestParam("helpingHandId") String helpingHandId){
-		return patientHelpingHand.disablePatientDetailsById(helpingHandId,0);
+	public @ResponseBody CommonResponseDTO disablePatientDetailsById(@RequestParam("helpingHandId") String helpingHandId){
+		return patientHelpingHand.disablePatientDetailsById(helpingHandId);
 	}
 	
 
@@ -87,9 +87,9 @@ public class HelpingHandController {
 		
 	}
 	
-	@RequestMapping(value ="/api/disableOldAgeHomeDetailsById",method=RequestMethod.GET)
-	public @ResponseBody int disableOldAgeHomeDetailsById(@RequestParam("helpingHandId") String helpingHandId){
-		return oldAgeHomeHelpingHand.disableOldAgeHomeDetailsById(helpingHandId,0);
+	@RequestMapping(value ="/api/disableOldAgeHomeDetailsById",method=RequestMethod.DELETE)
+	public @ResponseBody CommonResponseDTO disableOldAgeHomeDetailsById(@RequestParam("helpingHandId") String helpingHandId){
+		return oldAgeHomeHelpingHand.disableOldAgeHomeDetailsById(helpingHandId);
 	}
 	
 	
@@ -111,15 +111,6 @@ public class HelpingHandController {
 		
 	}
 	
-	
-	// How do we send big comments and which helping hand he is asking for
-	@RequestMapping(value ="/api/saveHelpingHandUserComments",method=RequestMethod.POST)
-	public @ResponseBody CommonResponseDTO saveHelpingHandUserComments(@RequestParam int id,@RequestParam String content){
-		// Need to send email with the comments 
-		
-		return null;
-		
-	}
 	@RequestMapping(value ="/api/editEducationHelpingHands",method=RequestMethod.POST)
  	public @ResponseBody CommonResponseDTO editEducationHelpingHands(@RequestBody  EducationDetailsDTO educationDetailsDTO){
 			return  educationHelpingHand.updateEducationHelpingHandDetails(educationDetailsDTO);
