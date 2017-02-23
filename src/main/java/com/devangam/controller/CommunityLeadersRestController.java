@@ -48,4 +48,8 @@ public class CommunityLeadersRestController {
  	public @ResponseBody CommonResponseDTO updateCommunityLeaderDetails(@RequestBody  CommunityLeadersDTO communityLeadersDTO){
 			return  communityLeaderService.updateCommunityLeaderDetails(communityLeadersDTO);
  	}
+	@RequestMapping(value ="/api/deleteCommunityLeaderDetails",method=RequestMethod.DELETE)
+ 	public @ResponseBody CommonResponseDTO deleteCommunityLeaderDetails(@RequestParam("id") String id){
+			return  communityLeaderService.deleteCommunityLeaderDetails(id);
+ 	}
 }
