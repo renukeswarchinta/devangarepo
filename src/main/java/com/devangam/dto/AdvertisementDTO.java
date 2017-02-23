@@ -23,4 +23,5 @@ public class AdvertisementDTO {
 	private String advertisementRequestJson;
 	@JsonIgnore
 	private List<MultipartFile> multipartFiles;
+	private boolean editFlow;
 }

@@ -18,7 +18,6 @@ public class AdvertisementEntity {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="ID")
-	@JsonIgnore
 	private int id;
 
 	@Column(name="ADVERTISEMENT_IMAGE_PATH")
