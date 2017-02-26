@@ -9,5 +9,5 @@ public class DonationDetailsDTO {
 	private int userId;
 	private String helpingHandType;
 	private double amountReceived;
-
+	private String paymentId;
 }

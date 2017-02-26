@@ -1,43 +1,72 @@
 package com.devangam.service;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.ranges.RangeException;
 
+import com.devangam.client.razorpay.RazorpayHttpClient;
 import com.devangam.dto.CommonResponseDTO;
 import com.devangam.dto.DonationDetailsDTO;
 import com.devangam.dto.HelpingHandDonationDetails;
 import com.devangam.entity.DonationDetails;
 import com.devangam.repository.DonationDetailsRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.razorpay.Payment;
+
+import lombok.extern.slf4j.Slf4j;
+
+import static com.devangam.constants.DevangamConstants.FAIL;
+import static com.devangam.constants.DevangamConstants.SUCCESS;
 
 @Service
+@Slf4j
 public class DonationDetailsImpl {
 
 	@Autowired
 	private DonationDetailsRepository donationRepository;
+
 	@Autowired
 	private ObjectMapper objectMapper;
-	
-	
+
+	@Autowired
+	private RazorpayHttpClient razorpayHttpClient;
+
 	public CommonResponseDTO saveDonationDetails(DonationDetailsDTO donationDetailsDTO) {
-		DonationDetails donationDetails =objectMapper.convertValue(donationDetailsDTO, DonationDetails.class);
+		DonationDetails donationDetails = objectMapper.convertValue(donationDetailsDTO, DonationDetails.class);
 		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
-		try{
-			DonationDetails saveDonationDetails = donationRepository.save(donationDetails);
-			commonResponseDTO.setMessage("Successfully saved Donations");
-			commonResponseDTO.setStatus("200");
-		}catch(Exception e){
-			commonResponseDTO.setMessage("Failed to load successfully ");
-			commonResponseDTO.setStatus("404");
+		try {
+			String paymentId = donationDetailsDTO.getPaymentId();
+			if (StringUtils.isNotBlank(paymentId) && donationDetailsDTO.getUserId() > 0 && donationDetailsDTO.getHelpingHandId() > 0) {
+				Payment razorPayment = razorpayHttpClient.getPaymentById(paymentId);
+				int amount = razorPayment.get("amount");
+				String razorPaymentId = razorPayment.get("id");
+				if (paymentId.equalsIgnoreCase(razorPaymentId)) {
+					donationDetails.setAmountReceived(amount);
+					donationRepository.save(donationDetails);
+				}
+				commonResponseDTO.setMessage("Donation Payment Successully created.");
+				commonResponseDTO.setStatus(SUCCESS);
+			}else{
+				log.error("Required Donation Details are missing" + donationDetailsDTO.toString());
+				commonResponseDTO.setMessage("Donation Payment Failed");
+				commonResponseDTO.setStatus(FAIL);
+			}
+		} catch (RangeException rangeException) {
+			log.error(rangeException.getMessage(), rangeException);
+			commonResponseDTO.setMessage("Donation Payment Failed");
+			commonResponseDTO.setStatus(FAIL);
+		} catch (Exception exception) {
+			log.error(exception.getMessage(), exception);
+			commonResponseDTO.setMessage("Donation Payment Failed");
+			commonResponseDTO.setStatus(FAIL);
 		}
 		return commonResponseDTO;
-		
 	}
 
 	public HelpingHandDonationDetails getDonationDetailsById(String helpingHandId, String helpingHandType) {
-		
-		return donationRepository.getDonationDetails(helpingHandId,helpingHandType);
+
+		return donationRepository.getDonationDetails(helpingHandId, helpingHandType);
 	}
 
-	
 }

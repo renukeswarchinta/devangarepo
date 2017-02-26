@@ -24,6 +24,9 @@ public class DonationDetails {
 	@Column(name="HELPING_HAND_TYPE")
 	private String helpingHandType;
 	
+	@Column(name="PAYMENT_ID")
+	private String paymentId;
+	
 	@Column(name="DONATION_AMT")
 	private double amountReceived;
 
@@ -67,6 +70,10 @@ public class DonationDetails {
 	public void setAmountReceived(double amountReceived) {
 		this.amountReceived = amountReceived;
 	}
-
-	
+	public String getPaymentId() {
+		return paymentId;
+	}
+	public void setPaymentId(String paymentId) {
+		this.paymentId = paymentId;
+	}
 }
