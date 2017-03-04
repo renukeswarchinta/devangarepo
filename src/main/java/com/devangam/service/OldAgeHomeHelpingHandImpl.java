@@ -1,7 +1,9 @@
 package com.devangam.service;
 
-import java.util.List;
+import static com.devangam.constants.DevangamConstants.SUCCESS;
 
+import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,8 +14,6 @@ import com.devangam.dto.OldAgeHomeHelpingHandDTO;
 import com.devangam.entity.OldageHome;
 import com.devangam.repository.OldAgeHomeHelpingHandRpository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import static com.devangam.constants.DevangamConstants.FAIL;
-import static com.devangam.constants.DevangamConstants.SUCCESS;
 @Service
 public class OldAgeHomeHelpingHandImpl {
 
@@ -50,6 +50,7 @@ public class OldAgeHomeHelpingHandImpl {
 				oldAgeHomeEntity.setNoOfPeople(oldAgeHome.getNoOfPeople());
 				oldAgeHomeEntity.setOldageHomeGovtId(oldAgeHome.getOldageHomeGovtId());
 				oldAgeHomeEntity.setPhoneNumber(oldAgeHome.getPhoneNumber());
+				oldAgeHomeEntity.setLastUpdate(new Date());
 				oldAgeHomeHelpingHandRepo.save(oldAgeHomeEntity);
 				commonResponseDTO.setMessage("Success");
 				
@@ -63,7 +64,7 @@ public class OldAgeHomeHelpingHandImpl {
 		//return oldAgeHomeHelpingHandRepo.disableOldAgeHomeDetailsById(helpingHandId,disable);
 		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
 		try{
-			oldAgeHomeHelpingHandRepo.delete(Long.valueOf(helpingHandId));
+			oldAgeHomeHelpingHandRepo.delete(helpingHandId);
 			commonResponseDTO.setStatus(SUCCESS);
 		}catch(Exception e){
 			commonResponseDTO.setStatus(DevangamConstants.FAIL);

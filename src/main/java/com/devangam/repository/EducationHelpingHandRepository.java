@@ -16,6 +16,6 @@ public interface EducationHelpingHandRepository extends JpaRepository<Education,
 	public List<Education> findActiveEducationDetails();
 	
 	@Modifying(clearAutomatically = true)
-	@Query(value="update Education e set e.isEnable = :disable where e.Id = :helpingHandId")
+	@Query(value="update Education e set e.isEnable = :disable where e.id = :helpingHandId")
 	public int disableEducationDetailsById(String helpingHandId,int disable);
 }

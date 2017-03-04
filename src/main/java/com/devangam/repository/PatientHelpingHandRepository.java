@@ -11,7 +11,7 @@ import com.devangam.entity.Patients;
 public interface PatientHelpingHandRepository extends JpaRepository<Patients, Serializable>{
 
 	@Modifying(clearAutomatically = true)
-	@Query(value="update Patients e set e.isEnable = :disable where e.Id = :helpingHandId")
+	@Query(value="update Patients e set e.isEnable = :disable where e.id = :helpingHandId")
 	public int disablePatientDetailsById(String helpingHandId, int disable);
 
 }

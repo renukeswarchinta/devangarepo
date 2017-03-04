@@ -17,19 +17,21 @@ public class EventService {
 
 	@Autowired
 	private EventRepository eventRepository;
-	
-	
-	public void saveEventRepository(Events event){
+
+	public void saveEventRepository(Events event) {
 		eventRepository.save(event);
 	}
-	public List<Events> getListOfEvents(){
+
+	public List<Events> getListOfEvents() {
 		return eventRepository.findAll();
 	}
+
 	public CommonResponseDTO updateEvents(EventDTO eventDTO) {
 
 		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
-		try{
-				Events event = eventRepository.findOne(eventDTO.getEventId());
+		try {
+			Events event = eventRepository.findOne(eventDTO.getEventId());
+			if (null != event) {
 				event.setEventDescription(eventDTO.getEventDescription());
 				event.setEventLaunchDate(eventDTO.getEventLaunchDate());
 				event.setEventName(eventDTO.getEventName());
@@ -38,23 +40,27 @@ public class EventService {
 				eventRepository.save(event);
 				commonResponseDTO.setMessage("Success");
 				commonResponseDTO.setStatus(SUCCESS);
-				
-		}catch(Exception e){
+			} else {
+				commonResponseDTO.setMessage("Event not found. EventId=" + eventDTO.getEventId());
+				commonResponseDTO.setStatus(FAIL);
+			}
+
+		} catch (Exception e) {
 			commonResponseDTO.setMessage("Failed to update ");
 			commonResponseDTO.setStatus(FAIL);
 		}
 		return commonResponseDTO;
-	
+
 	}
+
 	public CommonResponseDTO disableEventById(String id, int disable) {
 		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
-		try{
+		try {
 			eventRepository.delete(Long.valueOf(id));
-		}catch(Exception e){
+		} catch (Exception e) {
 			commonResponseDTO.setMessage("Failed to update ");
 			commonResponseDTO.setStatus(FAIL);
 		}
-	return commonResponseDTO;
+		return commonResponseDTO;
 	}
 }
-

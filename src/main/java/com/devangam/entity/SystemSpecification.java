@@ -33,8 +33,7 @@ public class SystemSpecification {
 	@Column(name = "CREATED_DATE")
 	private Date createdDate;
 
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "UPDATED_DATE")
-	private boolean updatedDate;
+	private Date updatedDate;
 
 }

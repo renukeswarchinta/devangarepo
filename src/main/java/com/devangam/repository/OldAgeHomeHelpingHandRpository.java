@@ -11,7 +11,7 @@ import com.devangam.entity.OldageHome;
 
 public interface OldAgeHomeHelpingHandRpository extends JpaRepository<OldageHome, Serializable>{
 	@Modifying(clearAutomatically = true)
-	@Query(value="update OldageHome e set e.isEnable = :disable where e.Id = :helpingHandId")
+	@Query(value="update OldageHome e set e.isEnable = :disable where e.id = :helpingHandId")
 	public int disableOldAgeHomeDetailsById(String helpingHandId, int disable);
 
 }

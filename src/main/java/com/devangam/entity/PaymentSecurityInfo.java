@@ -38,6 +38,6 @@ public class PaymentSecurityInfo {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "UPDATED_DATE")
-	private boolean updatedDate;
+	private Date updatedDate;
 
 }
