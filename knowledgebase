@@ -39,6 +39,8 @@ git init
 
 Connect AWS console thru git:
 ssh -i <devanga.pem> ec2-user@<35.154.110.16>
+ssh -i app.pem ec2-user@35.154.114.72
+
 
 To start/stop Devanga service :
 sudo service devanga start/stop
