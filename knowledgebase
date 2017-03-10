@@ -48,5 +48,7 @@ sudo service devanga start/stop
 apache restart :
 sudo service httpd start/stops
 
+Ec2 instance name :ec2-35-154-114-72.ap-south-1.compute.amazonaws.com
+
 git fetch --all
 git reset --hard origin/master

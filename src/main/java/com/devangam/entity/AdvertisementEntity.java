@@ -33,7 +33,7 @@ public class AdvertisementEntity {
 	@Column(name="ADVERTISEMENT_END_DATE")
 	private Date endDate;
 	@Column(name="ADVERTISEMENT_COST")
-	private double advertisementCost;
+	private Double advertisementCost;
 	
 	@Column(name="IS_EXPIRED")
 	private boolean expired;
@@ -85,11 +85,11 @@ public class AdvertisementEntity {
 		this.endDate = endDate;
 	}
 
-	public double getAdvertisementCost() {
+	public Double getAdvertisementCost() {
 		return advertisementCost;
 	}
 
-	public void setAdvertisementCost(double advertisementCost) {
+	public void setAdvertisementCost(Double advertisementCost) {
 		this.advertisementCost = advertisementCost;
 	}
 

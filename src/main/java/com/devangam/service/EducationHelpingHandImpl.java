@@ -70,7 +70,7 @@ public class EducationHelpingHandImpl implements IHelpingHandService {
 		//return educationRepository.disableEducationDetailsById(helpingHandId,disable);
 		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
 		try{
-			educationRepository.delete(Long.valueOf(helpingHandId));
+			educationRepository.delete(Integer.valueOf(helpingHandId));
 			commonResponseDTO.setStatus(SUCCESS);
 		}catch(Exception e){
 			commonResponseDTO.setStatus(DevangamConstants.FAIL);

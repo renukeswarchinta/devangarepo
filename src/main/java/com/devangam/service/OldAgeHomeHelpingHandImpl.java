@@ -64,7 +64,7 @@ public class OldAgeHomeHelpingHandImpl {
 		//return oldAgeHomeHelpingHandRepo.disableOldAgeHomeDetailsById(helpingHandId,disable);
 		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
 		try{
-			oldAgeHomeHelpingHandRepo.delete(helpingHandId);
+			oldAgeHomeHelpingHandRepo.delete(Integer.valueOf(helpingHandId));
 			commonResponseDTO.setStatus(SUCCESS);
 		}catch(Exception e){
 			commonResponseDTO.setStatus(DevangamConstants.FAIL);

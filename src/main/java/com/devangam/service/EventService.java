@@ -56,7 +56,16 @@ public class EventService {
 	public CommonResponseDTO disableEventById(String id, int disable) {
 		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
 		try {
+			
+			Events event= eventRepository.findOne(Long.valueOf(id));
+			if(event == null){
+				commonResponseDTO.setMessage("Entity with that id does not exists ");
+				commonResponseDTO.setStatus(FAIL);
+				return commonResponseDTO;
+			}
 			eventRepository.delete(Long.valueOf(id));
+			commonResponseDTO.setMessage("Successfully deleted");
+			commonResponseDTO.setStatus(SUCCESS);
 		} catch (Exception e) {
 			commonResponseDTO.setMessage("Failed to update ");
 			commonResponseDTO.setStatus(FAIL);
