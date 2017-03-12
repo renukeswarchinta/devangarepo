@@ -1,9 +1,9 @@
 package com.devangam.service;
 
-import java.io.IOException;
-import static com.devangam.constants.DevangamConstants.SUCCESS;
 import static com.devangam.constants.DevangamConstants.FAIL;
-import java.time.Instant;
+import static com.devangam.constants.DevangamConstants.SUCCESS;
+
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,6 @@ public class AdvertisementService {
 	public CommonResponseDTO saveAdvertisement(AdvertisementDTO advertisementDTO) {
 		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
 		List<MultipartFile> multipartFiles = advertisementDTO.getMultipartFiles();
-		boolean editFlow = advertisementDTO.isEditFlow();
 		if (null != multipartFiles) {
 			multipartFiles.forEach(multipartFile -> {
 				if (null != multipartFile) {
@@ -49,24 +48,19 @@ public class AdvertisementService {
 					String imagePath = null;
 					try {
 						advertisementEntity = objectMapper.readValue(advertisementDTO.getAdvertisementRequestJson(), AdvertisementEntity.class);
-						if(editFlow) {
-							imagePath = advertisementEntity.getImagePath();
-						} else {
-							String uuid = String.valueOf(Instant.now().getEpochSecond());
-							imagePath = "/"+ uuid + "_"+ multipartFile.getOriginalFilename();
-						}
-						advertisementEntity.setImagePath(imagePath);
+						Document document = new Document(multipartFile.getBytes(), multipartFile.getOriginalFilename(), "", advertisementDirectory);
+						advertisementEntity.setImagePath(document.getFileName());
 						advertisementRepository.save(advertisementEntity);
 						// save image into file system
-						try {
-							fileSystemDocumentService
-									.insert(new Document(multipartFile.getBytes(), imagePath, "", advertisementDirectory));
-						} catch (IOException e) {
-							commonResponseDTO.setMessage("Exeption while saving ads");
-							commonResponseDTO.setStatus("500");
-						}
+						fileSystemDocumentService.insert(document);
+						commonResponseDTO.setMessage("Ad successfully saved");
+						commonResponseDTO.setStatus(SUCCESS);
 					} catch (IOException ioException) {
-						
+						commonResponseDTO.setMessage("Exeption while saving ads");
+						commonResponseDTO.setStatus(FAIL);
+					} catch (Exception exception) {
+						commonResponseDTO.setMessage("Exeption while saving ads");
+						commonResponseDTO.setStatus(FAIL);
 					}
 				}
 			});
@@ -97,12 +91,25 @@ public class AdvertisementService {
 
 	public CommonResponseDTO editAdevertisement(AdvertisementDTO advertisementDTO) throws JsonParseException, JsonMappingException, IOException {
 		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
-		log.debug("edit advertisement AdevertisementId=" + advertisementDTO.getId());
+		log.info("edit advertisement AdevertisementId=" + advertisementDTO.getId());
 		AdvertisementEntity advertisementEntity = objectMapper.readValue(advertisementDTO.getAdvertisementRequestJson(), AdvertisementEntity.class);
+		MultipartFile multipartFile = advertisementDTO.getMultipartFiles().size() > 0 ? advertisementDTO.getMultipartFiles().get(0) : null;
 		AdvertisementEntity repository  = advertisementRepository.findOne(advertisementEntity.getId());
+		String fileName = null;
 		if (null != advertisementEntity && null != repository) {
-			advertisementDTO.setEditFlow(Boolean.TRUE);
-			commonResponseDTO = saveAdvertisement(advertisementDTO);
+			if (null != multipartFile) {
+				fileName = advertisementEntity.getImagePath();
+				// Replace/delete the file if already exists
+				fileSystemDocumentService.deleteIfExists(advertisementDirectory, fileName);
+				Document document = new Document(multipartFile.getBytes(), multipartFile.getOriginalFilename(), "", advertisementDirectory);
+				fileSystemDocumentService.insert(document);
+				advertisementEntity.setImagePath(document.getFileName());
+			} else {
+				advertisementEntity.setImagePath(repository.getImagePath());
+			}
+			advertisementRepository.save(advertisementEntity);
+			commonResponseDTO.setMessage("Successfully Updated Ad");
+			commonResponseDTO.setStatus(SUCCESS);
 		} else {
 			commonResponseDTO.setMessage("Faild to edit advertisement");
 			commonResponseDTO.setStatus("Fail");
@@ -110,6 +117,4 @@ public class AdvertisementService {
 		}
 		return commonResponseDTO;
 	}
-
-	
 }

@@ -1,8 +1,11 @@
 package com.devangam.archive;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Properties;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * A document from an archive managed by {@link IArchiveService}.
@@ -31,10 +34,20 @@ public class Document extends DocumentMetadata implements Serializable {
 
     public Document(byte[] bytes, String originalFilename, String userId,String directory) {
     	this.fileData = bytes;
-    	this.fileName = originalFilename;
+    	this.fileName = getImagePathWithUUID(originalFilename);
     	this.userId = userId;
     	this.directory = directory;
 	}
+    
+    public String getImagePathWithUUID(String originalFileName) {
+		String imagePath = null;
+		if (StringUtils.isNotBlank(originalFileName)) {
+			String uuid = String.valueOf(Instant.now().getEpochSecond());
+			imagePath = uuid + "_" + originalFileName;
+		}
+		return imagePath;
+	}
+    
 
 	public byte[] getFileData() {
         return fileData;

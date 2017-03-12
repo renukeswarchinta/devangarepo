@@ -4,6 +4,11 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.time.Instant;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
@@ -49,23 +54,23 @@ public class FileSystemDocumentService {
 			createDirectory(document);
 			saveFileData(document);
 			// saveMetaData(document);
-		} catch (IOException e) {
-			String message = "Error while inserting document";
-			log.error("Error while inserting document",e);
-			// LOG.error(message, e);
-			//throw new RuntimeException(message, e);
+		} catch (IOException ioException) {
+			log.error("Error while inserting document",ioException);
 		}
 	}
 
 	public String renameFile(String toFileName, String fromFileName) {
-		String[] fileNameSplits = toFileName.split("\\.");
-		// extension is assumed to be the last part
-		int extensionIndex = fileNameSplits.length - 1;
-		String newFileName = fromFileName + "." + fileNameSplits[extensionIndex];
+		String newFileName = null;
+		if(StringUtils.isNotBlank(toFileName) && StringUtils.isNotBlank(fromFileName)){
+			String[] fileNameSplits = toFileName.split("\\.");
+			// extension is assumed to be the last part
+			int extensionIndex = fileNameSplits.length - 1;
+			newFileName = fromFileName + "." + fileNameSplits[extensionIndex];
+		}
 		return newFileName;
 	}
-
-	private boolean isMatched(DocumentMetadata metadata, String personName, Date date) {
+	
+	/*private boolean isMatched(DocumentMetadata metadata, String personName, Date date) {
 		if (metadata == null) {
 			return false;
 		}
@@ -78,13 +83,14 @@ public class FileSystemDocumentService {
 		}
 		return match;
 	}
-
+*/
 	private void saveFileData(Document document) throws IOException {
 		String path = getDirectoryPath(document);
 		BufferedOutputStream stream = new BufferedOutputStream(
 				new FileOutputStream(new File(new File(path), document.getFileName())));
 		stream.write(document.getFileData());
 		stream.close();
+		log.info("Successfully created file. FileName="+document.getFileName());
 	}
 
 	private String createDirectory(Document document) {
@@ -121,5 +127,18 @@ public class FileSystemDocumentService {
 		File file = new File(path);
 		file.mkdirs();
 	}
-
+	
+	
+	public boolean deleteIfExists(String directoryPath, String orginalFileName) {
+		// delete if exists
+		boolean isSuccess = false;
+		try {
+			Path path = FileSystems.getDefault().getPath(directoryPath, orginalFileName);
+			isSuccess = Files.deleteIfExists(path);
+			log.info("Delete status: " + isSuccess);
+		} catch (IOException | SecurityException e) {
+			log.error("Delete the file fail", e);
+		}
+		return isSuccess;
+	}
 }
