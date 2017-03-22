@@ -71,14 +71,15 @@ public class AdvertisementService {
 	}
 	
 	public List<AdvertisementEntity> getAllAdvertisementDetails() {
-		return  advertisementRepository.findAll();
+		return  advertisementRepository.findAllActiveAdvertisements();
 	}
 
-	public CommonResponseDTO disableAdvertisementDetails(long id) {
+	public CommonResponseDTO disableAdvertisementDetails(Long id) {
 		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
 		try {
-			advertisementRepository.delete(id);
-			commonResponseDTO.setMessage("Failed to delete ");
+			//advertisementRepository.delete(id);
+			advertisementRepository.disableAdvertisement(id);
+			commonResponseDTO.setMessage("Suucess to update ");
 			commonResponseDTO.setStatus(SUCCESS);
 		} catch (Exception exception) {
 			commonResponseDTO.setMessage("Failed to update ");

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -61,8 +62,8 @@ public class AdvertisementUploadController {
 		return  advertisementService.editAdevertisement(advertisementDTO);
  	}
 	
-	@RequestMapping(value = "/api/disableAdvertisementDetails", method = RequestMethod.DELETE)
-	public @ResponseBody CommonResponseDTO disableAdvertisementDetails(@RequestParam("id") long id) {
+	@RequestMapping(value = "/api/disableAdvertisementDetails/{id}", method = RequestMethod.DELETE)
+	public @ResponseBody CommonResponseDTO disableAdvertisementDetails(@Param("id") Long id) {
 		return advertisementService.disableAdvertisementDetails(id);
 
 	}

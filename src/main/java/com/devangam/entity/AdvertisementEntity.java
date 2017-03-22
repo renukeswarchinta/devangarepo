@@ -18,7 +18,7 @@ public class AdvertisementEntity {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="ID")
-	private int id;
+	private Long id;
 
 	@Column(name="ADVERTISEMENT_IMAGE_PATH")
 	private String imagePath;
@@ -45,11 +45,11 @@ public class AdvertisementEntity {
 	public AdvertisementEntity() {
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
