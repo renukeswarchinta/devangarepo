@@ -13,7 +13,6 @@ import com.devangam.entity.AdvertisementEntity;
 
 public interface AdvertisementRepository extends JpaRepository<AdvertisementEntity, Serializable>{
 
-	@Transactional
 	@Modifying(clearAutomatically = true)
     @Query("UPDATE AdvertisementEntity c SET c.expired = 1 WHERE c.id = :id")
 	int disableAdvertisement(@Param("id") Long id);

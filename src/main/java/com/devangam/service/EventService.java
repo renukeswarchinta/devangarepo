@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.devangam.dto.CommonResponseDTO;
 import com.devangam.dto.EventDTO;
@@ -13,6 +14,7 @@ import com.devangam.entity.Events;
 import com.devangam.repository.EventRepository;
 
 @Service
+@Transactional
 public class EventService {
 
 	@Autowired
@@ -23,25 +25,26 @@ public class EventService {
 	}
 
 	public List<Events> getListOfEvents() {
-		return eventRepository.findAll();
+		return eventRepository.findAllActiveEvents();
 	}
 
 	public CommonResponseDTO updateEvents(EventDTO eventDTO) {
 
 		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
 		try {
-			Events event = eventRepository.findOne(eventDTO.getEventId());
+			Events event = eventRepository.findOne(eventDTO.getId());
 			if (null != event) {
 				event.setEventDescription(eventDTO.getEventDescription());
 				event.setEventLaunchDate(eventDTO.getEventLaunchDate());
 				event.setEventName(eventDTO.getEventName());
 				event.setEventPostDate(eventDTO.getEventPostDate());
 				event.setEventPostEndDate(eventDTO.getEventPostEndDate());
+				event.setHostedBy(eventDTO.getHostedBy());
 				eventRepository.save(event);
 				commonResponseDTO.setMessage("Success");
 				commonResponseDTO.setStatus(SUCCESS);
 			} else {
-				commonResponseDTO.setMessage("Event not found. EventId=" + eventDTO.getEventId());
+				commonResponseDTO.setMessage("Event not found. EventId=" + eventDTO.getId());
 				commonResponseDTO.setStatus(FAIL);
 			}
 
@@ -63,7 +66,7 @@ public class EventService {
 				commonResponseDTO.setStatus(FAIL);
 				return commonResponseDTO;
 			}
-			eventRepository.delete(Long.valueOf(id));
+			eventRepository.disableEvents(Long.valueOf(id));
 			commonResponseDTO.setMessage("Successfully deleted");
 			commonResponseDTO.setStatus(SUCCESS);
 		} catch (Exception e) {
