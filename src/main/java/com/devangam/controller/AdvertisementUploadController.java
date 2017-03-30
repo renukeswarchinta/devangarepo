@@ -36,7 +36,8 @@ public class AdvertisementUploadController {
 	private AdvertisementService advertisementService;
 	
 	@RequestMapping(value="/api/saveAdvertisementDetails",method=RequestMethod.POST)
-	public @ResponseBody CommonResponseDTO saveAdvertisement(@RequestParam(value = "files", required = false) List<MultipartFile> files, @RequestParam(value = "advertisementRequestJson", required = true) String advertisementRequestJson){
+	public @ResponseBody CommonResponseDTO saveAdvertisement(@RequestParam(value = "files", required = false) List<MultipartFile> files,
+															@RequestParam(value = "advertisementRequestJson", required = true) String advertisementRequestJson){
 		AdvertisementDTO advertisementDTO = new AdvertisementDTO();
 		advertisementDTO.setAdvertisementRequestJson(advertisementRequestJson);
 		advertisementDTO.setMultipartFiles(files);
