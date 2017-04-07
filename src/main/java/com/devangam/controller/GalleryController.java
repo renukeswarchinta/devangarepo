@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,12 +20,13 @@ public class GalleryController {
 	@Autowired
 	private GalleryService galleryService;
 
-	@RequestMapping(path="api/addGalleryImages")
+	@RequestMapping(path="api/addGalleryImages",method=RequestMethod.POST)
 	public @ResponseBody CommonResponseDTO saveGallery(
 			@RequestParam(value = "file", required = false) List<MultipartFile> file, 
 			@RequestParam(value = "requestJson", required = true) String requestJson){
 		
 		GalleryDTO galleryDTO = new GalleryDTO();
+		//galleryDTO.setMultipartFiles(file);
 		galleryDTO.setListOfMultipartFiles(file);
 		galleryDTO.setRequestJson(requestJson);
 		return galleryService.saveGallery(galleryDTO);

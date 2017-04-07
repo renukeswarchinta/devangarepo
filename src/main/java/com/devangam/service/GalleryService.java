@@ -4,6 +4,7 @@ import static com.devangam.constants.DevangamConstants.FAIL;
 import static com.devangam.constants.DevangamConstants.SUCCESS;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,5 +65,29 @@ public class GalleryService {
 		commonResponseDTO.setMessage("Saved Successfully");
 		commonResponseDTO.setStatus("200");
 		return commonResponseDTO;
+	
+		/*CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
+		MultipartFile multipartFile =galleryDTO.getMultipartFiles();
+		GalleryEntity galleryEntity = null;
+		String imagePath = null;
+		try {
+			galleryEntity = objectMapper.readValue(galleryDTO.getRequestJson(), GalleryEntity.class);
+			Document document = new Document(multipartFile.getBytes(), multipartFile.getOriginalFilename(), "", galleryDirectory);
+			galleryEntity.setImagePath(document.getFileName());
+			galleryRepository.save(galleryEntity);
+			// save image into file system
+			fileSystemDocumentService.insert(document);
+			commonResponseDTO.setMessage("Ad successfully saved");
+			commonResponseDTO.setStatus(SUCCESS);
+		} catch (IOException ioException) {
+			commonResponseDTO.setMessage("Exeption while saving ads");
+			commonResponseDTO.setStatus(FAIL);
+		} catch (Exception exception) {
+			commonResponseDTO.setMessage("Exeption while saving ads");
+			commonResponseDTO.setStatus(FAIL);
+		}*/
+		//return commonResponseDTO;
+	
+	
 	}
 }

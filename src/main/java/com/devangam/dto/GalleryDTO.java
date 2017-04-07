@@ -18,4 +18,8 @@ public class GalleryDTO {
 	private String requestJson; 
 	@JsonIgnore
 	private List<MultipartFile> listOfMultipartFiles;
+	/*@JsonIgnore
+	private MultipartFile[] listOfMultipartFiles;*/
+	@JsonIgnore
+	private MultipartFile multipartFiles;
 }
