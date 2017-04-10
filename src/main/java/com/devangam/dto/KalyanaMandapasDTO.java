@@ -21,4 +21,5 @@ public class KalyanaMandapasDTO {
 	@JsonIgnore
 	private String kalyanaMandapasInfo;
 	private MultipartFile multipartFile;
+	private String kalyanaMandapamContactInfo;
 }

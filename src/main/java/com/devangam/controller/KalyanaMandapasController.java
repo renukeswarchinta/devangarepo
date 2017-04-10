@@ -13,20 +13,19 @@ import com.devangam.service.KalyanaMandapasService;
 
 
 @RestController
-public class KalynaMandapasController {
+public class KalyanaMandapasController {
 
 	@Autowired
 	private KalyanaMandapasService  kalyanaMandapasService;
 	
 	
-	@PostMapping("/saveKalynaMandapasInfo")
+	@PostMapping("/api/saveKalynaMandapasInfo")
 	public  CommonResponseDTO saveKalynaMandapasInfo(@RequestParam(value = "file", required = false) MultipartFile file,
 			@RequestParam(value = "kalyanaMandapaInfo", required = true) String kalyanaMandapaInfo){
 		KalyanaMandapasDTO kalyanaMandapasDTO = new KalyanaMandapasDTO();
 		kalyanaMandapasDTO.setMultipartFile(file);
 		kalyanaMandapasDTO.setKalyanaMandapasInfo(kalyanaMandapaInfo);
-		
-	return null;
+		return kalyanaMandapasService.saveKalayanMandapasInfo(kalyanaMandapasDTO);
 	}
 
 }

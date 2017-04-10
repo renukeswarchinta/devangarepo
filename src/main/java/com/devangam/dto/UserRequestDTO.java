@@ -14,6 +14,7 @@ public class UserRequestDTO implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -2095259284251994712L;
+	private int userId;
 	private String username;
 	private String firstname;
 	private String lastname;

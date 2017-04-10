@@ -26,6 +26,9 @@ public class KalyanaMandapasEntity {
 	@Column(name="MANDAPAM_IMAGE_PATH")
 	private String imagePath;
 	
+	@Column(name="MANDAPAM_CONTACT_INFO")
+	private String kalyanaMandapamContactInfo;
+	
 	
 	KalyanaMandapasEntity(){
 		
@@ -69,6 +72,14 @@ public class KalyanaMandapasEntity {
 
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
+	}
+
+	public String getKalyanaMandapamContactInfo() {
+		return kalyanaMandapamContactInfo;
+	}
+
+	public void setKalyanaMandapamContactInfo(String kalyanaMandapamContactInfo) {
+		this.kalyanaMandapamContactInfo = kalyanaMandapamContactInfo;
 	}
 	
 	

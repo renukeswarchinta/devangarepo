@@ -32,7 +32,6 @@ public class KalyanaMandapasService {
 	private FileSystemDocumentService fileSystemDocumentService;
 
 	public CommonResponseDTO saveKalayanMandapasInfo(KalyanaMandapasDTO kalyanaMandapasDTO) {
-
 		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
 		try {
 			KalyanaMandapasEntity kalyanaMandapas = objectMapper.readValue(kalyanaMandapasDTO.getKalyanaMandapasInfo(),
