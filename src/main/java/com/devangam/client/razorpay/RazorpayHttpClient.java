@@ -42,7 +42,7 @@ public class RazorpayHttpClient {
 		try {
 			// TODO : Fetch Razorpay with key_id & key_secret from
 			// PaymentSecurityInfo table.
-			razorpayClient = new RazorpayClient("rzp_test_z5OTBfUB0Ell1B", "7HDgzB4yvAH5z5");
+			razorpayClient = new RazorpayClient("rzp_test_GOqwbLnGCpSbOH", "0DOxvgp0zpwCeRCASCWBvUIm");
 		} catch (Exception exception) {
 			throw new RazorpayException("Initialize RazorpayClient failed.", exception);
 		}

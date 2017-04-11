@@ -10,7 +10,9 @@ import com.devangam.dto.CommonResponseDTO;
 import com.devangam.dto.DonationDetailsDTO;
 import com.devangam.dto.HelpingHandDonationDetails;
 import com.devangam.entity.DonationDetails;
+import com.devangam.entity.User;
 import com.devangam.repository.DonationDetailsRepository;
+import com.devangam.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.razorpay.Payment;
 
@@ -27,12 +29,16 @@ public class DonationDetailsImpl {
 	private DonationDetailsRepository donationRepository;
 
 	@Autowired
+	private UserRepository userRepository ; 
+	@Autowired
 	private ObjectMapper objectMapper;
 
 	@Autowired
 	private RazorpayHttpClient razorpayHttpClient;
 
 	public CommonResponseDTO saveDonationDetails(DonationDetailsDTO donationDetailsDTO) {
+		User user = userRepository.findByUsername(donationDetailsDTO.getEmailId());
+		donationDetailsDTO.setUserId(user.getUserId());
 		DonationDetails donationDetails = objectMapper.convertValue(donationDetailsDTO, DonationDetails.class);
 		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
 		try {

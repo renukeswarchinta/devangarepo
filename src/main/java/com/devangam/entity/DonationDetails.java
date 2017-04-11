@@ -29,6 +29,12 @@ public class DonationDetails {
 	
 	@Column(name="DONATION_AMT")
 	private double amountReceived;
+	
+	@Column(name="EMAIL_ID")
+	private String emailId;
+	
+	@Column(name="PHONE_NUMBER")
+	private String phoneNumber;
 
 	public DonationDetails(){}
 	public int getId() {
@@ -75,5 +81,17 @@ public class DonationDetails {
 	}
 	public void setPaymentId(String paymentId) {
 		this.paymentId = paymentId;
+	}
+	public String getEmailId() {
+		return emailId;
+	}
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
+	}
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 }

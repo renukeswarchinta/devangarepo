@@ -10,4 +10,6 @@ public class DonationDetailsDTO {
 	private String helpingHandType;
 	private double amountReceived;
 	private String paymentId;
+	private String emailId;
+	private String phoneNumber;
 }
