@@ -2,7 +2,8 @@ package com.devangam.utils;
 
 public enum HelpingHandType {
 
-	PATIENT("PATIENT"),OLDAGEHOME("OLDAGEHOME"),EDUCATION("EDUCATION");
+	//PATIENT("PATIENT"),OLDAGEHOME("OLDAGEHOME"),EDUCATION("EDUCATION");
+	EDUCATION("t_education"),PATIENT("t_patient"),OLDAGEHOME("t_oldage_home");
 	
 	private String helpingHandType;
 	

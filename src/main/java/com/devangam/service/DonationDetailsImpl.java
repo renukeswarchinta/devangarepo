@@ -13,6 +13,7 @@ import com.devangam.entity.DonationDetails;
 import com.devangam.entity.User;
 import com.devangam.repository.DonationDetailsRepository;
 import com.devangam.repository.UserRepository;
+import com.devangam.utils.HelpingHandType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.razorpay.Payment;
 
@@ -29,35 +30,54 @@ public class DonationDetailsImpl {
 	private DonationDetailsRepository donationRepository;
 
 	@Autowired
-	private UserRepository userRepository ; 
+	private UserRepository userRepository;
 	@Autowired
 	private ObjectMapper objectMapper;
 
 	@Autowired
 	private RazorpayHttpClient razorpayHttpClient;
 
+	public DonationDetails checkIfUserDonatedForHelpingHand(int userId, int helpingHandId, String helpingHandType) {
+		return donationRepository.findByUserIdAndHelpingHandIdAndHelpingHandType(userId, helpingHandId, helpingHandType);
+	}
+
 	public CommonResponseDTO saveDonationDetails(DonationDetailsDTO donationDetailsDTO) {
-		User user = userRepository.findByUsername(donationDetailsDTO.getEmailId());
-		donationDetailsDTO.setUserId(user.getUserId());
-		DonationDetails donationDetails = objectMapper.convertValue(donationDetailsDTO, DonationDetails.class);
 		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
 		try {
+			User user = userRepository.findByUsername(donationDetailsDTO.getEmailId());
+			donationDetailsDTO.setUserId(user.getUserId());
+
+			
 			String paymentId = donationDetailsDTO.getPaymentId();
-			if (StringUtils.isNotBlank(paymentId) && donationDetailsDTO.getUserId() > 0 && donationDetailsDTO.getHelpingHandId() > 0) {
+			DonationDetails donationDetails = objectMapper.convertValue(donationDetailsDTO, DonationDetails.class);
+			DonationDetails dbDonationDetails = checkIfUserDonatedForHelpingHand(user.getUserId(),donationDetailsDTO.getHelpingHandId(), donationDetailsDTO.getHelpingHandType());
+			if (dbDonationDetails != null) {
+				double amtReceived = donationDetailsDTO.getAmountReceived() + dbDonationDetails.getAmountReceived();
+				dbDonationDetails.setAmountReceived(amtReceived);
+				dbDonationDetails.setPaymentId(donationDetailsDTO.getPaymentId());
+				donationRepository.save(dbDonationDetails);
+			}else{
+				donationRepository.save(donationDetails);
+			}
+
+			/*if (StringUtils.isNotBlank(paymentId) && donationDetailsDTO.getUserId() > 0	&& donationDetailsDTO.getHelpingHandId() > 0) {
 				Payment razorPayment = razorpayHttpClient.getPaymentById(paymentId);
 				int amount = razorPayment.get("amount");
 				String razorPaymentId = razorPayment.get("id");
 				if (paymentId.equalsIgnoreCase(razorPaymentId)) {
-					donationDetails.setAmountReceived(amount);
-					donationRepository.save(donationDetails);
+					donationRepository.save(dbDonationDetails);
 				}
 				commonResponseDTO.setMessage("Donation Payment Successully created.");
 				commonResponseDTO.setStatus(SUCCESS);
-			}else{
+			} else {
 				log.error("Required Donation Details are missing" + donationDetailsDTO.toString());
 				commonResponseDTO.setMessage("Donation Payment Failed");
 				commonResponseDTO.setStatus(FAIL);
-			}
+			}*/
+			String helpingHandType = donationDetailsDTO.getHelpingHandType();
+			HelpingHandType type = HelpingHandType.valueOf(helpingHandType);
+			//sendEmailToUserRegardingDonations()
+			
 		} catch (RangeException rangeException) {
 			log.error(rangeException.getMessage(), rangeException);
 			commonResponseDTO.setMessage("Donation Payment Failed");
@@ -70,9 +90,18 @@ public class DonationDetailsImpl {
 		return commonResponseDTO;
 	}
 
-	public HelpingHandDonationDetails getDonationDetailsById(String helpingHandId, String helpingHandType) {
+	/*
+	 * private DonationDetails checkIfUserDonatedForHelpingHand(int userId, int
+	 * helpingHandId, String helpingHandType) { DonationDetails donations =
+	 * donationRepository.findByUserIdAndHelpingIdAndHelpingType(userId,
+	 * helpingHandId,helpingHandType);
+	 * 
+	 * }
+	 */
+	public HelpingHandDonationDetails getDonationDetailsById(String helpingHandId, String helpingHandType,
+			String userId) {
 
-		return donationRepository.getDonationDetails(helpingHandId, helpingHandType);
+		return donationRepository.getDonationDetails(helpingHandId, helpingHandType, userId);
 	}
 
 }

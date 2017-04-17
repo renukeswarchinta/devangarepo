@@ -18,7 +18,7 @@ public interface DonationDetailsRepository  extends JpaRepository<DonationDetail
 			+ "join donation_details d "
 			+ "on d.user_id = u.user_id "
 			+ "where d.helping_hand_id =?0 and d.helping_hand_type = ?1", nativeQuery  = true)
-	HelpingHandDonationDetails getDonationDetails(String helpingHandId, String helpingHandType);
+	HelpingHandDonationDetails getDonationDetails(String helpingHandId, String helpingHandType,String userId);
 	
 	
 	@Query(value ="select  e.name,e.phone_number,d.donation_amt,d.helping_hand_type "
@@ -40,6 +40,9 @@ public interface DonationDetailsRepository  extends JpaRepository<DonationDetail
 			+ "on e.id = d.helping_hand_id and  d.helping_hand_type = 'oldAgeHome'"
 			+ " where d.user_id = :userId",nativeQuery = true)
 	List<Object[]> getOldAgeHomeDonationDetailsByUserId(@Param("userId") long userId);
+
+	
+	DonationDetails findByUserIdAndHelpingHandIdAndHelpingHandType(int userId, int helpingHandId, String helpingHandType);
 	
 	
 	

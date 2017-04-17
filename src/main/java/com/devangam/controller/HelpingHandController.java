@@ -18,6 +18,7 @@ import com.devangam.dto.JobOpportunityDTO;
 import com.devangam.dto.OldAgeHomeHelpingHandDTO;
 import com.devangam.dto.PatientDetailsDTO;
 import com.devangam.dto.UserCommentsDTO;
+import com.devangam.entity.DonationDetails;
 import com.devangam.entity.Education;
 import com.devangam.entity.JobOpportunities;
 import com.devangam.entity.OldageHome;
@@ -99,6 +100,15 @@ public class HelpingHandController {
 		
 	}
 	
+	
+
+	@RequestMapping(value ="/api/checkIfUserDonatedForHelpingHand",method=RequestMethod.GET)
+	public @ResponseBody DonationDetails checkIfUserDonatedForHelpingHand(@RequestParam int userId,@RequestParam int helpingHandId,@RequestParam String helpingHandType){
+		return donationDetailsImpl.checkIfUserDonatedForHelpingHand(userId,helpingHandId,helpingHandType);
+		
+	}
+	
+	
 	@RequestMapping(value ="/api/getJobOpportunities",method=RequestMethod.GET)
 	public @ResponseBody List<JobOpportunities> getJobOpportunities(){
 		return jobOpportunitiesServiceImpl.getJobOpportunities();
@@ -132,8 +142,9 @@ public class HelpingHandController {
 	// 
 	@RequestMapping(value ="/api/getDonationDetailsByHelpingHandId",method=RequestMethod.GET)
 	public @ResponseBody HelpingHandDonationDetails getDonationDetailsByHelpingHandId(@RequestParam String helpingHandId,
-			@RequestParam String helpingHandType){
-		HelpingHandDonationDetails donationDetails = donationDetailsImpl.getDonationDetailsById(helpingHandId,helpingHandType);
+			@RequestParam String helpingHandType,
+			@RequestParam String userId){
+		HelpingHandDonationDetails donationDetails = donationDetailsImpl.getDonationDetailsById(helpingHandId,helpingHandType,userId);
 		System.out.println(donationDetails.getDonationAmount());
 		return null;
 	}
