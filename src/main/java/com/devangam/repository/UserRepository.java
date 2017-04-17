@@ -2,6 +2,7 @@ package com.devangam.repository;
 
 import java.util.List;
 
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -23,4 +24,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Modifying(clearAutomatically = true)
 	@Query("select u from User u where u.active = 1")
 	List<User> getRegisteredUsers();
+	
+
+	@Modifying(clearAutomatically = true)
+	@Query("UPDATE User u SET u.matrimonyUser = :active WHERE u.email =:email")
+	List<User> disableMatrimonyUser(@Param("active") boolean active, @Param("email") String email);
+	
 }

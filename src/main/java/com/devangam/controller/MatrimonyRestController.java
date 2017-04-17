@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.devangam.dto.CommonResponseDTO;
 import com.devangam.dto.MatrimonyProfileDTO;
 import com.devangam.dto.PremiumUserDTO;
 import com.devangam.entity.PremiumUser;
@@ -74,4 +75,11 @@ public class MatrimonyRestController {
 		User userEntity = userService.findUserEntity("email");
 		return userEntity.getPremiumUser();
 	}
+	
+	@RequestMapping(value = "/api/user/disableMatrimonyDetails", method = RequestMethod.GET)
+	public @ResponseBody CommonResponseDTO disableMatrimonyDetails(@RequestParam("email") String email){
+		return matrimonyService.disableMatrimonyDetails(email);
+	}
+	
+	
 }
