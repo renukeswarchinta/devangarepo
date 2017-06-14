@@ -2,8 +2,11 @@ package com.devangam.controller;
 import static com.devangam.constants.DevangamConstants.FAIL;
 import static com.devangam.constants.DevangamConstants.SUCCESS;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mobile.device.Device;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.devangam.security.JwtAuthenticationRequest;
 import com.devangam.security.JwtTokenUtil;
+import com.devangam.security.JwtUser;
 import com.devangam.security.service.JwtAuthenticationResponse;
 
 
@@ -62,19 +66,20 @@ public class AuthenticationRestController {
 		}
 		return jwtAuthenticationResponse;
 	}
-/*
+
     @RequestMapping(value = "${jwt.route.authentication.refresh}", method = RequestMethod.GET)
     public ResponseEntity<?> refreshAndGetAuthenticationToken(HttpServletRequest request) {
         String token = request.getHeader(tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(token);
         JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
 
-        if (jwtTokenUtil.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
+        if (jwtTokenUtil.canTokenBeRefreshed(token)){
+        		//, user.getLastPasswordResetDate())) {
             String refreshedToken = jwtTokenUtil.refreshToken(token);
             return ResponseEntity.ok(new JwtAuthenticationResponse(refreshedToken));
         } else {
             return ResponseEntity.badRequest().body(null);
         }
     }
-*/
+
 }

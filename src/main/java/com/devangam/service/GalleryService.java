@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.devangam.archive.Document;
 import com.devangam.dto.CommonResponseDTO;
 import com.devangam.dto.GalleryDTO;
+import com.devangam.entity.AdvertisementEntity;
 import com.devangam.entity.GalleryEntity;
 import com.devangam.repository.GalleryRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -65,29 +66,22 @@ public class GalleryService {
 		commonResponseDTO.setMessage("Saved Successfully");
 		commonResponseDTO.setStatus("200");
 		return commonResponseDTO;
+	}
 	
-		/*CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
-		MultipartFile multipartFile =galleryDTO.getMultipartFiles();
-		GalleryEntity galleryEntity = null;
-		String imagePath = null;
+	public List<GalleryEntity> getGalleryImages() {
+		return  galleryRepository.findAll();
+	}
+	public CommonResponseDTO deleteGalleryImages(Long id) {
+		CommonResponseDTO commonResponseDTO = new CommonResponseDTO();
 		try {
-			galleryEntity = objectMapper.readValue(galleryDTO.getRequestJson(), GalleryEntity.class);
-			Document document = new Document(multipartFile.getBytes(), multipartFile.getOriginalFilename(), "", galleryDirectory);
-			galleryEntity.setImagePath(document.getFileName());
-			galleryRepository.save(galleryEntity);
-			// save image into file system
-			fileSystemDocumentService.insert(document);
-			commonResponseDTO.setMessage("Ad successfully saved");
+			galleryRepository.delete(id);
+			commonResponseDTO.setMessage("Deleted successfully ");
 			commonResponseDTO.setStatus(SUCCESS);
-		} catch (IOException ioException) {
-			commonResponseDTO.setMessage("Exeption while saving ads");
-			commonResponseDTO.setStatus(FAIL);
 		} catch (Exception exception) {
-			commonResponseDTO.setMessage("Exeption while saving ads");
+			commonResponseDTO.setMessage("Failed to update ");
 			commonResponseDTO.setStatus(FAIL);
-		}*/
-		//return commonResponseDTO;
-	
-	
+		}
+		return commonResponseDTO;
+
 	}
 }

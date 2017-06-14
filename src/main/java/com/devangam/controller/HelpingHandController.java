@@ -3,6 +3,7 @@ package com.devangam.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -49,6 +50,7 @@ public class HelpingHandController {
 	private UserCommentsService userCommentsService;
 	
 	@RequestMapping(value="/api/addEducationDetails",method=RequestMethod.POST)
+	@PreAuthorize("hasRole('ADMIN')")
 	public @ResponseBody CommonResponseDTO addEducationDetails(@RequestBody EducationDetailsDTO educationDetails){
 		return educationHelpingHand.createEducationDetails(educationDetails);
 	} 
